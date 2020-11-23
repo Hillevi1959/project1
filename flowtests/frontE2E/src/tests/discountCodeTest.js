@@ -1,0 +1,99 @@
+import { t } from 'testcafe';
+import enableDebug from '../../../common/src/util/debug';
+import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
+import { selectProvider } from '../../../common/src/util/debugOptions';
+import setProps from '../../../common/src/util/props';
+import { closeHeaderUrgencyBanner, searchAndSelectTrip } from '../../../common/src/rf_pages/start';
+import config from '../../testdata.json';
+import { checkForDiscountCodes } from '../../../common/src/rf_pages/edvin';
+import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
+import { addNumberToTraveler, getFirstAdult } from '../../../common/src/util/travelerData';
+import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
+import { addPaymentData, checkPaymentConditions } from '../../../common/src/rf_pages/payment';
+import paymentModule from '../../../common/src/rf_modules/paymentModule';
+import orderModule from '../../../common/src/rf_modules/orderModule';
+import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
+import { getWindowWidth } from '../../../common/src/util/device';
+import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+
+const url = getSiteUrl('test-uk', config.host);
+const props = {
+  'IbeClient.TravelerDetails.Modal': 'SEATMAP',
+  'Payment.FraudAssessment.Accertify.ShadowMode': true,
+  'Payment.provider.creditcard': 'adyen',
+  'Payment.DiscountCode.Enabled': true,
+  'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
+  'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
+};
+
+fixture('Discount code verification')
+  .page(url)
+  .beforeEach(async () => {
+    await enableDebug(true);
+    await acceptCookies();
+    await selectProvider('IbeGDSDummy');
+    await selectProvider('IbeDummy');
+    await setProps(props);
+    await closeHeaderUrgencyBanner();
+  });
+
+test('Verify discount use on payment and order page', async () => {
+  const travelers = addNumberToTraveler([getFirstAdult()]);
+  const numberOfAdults = 1;
+  if ((await getWindowWidth()) < 970) {
+    // eslint-disable-next-line no-console
+    console.warn('This test is not run on mobile or tablet device');
+  } else {
+    await checkForDiscountCodes();
+    await t.navigateTo(url);
+    await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney');
+    await addTravelerInformation(travelers);
+    await addNoExtraProducts(numberOfAdults);
+    await bookFlight();
+    await closeSeatMapModal();
+    await t.click(paymentModule.cardLabel);
+    await addPaymentData();
+
+    // Verification on payment page
+    await t
+      .expect(paymentModule.cartDiscountCode.exists)
+      .notOk()
+      .expect(paymentModule.discountCodePriceBox.exists)
+      .notOk();
+
+    await t.typeText(paymentModule.discountCodeInput, 'TESTDISCOUNTCODE');
+    await t.click(paymentModule.discountCodeButton);
+
+    await t
+      .expect(paymentModule.cartDiscountCode.visible)
+      .ok()
+      .expect(paymentModule.discountCodePriceBox.visible)
+      .ok();
+
+    await t.click(paymentModule.discountCodeRemoveButton);
+
+    await t.expect(paymentModule.cartDiscountCode.exists).notOk();
+    await t.expect(paymentModule.discountCodePriceBox.exists).notOk();
+
+    await t
+      .expect(paymentModule.cartDiscountCode.exists)
+      .notOk()
+      .expect(paymentModule.discountCodePriceBox.exists)
+      .notOk()
+      .typeText(paymentModule.discountCodeInput, 'TESTDISCOUNTCODE');
+
+    await t.click(paymentModule.discountCodeButton);
+
+    await t
+      .expect(paymentModule.cartDiscountCode.visible)
+      .ok()
+      .expect(paymentModule.discountCodePriceBox.visible)
+      .ok();
+
+    await checkPaymentConditions();
+    await t.click(paymentModule.payButton);
+    // Verification on order page
+    await waitForOrderPageToLoad();
+    await t.expect(orderModule.receiptInformation.innerText).contains('Your discount voucher');
+  }
+});

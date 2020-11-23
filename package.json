@@ -1,0 +1,26 @@
+{
+  "name": "ibe",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://git.etraveli.net/projects/ITDEV/repos/ibe"
+  },
+  "bugs": {
+    "url": "https://jira.etraveli.net"
+  },
+  "scripts": {
+    "lint": "eslint **/*.js"
+  },
+  "devDependencies": {
+    "@eti/eslint-config": "^17.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "node-fetch": "^2.6.0",
+    "prettier": "^1.19.1",
+    "testcafe": "^1.8.2"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "all"
+  }
+}

@@ -1,0 +1,12 @@
+classes/*
+test-classes/*
+deploy/*
+config/*generated.xml
+config/test/*generated.xml
+libs/*
+lib/*
+dependency-check-reports/*
+reports/*
+target/*
+uitest.iml
+node_modules/*
