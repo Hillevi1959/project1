@@ -4,7 +4,6 @@ export default {
   bookFlightButton: Selector('[data-testid="resultPage-book-button"]'),
   bookFlightWithFlexibleTicketButton: Selector('[data-testid="resultPage-book-button"]').nth(1),
   cabinClassDropdown: Selector('[data-testid="searchForm-cabinClasses-dropdown"]'),
-  campaignFilterButton: Selector('[data-testid="result-quick-sort-button"]').nth(1),
   cheapestFilterButton: Selector('[data-testid="result-quick-sort-button"]').nth(2),
   clearAirlines: Selector(
     '[data-testid="resultPage-AIRLINESFilter-content"] > div > span:nth-child(1)',
@@ -26,6 +25,7 @@ export default {
   ),
   filterAirlineLufthansaCheckbox: Selector('#airline-LH'),
   filterAirlineSasCheckbox: Selector('#airline-SK'),
+  filterAirlineMauritiusCheckbox: Selector('#airline-MK'),
   filterArrivalSecondBoundRadioButton: Selector(
     '[data-testid="resultPage-departureArrivalFilter-arrival1-radio"]',
   ),
@@ -53,7 +53,7 @@ export default {
   filterPriceSliderRight: Selector(
     '[data-testid="resultPage-PRICEFilter-content"] [data-testid="handle-1"]',
   ),
-  filterPriceMaxLabel: Selector('[data-testid="resultPage-PRICEFilter-content"] div').nth(8),
+  filterPriceMaxLabel: Selector('[data-testid="resultPage-PRICEFilter-content"] div').nth(9),
   filterMaxStopResetButton: Selector(
     '[data-testid="resultPage-filterHeader-MAX_STOPSFilterResetButton-button"]',
   ),
@@ -108,7 +108,7 @@ export default {
   ),
   tripDetailBound: Selector('[data-testid="tripDetails-bound"]'),
   tripInfoText: Selector('.resultPage-flightResults-4 [data-testid="tripDetails-segment-event"]'),
-  tripPriceStandard: Selector('[data-test-id="result-trip-price-standard"]'),
+  tripPriceStandard: Selector('[data-testid="result-trip-price-standard"]'),
   tripTitleFlight: Selector('[data-testid="tripDetails-title-TitleText"]'),
   tripTitleDate: Selector('[data-testid="tripDetails-title-date-desktop"]'),
   tripTitleDateMobile: Selector('[data-testid="tripDetails-title-date-mobile"]'),

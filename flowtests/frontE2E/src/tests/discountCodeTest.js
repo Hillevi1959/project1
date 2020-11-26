@@ -15,6 +15,7 @@ import orderModule from '../../../common/src/rf_modules/orderModule';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import { getWindowWidth } from '../../../common/src/util/device';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+import { scrollToElement } from '../../../common/src/util/clientFunction';
 
 const url = getSiteUrl('test-uk', config.host);
 const props = {
@@ -52,6 +53,8 @@ test('Verify discount use on payment and order page', async () => {
     await bookFlight();
     await closeSeatMapModal();
     await t.click(paymentModule.cardLabel);
+    await scrollToElement('[for="CARD"]');
+    await t.click(paymentModule.cardLabel);
     await addPaymentData();
 
     // Verification on payment page
@@ -61,6 +64,7 @@ test('Verify discount use on payment and order page', async () => {
       .expect(paymentModule.discountCodePriceBox.exists)
       .notOk();
 
+    await t.click(paymentModule.discountCodeToggleInput);
     await t.typeText(paymentModule.discountCodeInput, 'TESTDISCOUNTCODE');
     await t.click(paymentModule.discountCodeButton);
 

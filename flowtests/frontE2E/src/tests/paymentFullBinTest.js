@@ -46,6 +46,8 @@ test('Add different card numbers', async () => {
   await scrollToElement('[for="CARD"]');
   await t.click(paymentModule.cardLabel);
   //  Card number not recognized
+  await scrollToElement('[for="CARD"]');
+  await t.click(paymentModule.cardLabel);
   await t.typeText(paymentModule.cardNumberInput, '99999999');
   await t.expect(paymentModule.cardInfoText.visible).ok();
 

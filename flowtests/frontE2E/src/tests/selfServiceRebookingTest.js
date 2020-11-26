@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
-/* eslint-disable consistent-return */
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getNumberOfElements, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider } from '../../../common/src/util/debugOptions';
@@ -11,40 +10,41 @@ import {
   makeSearch,
   selectTravelers,
 } from '../../../common/src/rf_pages/start';
-import config from '../../../frontE2E/testdata.json';
+import config from '../../testdata.json';
 import {
   addNumberToTraveler,
   getFirstChild,
   getFirstAdult,
   getFirstInfant,
   getSecondAdult,
-  getThirdAdult,
-  getFourthAdult,
-  getSecondChild,
-  getSecondInfant,
 } from '../../../common/src/util/travelerData';
 import orderModule from '../../../common/src/rf_modules/orderModule';
+import startModule from '../../../common/src/rf_modules/startModule';
 import { selectTripNumber } from '../../../common/src/rf_pages/result';
 import {
   addContact,
-  addTraveler,
   addTravelerInformation,
   bookFlight,
 } from '../../../common/src/rf_pages/travelerDetails';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { acceptPriceChange, payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import {
+  acceptPriceChange,
+  addPaymentData,
+  checkPaymentConditions,
+  payWithCreditCard,
+} from '../../../common/src/rf_pages/payment';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import {
   createVoucherInEdvin,
   getDiscountCode,
   getDiscountCodeUrl,
 } from '../../../common/src/rf_pages/edvin';
-import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import { getWindowWidth } from '../../../common/src/util/device';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
+import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
@@ -62,29 +62,22 @@ const travelers = addNumberToTraveler([
   getFirstChild(),
   getFirstInfant(),
 ]);
-const newTravelers = addNumberToTraveler([
-  getThirdAdult(),
-  getFourthAdult(),
-  getSecondChild(),
-  getSecondInfant(),
-]);
 const numberOfAdults = 2;
 const numberOfChildren = 1;
 const numberOfInfants = 1;
-const origin = 'Stockholm';
-const destination = 'London';
+const origin = 'Mauritius';
+const destination = 'New Delhi';
 
 async function createOrderAndDiscountCode() {
   const site = 'https://gotogate-uk';
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
-  console.log('Search for trip');
   await makeSearch('one way trip', origin, destination, 10);
   await t.expect(resultModule.toggleFilterButton.visible).ok('', { timeout: 20000 });
   await scrollToElement('[data-testid="resultPage-toggleFiltersButton-button"]');
   await t
     .click(resultModule.toggleFilterButton)
     .click(resultModule.clearAirlines)
-    .click(resultModule.filterAirlineSasCheckbox)
+    .click(resultModule.filterAirlineMauritiusCheckbox)
     .click(resultModule.toggleFilterButton);
   await selectTripNumber(0);
   await addTravelerInformation(travelers);
@@ -109,113 +102,124 @@ async function createOrderAndDiscountCode() {
 async function prepareSelfServiceRebookingFlow() {
   await t.navigateTo(url);
   await enableDebug();
+  await selectProvider('Sabre');
   await selectProvider('Amadeus');
   await setProps(props);
   await t.navigateTo(getDiscountCodeUrl());
   console.log('Go to SSR start page');
 }
-
-fixture('Verify self service rebooking flow semi automated')
+/*
+  To make this test run without errors after first deploy, run test 'Edvin warm up' in aEdvinOrderWarmUpTest.js
+  or do a manual search for an order
+ */
+fixture('Verify self service rebooking flow')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
+    await selectProvider('Sabre');
     await selectProvider('Amadeus');
     await setProps(props);
     await acceptCookies();
     await closeHeaderUrgencyBanner();
   });
-/*
-  To make this test run without errors after first deploy, an order search needs to be done manually in Edvin
- */
-test('Create order in self service rebooking flow semi automated', async () => {
-  if ((await getWindowWidth()) < 970) {
-    // eslint-disable-next-line no-console
-    console.warn('This test is not run on mobile or tablet device');
-  } else {
-    await createOrderAndDiscountCode();
-    console.log('Voucher code: ', getDiscountCode());
-    console.log('Voucher url: ', getDiscountCodeUrl());
-    await prepareSelfServiceRebookingFlow();
-    await t.debug();
-  }
-});
 
-test.skip('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
+test('Create order in self service rebooking flow', async () => {
   if ((await getWindowWidth()) < 970) {
-    // eslint-disable-next-line no-console
     console.warn('This test is not run on mobile or tablet device');
   } else {
-    await t.navigateTo(url);
-    await enableDebug();
-    await selectProvider('Sabre');
-    // await selectProvider('Amadeus');
-    await setProps(props);
-    await acceptCookies();
-    await closeHeaderUrgencyBanner();
     await createOrderAndDiscountCode();
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
     await prepareSelfServiceRebookingFlow();
+    // Verify start page
+    const voucherMessageRow1 = 'Welcome! You are a few steps away from using your voucher.';
+    const voucherMessageRow2 =
+      'Some of your information is prefilled and cannot be changed. Please make sure to apply the voucher on the payment step.';
+    await t.expect(startModule.voucherMessage1.innerText).contains(voucherMessageRow1);
+    await t.expect(startModule.voucherMessage2.innerText).contains(voucherMessageRow2);
+
+    await t.click(startModule.travelerDropDown);
+    await t.expect(startModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
+    await t.expect(startModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
+    await t.expect(startModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
     await makeSearch('one way trip', origin, destination, 20);
+    // Verify result page
+    await t.expect(resultModule.resultPage.visible).ok('', { timeout: 20000 });
+    await t.click(resultModule.searchFormButton);
+    await t.click(resultModule.travelerDropDown);
 
-    let tripNumber = 0;
-    await t.expect(resultModule.resultPage.visible).ok('', { timeout: 5000 });
-    // Select trip without voucher tag
-    while (
-      (await getNumberOfElements(
-        `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="valid-with-voucher-tag"]`,
-      )) === 1
-    ) {
-      tripNumber += 1;
-      if (tripNumber === 10) {
-        await t.click(resultModule.searchFormButton);
-        await t.click(resultModule.departureDate);
-        await t.click(Selector('.DayPicker-Day').nth(27));
-        await t.click(resultModule.searchFlight);
-        tripNumber = 0;
+    await t.expect(resultModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
+    await t.expect(resultModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
+    await t.expect(resultModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
+
+    await t.click(resultModule.searchFormButton);
+
+    // Verify voucher tags
+    let numberOfVoucherTrips = await getNumberOfElements(
+      '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
+    );
+    let numberOfTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+
+    await t.expect(await numberOfTrips).gte(await numberOfVoucherTrips);
+
+    await t.click(resultModule.voucherSwitch);
+    numberOfTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+    numberOfVoucherTrips = await getNumberOfElements(
+      '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
+    );
+
+    await t.expect(await numberOfVoucherTrips).eql(await numberOfTrips);
+
+    await t.click(resultModule.cheapestFilterButton);
+    await selectTripNumber(0);
+
+    // verify TD-page
+    await addContact(travelers[0]);
+
+    for (const traveler of travelers) {
+      // Check for each traveler the radio buttons are disabled
+      for (let i = 0; i < 2; i += 1) {
+        await t
+          .expect(
+            travelerDetailsModule
+              .travelerInput(traveler.nr)
+              .nth(i)
+              .hasAttribute('disabled'),
+          )
+          .eql(true);
+      }
+      // Check for each traveler the input fields are readonly
+      for (let i = 2; i < 4; i += 1) {
+        await t
+          .expect(
+            travelerDetailsModule
+              .travelerInput(traveler.nr)
+              .nth(i)
+              .hasAttribute('readonly'),
+          )
+          .eql(true);
       }
     }
-    const tripWithoutVoucher = Selector(
-      `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="resultPage-book-button"]`,
-    ).nth(0);
-    await t.click(tripWithoutVoucher);
 
-    // Verify TD-page
-    await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
-
-    await addContact(travelers[0], true);
-    for (const traveler of newTravelers) {
-      await addTraveler(traveler);
-    }
     await addNoExtraProducts(numberOfAdults + numberOfChildren);
     await bookFlight();
     await closeSeatMapModal();
 
     // Verify payment page
-    await t.expect(paymentModule.paymentContainer.visible).ok();
-    await t.expect(paymentModule.voucherNotValidInfo.visible).ok();
+    await t.click(paymentModule.cardLabel);
+    await addPaymentData();
 
-    await t.click(paymentModule.discountCodeToggleInput);
-    await t.typeText(paymentModule.discountCodeInput, getDiscountCode());
-    await t.click(paymentModule.discountCodeButton);
+    await t.expect(paymentModule.discountCodeSuccess.visible).ok();
+    await t.expect(paymentModule.cartDiscountCode.innerText).contains('Your discount voucher');
 
-    await t.expect(paymentModule.discountCodeError.visible).ok();
-
-    await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
-    await payWithCreditCard();
+    await checkPaymentConditions();
+    await t.click(paymentModule.payButton);
     await acceptPriceChange();
-    // Verify order page
-    await waitForOrderPageToLoad();
 
-    await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
-
-    await t.click(orderModule.showBaggageButton);
-
-    for (let i = 0; i < newTravelers.length; i += 1) {
-      await t
-        .expect(orderModule.travelerName.nth(i).innerText)
-        .contains(`${newTravelers[i].firstName} ${newTravelers[i].lastName}`);
-    }
+    await t.expect(orderModule.selfServiceRebookingImage.visible).ok('', { timeout: 20000 });
+    const infoText =
+      'Your rebooking request is being processed. Please note that this may take up to 24 hours.';
+    await t.expect(orderModule.selfServiceRebookingInfoText.innerText).contains(infoText);
+    console.log('Create order in self service rebooking flow PASSED!');
   }
-  console.log('Choose trip that does not match the voucher flow PASSED!');
 });

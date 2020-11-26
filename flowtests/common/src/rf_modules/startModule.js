@@ -29,6 +29,8 @@ export default {
   travelerInfantsCounterMinus: Selector(
     '[data-testid="infants-option"] .etiCounter__button--minus',
   ),
+  voucherMessage1: Selector('[data-testid="searchPage-searchForm"] div h2'),
+  voucherMessage2: Selector('[data-testid="searchPage-searchForm"] div .etiHtmlContent'),
   setMultiTripOrigin: tripNr =>
     Selector(`[data-testid="searchForm-multiBound[${tripNr}]-origin-input"]`),
   setMultiTripDestination: tripNr =>

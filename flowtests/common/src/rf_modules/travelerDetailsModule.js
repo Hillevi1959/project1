@@ -276,6 +276,6 @@ export default {
   setGender: (gender, passengerNr) =>
     Selector(`[data-testid="travelerDetails-${gender}-${passengerNr}-label"]`),
   setLastName: passengerNr => Selector(`[data-testid="traveler-lastName-${passengerNr}-input"]`),
-  tavelerInput: travelerNr =>
+  travelerInput: travelerNr =>
     Selector(`[data-testid="travelerDetails-traveler-${travelerNr}-section"] input`),
 };

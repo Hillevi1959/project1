@@ -14,6 +14,9 @@ export const goBack = ClientFunction(() => window.history.back());
 export const goForward = ClientFunction(() => window.history.forward());
 
 export const getCurrentUrl = ClientFunction(() => window.location.href);
+// eslint-disable-next-line no-return-assign
+export const navigateToUrl = ClientFunction(url => (window.location = url));
+export const clickElement = ClientFunction(selector => document.querySelector(selector).click());
 
 export const getCurrentUrlPathName = ClientFunction(() => window.location.pathname);
 

@@ -107,6 +107,7 @@ async function clickNextMonth() {
 }
 
 async function enterFromCity(origin) {
+  await t.click(startModule.origin);
   await t.typeText(startModule.origin, origin);
   await t.pressKey('enter');
 }

@@ -17,14 +17,14 @@ const props = {
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
 };
-// This test is unstable
-fixture
-  .skip(`Verify quick filter sorting on result page`)
+
+fixture(`Verify quick filter sorting on result page`)
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
     await acceptCookies();
-    await selectProvider('Amadeus');
+    await selectProvider('IbeGDSDummy');
+    await selectProvider('IbeDummy');
     await setProps(props);
     await closeHeaderUrgencyBanner();
     await selectTravelers(numberOfAdults, 0, 0);
@@ -32,10 +32,7 @@ fixture
   });
 
 test('Verify quick filter sorting on result page', async () => {
-  await t.expect(resultModule.campaignFilterButton.visible).ok('', { timeout: 50000 });
-  await t.click(resultModule.campaignFilterButton);
-  await t.expect(resultModule.topTripHeader.innerText).eql('Campaign');
-
+  await t.expect(resultModule.cheapestFilterButton.visible).ok('', { timeout: 10000 });
   await t.click(resultModule.cheapestFilterButton);
   await t.expect(resultModule.topTripHeader.innerText).eql('Cheapest');
 

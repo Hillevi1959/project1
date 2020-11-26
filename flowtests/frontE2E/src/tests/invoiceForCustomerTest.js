@@ -27,7 +27,12 @@ import orderModule from '../../../common/src/rf_modules/orderModule';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
 const url = getSiteUrl('gotogate-uk', config.host);
-const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult(), getFirstChild(), getFirstInfant()]);
+const travelers = addNumberToTraveler([
+  getFirstAdult(),
+  getSecondAdult(),
+  getFirstChild(),
+  getFirstInfant(),
+]);
 const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',

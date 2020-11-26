@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable consistent-return */
 import { t } from 'testcafe';
-import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
+import { acceptCookies, getOrderNumberFromUrl, getSiteUrl } from '../../../common/src/util/common';
 import enableDebug from '../../../common/src/util/debug';
 import setProps from '../../../common/src/util/props';
 import { selectProvider } from '../../../common/src/util/debugOptions';
@@ -31,6 +31,7 @@ import postbookingModule from '../../../common/src/rf_modules/postbookingModule'
 import config from '../../testdata.json';
 import { closeHeaderUrgencyBanner } from '../../../common/src/rf_pages/start';
 import { createOrderWithNoProducts } from '../../../common/src/util/createOrder';
+import { dropdownSelect } from '../../../common/src/util/dropdownSelect';
 
 const url = getSiteUrl('supersaver-se', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -146,6 +147,7 @@ test('Only not selected products are available in postbooking', async () => {
   await createOrderFlowWithProducts(travelers);
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
+  const orderNumberOnOrderPage = await orderModule.orderNumber.innerText;
   await setProps(postbookingProps);
   await goToPostbookingFromOrderPage();
   await openProductsInCart();
@@ -165,4 +167,24 @@ test('Only not selected products are available in postbooking', async () => {
 
   const numberOfExtraProductsOrderPage = await orderModule.postBookingProducts.count;
   await t.expect(numberOfExtraProductsOrderPage).eql(addedNumberOfExtraProducts);
+
+  await t.click(orderModule.printConfirmationButton);
+  await dropdownSelect(orderModule.printBusinessReceiptDropdown, 1);
+
+  await t
+    .typeText(orderModule.companyInformationAddress, travelers[0].street)
+    .typeText(orderModule.companyInformationName, travelers[0].company)
+    .typeText(orderModule.companyInformationCompanyAddress, 'Box 123')
+    .typeText(orderModule.companyInformationCity, travelers[0].city)
+    .typeText(orderModule.companyInformationZipCode, travelers[0].zipCode)
+    .typeText(orderModule.companyInformationVatNumber, travelers[0].vatNumber);
+
+  await t
+    .expect(orderModule.printBusinessReceiptDropdown.innerText)
+    .contains(`${orderNumberOnOrderPage}-1`);
+
+  await t.click(orderModule.printBusinessReceiptButton);
+  const orderNumberInUrl = await getOrderNumberFromUrl();
+
+  await t.expect(orderNumberOnOrderPage).eql(orderNumberInUrl);
 });

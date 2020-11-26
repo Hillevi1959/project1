@@ -13,7 +13,7 @@ import {
   bookFlight,
   toggleCart,
 } from '../../../common/src/rf_pages/travelerDetails';
-import { payWithDummyBank } from '../../../common/src/rf_pages/payment';
+import { openCartIfClosed, payWithDummyBank } from '../../../common/src/rf_pages/payment';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import {
   addNumberToTraveler,
@@ -97,6 +97,7 @@ test('Book and pay for a trip with bundled products', async () => {
     await toggleCart();
   }
   if (await isDesktop()) {
+    await openCartIfClosed();
     await t.expect(paymentModule.cartFlexTicketProduct.visible).ok();
     await t.expect(paymentModule.cartCancellationInsideEuProduct.visible).ok();
     await t

@@ -1,11 +1,9 @@
+/* eslint-disable no-console */
 import { Selector, t } from 'testcafe';
 import paymentModule from '../rf_modules/paymentModule';
 import getPaymentData from '../util/paymentData';
 import { scrollToElement } from '../util/clientFunction';
 import { isDesktop, isMobile, isTablet } from '../util/device';
-import { getNumberOfElements } from '../util/common';
-// import { getSiteUrl } from '../util/common';
-// import config from '../../testdata.json';
 
 export async function checkPaymentConditions() {
   if (await paymentModule.checkPaymentConditions.visible) {
@@ -23,7 +21,7 @@ export async function openCartIfClosed() {
 }
 
 export async function payWithDummyBank(traveler) {
-  await t.expect(paymentModule.paymentContainer.exists).ok('', { timeout: 30000 });
+  await t.expect(paymentModule.paymentContainer.exists).ok('', { timeout: 10000 });
   await scrollToElement('[for="BANK"]');
   await t.click(paymentModule.bankLabel);
   await scrollToElement('[data-testid="bank-payment-form"] [data-testid="firstName-input"]');
@@ -59,26 +57,31 @@ export async function getBaggagePricePayment() {
 
 export async function addPaymentData() {
   const paymentData = getPaymentData();
+  await scrollToElement('[data-testid="card-payment-form"] [data-testid="cardnumber-input"]');
   await t.typeText(paymentModule.cardNumberInput, paymentData.cardNumber);
+  await scrollToElement('[data-testid="card-payment-form"] [data-testid="cc-exp-input"]');
   await t.typeText(paymentModule.cardExpInput, paymentData.exp);
   await t.typeText(paymentModule.cardCvcInput, paymentData.cvc);
+  await scrollToElement('[data-testid="card-payment-form"] [data-testid="firstName-input"]');
   await t.typeText(paymentModule.cardFirstNameInput, paymentData.firstName);
+  await scrollToElement('[data-testid="card-payment-form"] [data-testid="lastName-input"]');
   await t.typeText(paymentModule.cardLastNameInput, paymentData.lastName);
 }
 
 export async function acceptPriceChange() {
-  if (!(await Selector('[data-testid="order-page"]', { timeout: 30000 }).visible)) {
-    if (
-      await getNumberOfElements('.ReactModal__Content.ReactModal__Content--after-open.etiModal' > 0)
-    ) {
+  if (
+    !(await Selector('[data-testid="order-page"]', { timeout: 30000 }).visible) ||
+    !(await Selector('[data-testid="image-panel"]', { timeout: 30000 }).visible)
+  ) {
+    if (await paymentModule.priceChangeModal.visible) {
+      console.log('Payment change visible');
       await t.click(paymentModule.priceChangeYesButton.nth(0));
     }
   }
 }
 
 export async function payWithCreditCard() {
-  await t.expect(paymentModule.paymentContainer.exists).ok('', { timeout: 30000 });
-  await scrollToElement('[for="CARD"]');
+  await t.expect(paymentModule.paymentContainer.exists).ok('', { timeout: 10000 });
   await t.click(paymentModule.cardLabel);
   await openCartIfClosed();
   await addPaymentData();

@@ -12,8 +12,7 @@ import {
 import {
   addTravelerInformation,
   bookFlight,
-  closeCart,
-  openCart,
+  toggleCart,
 } from '../../../common/src/rf_pages/travelerDetails';
 import { openCartIfClosed, payWithDummyBank } from '../../../common/src/rf_pages/payment';
 import {
@@ -32,9 +31,9 @@ import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import travelerModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import resultModule from '../../../common/src/rf_modules/resultModule';
-import config from './testdata.json';
 import { messageSupersaverSe } from '../../../common/src/rf_pages/order';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
+import config from './testdata.json';
 
 const url = getSiteUrl('supersaver-se', config.host);
 const props = {
@@ -45,7 +44,7 @@ const props = {
   'Payment.RemoveAdressForBank.Enable': false,
 };
 
-fixture('FlexibleTicket product verification')
+fixture('Flexible Ticket product verification')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
@@ -66,12 +65,12 @@ test('Flexible Ticket not available for infant', async () => {
   await addNoExtraProducts(numberOfAdults, numberOfInfants);
   await addFlexibleTicketAllTravelers();
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t.expect(travelerModule.cartFlexTicketProductMobile.visible).ok();
     await t
       .expect(travelerModule.cartFlexTicketProductMobile.innerText)
       .contains(`${numberOfAdults} Ombokningsbar biljett`);
-    await closeCart();
+    await toggleCart();
   }
   if (await isDesktop()) {
     await t.expect(travelerModule.cartFlexTicketProduct.visible).ok();
@@ -82,17 +81,28 @@ test('Flexible Ticket not available for infant', async () => {
   await bookFlight();
   await closeSeatMapModal();
   await t.expect(paymentModule.bankLabel.exists).ok('', { timeout: 30000 });
-  await openCartIfClosed();
-  await t.expect(paymentModule.cartFlexTicketProduct.visible).ok();
-  await t
-    .expect(paymentModule.cartFlexTicketProduct.innerText)
-    .contains(`${numberOfAdults} Ombokningsbar biljett`);
-  await payWithDummyBank(travelers[0]);
-  await t
-    .expect(orderModule.infoTextOrderPage.visible)
-    .ok('', { timeout: 50000 })
-    .expect(orderModule.infoTextOrderPage.innerText)
-    .contains(messageSupersaverSe);
+
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t.expect(paymentModule.cartFlexTicketProductMobile.visible).ok();
+    await t
+      .expect(paymentModule.cartFlexTicketProductMobile.innerText)
+      .contains(`${numberOfAdults} Ombokningsbar biljett`);
+    await toggleCart();
+  }
+  if (await isDesktop()) {
+    await openCartIfClosed();
+    await t.expect(paymentModule.cartFlexTicketProduct.visible).ok();
+    await t
+      .expect(paymentModule.cartFlexTicketProduct.innerText)
+      .contains(`${numberOfAdults} Ombokningsbar biljett`);
+    await payWithDummyBank(travelers[0]);
+    await t
+      .expect(orderModule.infoTextOrderPage.visible)
+      .ok('', { timeout: 50000 })
+      .expect(orderModule.infoTextOrderPage.innerText)
+      .contains(messageSupersaverSe);
+  }
 });
 
 test('Different selections for flexible ticket', async () => {
@@ -107,13 +117,13 @@ test('Different selections for flexible ticket', async () => {
 
   // Flexible ticket for one of 2 travellers
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t
       .expect(travelerModule.cartFlexTicketProductMobile.visible)
       .ok()
       .expect(travelerModule.cartFlexTicketProductMobile.innerText)
       .contains(`${numberOfFlexibleTickets} Ombokningsbar biljett`);
-    await closeCart();
+    await toggleCart();
   }
   if (await isDesktop()) {
     await t
@@ -126,7 +136,7 @@ test('Different selections for flexible ticket', async () => {
   // Flexible ticket for both travellers
   await addFlexibleTicketAllTravelers();
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t
       .expect(travelerModule.cartFlexTicketProductMobile.visible)
       .ok()
@@ -149,7 +159,7 @@ test('Flexible ticket included in trip, added to cart', async () => {
   await makeSearch('return trip', 'STO', 'SYD', 10);
   await t.click(resultModule.bookFlightWithFlexibleTicketButton);
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t
       .expect(travelerModule.cartFlexTicketProductMobile.visible)
       .ok()

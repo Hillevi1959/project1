@@ -1,8 +1,9 @@
 /* eslint-disable no-await-in-loop */
+/* eslint-disable no-console */
 import { Selector, t } from 'testcafe';
 import config from '../../../frontE2E/testdata.json';
 import edvinModule from '../rf_modules/edvinModule';
-import { getCurrentUrl } from '../util/clientFunction';
+import { getCurrentUrl, navigateToUrl } from '../util/clientFunction';
 import { getSiteUrl } from '../util/common';
 
 let discountCodeLinkResponsive = '';
@@ -91,71 +92,15 @@ export function getDiscountCode() {
   return discountCode;
 }
 
-export async function createVoucherInEdvin(site, orderNumber) {
-  do {
-    await t.navigateTo(
-      `${site}${config.host}/edvin/order/Order.list.action?_s=true&searching=true`,
-    );
-    let currentUrl = await getCurrentUrl();
-    if (!currentUrl.includes('edvin/gui/?url=/edvin/core/order/OrderContainer.edit.action%3Fid')) {
-      await t.expect(edvinModule.orderNumberInput.visible).ok();
-      await t
-        .click(edvinModule.orderNumberInput)
-        .typeText(edvinModule.orderNumberInput, orderNumber)
-        .click(edvinModule.submitButton);
-    }
-    let orderUlrWithId = await convertUrl(
-      site,
-      `${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=`,
-    );
-    if (await Selector('.alert.alert-info').visible) {
-      await t.click(Selector('.edvin-menu.edvin-menu-left'));
-      await t.navigateTo(
-        `${site}${config.host}/edvin/order/Order.list.action?_s=true&searching=true`,
-      );
-      currentUrl = await getCurrentUrl();
-      if (
-        !currentUrl.includes('edvin/gui/?url=/edvin/core/order/OrderContainer.edit.action%3Fid')
-      ) {
-        await t.expect(edvinModule.orderNumberInput.visible).ok();
-        await t
-          .click(edvinModule.orderNumberInput)
-          .typeText(edvinModule.orderNumberInput, orderNumber)
-          .click(edvinModule.submitButton);
-        orderUlrWithId = await convertUrl(
-          site,
-          `${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=`,
-        );
-      }
-    }
-    await t.navigateTo(orderUlrWithId);
-  } while (!(await edvinModule.providerBookingIdLink.visible));
-
-  await t.click(edvinModule.providerBookingIdLink);
-  const providerBookingUrlWithId = await convertUrl(
-    site,
-    `${config.host}/edvin/core/booking/ProviderBooking.edit.action?_s=true&id=`,
-  );
-  await t.navigateTo(providerBookingUrlWithId);
-  await t.click(edvinModule.realDiscountGeneratorButton);
-  await t.navigateTo(providerBookingUrlWithId);
-  await t.click(edvinModule.discountItemLink);
-  const discountUrlWithId = await convertUrl(
-    site,
-    `${config.host}/edvin/discount/DiscountItem.edit.action?_s=true&id=`,
-  );
-  await t.navigateTo(discountUrlWithId);
-  setDiscountCode(await edvinModule.discountCodeField.getAttribute('value'));
-  setDiscountCodeUrl(await edvinModule.discountLinkResponsive.getAttribute('href'));
-}
-
 export async function searchFirstOrderInEdvin() {
   const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
   await t.navigateTo(`${urlEdvin}/order/Order.list.action?_s=true&searching=true`);
-  await t
-    .typeText(edvinModule.userNameInput, 'autotest')
-    .typeText(edvinModule.passwordInput, 'gurkburk')
-    .click(edvinModule.logInButton);
+  if (await edvinModule.userNameInput.visible) {
+    await t
+      .typeText(edvinModule.userNameInput, 'autotest')
+      .typeText(edvinModule.passwordInput, 'gurkburk')
+      .click(edvinModule.logInButton);
+  }
   const currentUrl = await getCurrentUrl();
   if (!currentUrl.includes('edvin/gui/?url=/edvin/core/order/OrderContainer.edit.action%3Fid')) {
     await t
@@ -165,12 +110,51 @@ export async function searchFirstOrderInEdvin() {
       .click(edvinModule.orderNumberInput)
       .typeText(edvinModule.orderNumberInput, 'L');
     await t.click(edvinModule.submitButton);
-    const orderNumber = await edvinModule.firstOrderNumberInResultTable.innerText;
-    console.log('Searched order number: ', await orderNumber);
-    await t.expect(edvinModule.orderNumberInput.visible).ok('', { timeout: 20000 });
-    await t
-      .click(edvinModule.orderNumberInput)
-      .typeText(edvinModule.orderNumberInput, await orderNumber)
-      .click(edvinModule.submitButton);
+    console.log('Edvin warm up search for order');
+    await t.click(edvinModule.firstOrderNumberInResultTable);
   }
+}
+
+async function searchOrder(site, orderNumber) {
+  await t.navigateTo(`${site}${config.host}/edvin/order/Order.list.action?_s=true&searching=true`);
+  const currentUrl = await getCurrentUrl();
+  if (!currentUrl.includes('edvin/gui/?url=/edvin/core/order/OrderContainer.edit.action%3Fid')) {
+    await t.expect(edvinModule.orderNumberInput.visible).ok();
+    await t.click(edvinModule.orderNumberInput).typeText(edvinModule.orderNumberInput, orderNumber);
+    await t.click(edvinModule.submitButton);
+    console.log('Search for order: ', orderNumber);
+  }
+  return convertUrl(site, `${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=`);
+}
+
+export async function createVoucherInEdvin(site, orderNumber) {
+  let iteration = 0;
+  do {
+    let orderUrlWithId = await searchOrder(site, orderNumber);
+
+    if (await Selector('.alert.alert-info', { timeout: 1000 }).visible) {
+      await t.click(Selector('.edvin-menu.edvin-menu-left'));
+      orderUrlWithId = searchOrder(site, orderNumber);
+    }
+    await navigateToUrl(orderUrlWithId);
+    iteration += 1;
+    console.log('Search for order: ', orderNumber);
+  } while (!(await edvinModule.providerBookingIdLink.visible) && iteration < 20);
+
+  await t.click(edvinModule.providerBookingIdLink);
+  const providerBookingUrlWithId = await convertUrl(
+    site,
+    `${config.host}/edvin/core/booking/ProviderBooking.edit.action?_s=true&id=`,
+  );
+  await t.navigateTo(providerBookingUrlWithId);
+  await t.click(edvinModule.dummyDiscountGeneratorButton);
+  await t.navigateTo(providerBookingUrlWithId);
+  await t.click(edvinModule.discountItemLink);
+  const discountUrlWithId = await convertUrl(
+    site,
+    `${config.host}/edvin/discount/DiscountItem.edit.action?_s=true&id=`,
+  );
+  await t.navigateTo(discountUrlWithId);
+  setDiscountCode(await edvinModule.discountCodeField.getAttribute('value'));
+  setDiscountCodeUrl(await edvinModule.discountLinkResponsive.getAttribute('href'));
 }
