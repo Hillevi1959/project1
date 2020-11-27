@@ -46,11 +46,11 @@ import resultModule from '../../../common/src/rf_modules/resultModule';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
+import { getTripPricePound, getVoucherPricePound } from '../../../common/src/util/price';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
 const props = {
-  'PaymentService.CascadingPaymentsBehavior.Enabled': false,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
   'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
@@ -103,13 +103,13 @@ async function prepareSelfServiceRebookingFlow() {
   await t.navigateTo(url);
   await enableDebug();
   await selectProvider('Sabre');
-  await selectProvider('Amadeus');
   await setProps(props);
   await t.navigateTo(getDiscountCodeUrl());
   console.log('Go to SSR start page');
 }
 /*
-  To make this test run without errors after first deploy, run test 'Edvin warm up' in aEdvinOrderWarmUpTest.js
+  To make this test run without errors after first deploy when starting the test in a terminal,
+   run test 'Edvin warm up' in aEdvinOrderWarmUpTest.js
   or do a manual search for an order
  */
 fixture('Verify self service rebooking flow')
@@ -117,7 +117,6 @@ fixture('Verify self service rebooking flow')
   .beforeEach(async () => {
     await enableDebug();
     await selectProvider('Sabre');
-    await selectProvider('Amadeus');
     await setProps(props);
     await acceptCookies();
     await closeHeaderUrgencyBanner();
@@ -153,26 +152,37 @@ test('Create order in self service rebooking flow', async () => {
     await t.expect(resultModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
 
     await t.click(resultModule.searchFormButton);
-
     // Verify voucher tags
     let numberOfVoucherTrips = await getNumberOfElements(
       '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
     );
-    let numberOfTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+    let numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
 
-    await t.expect(await numberOfTrips).gte(await numberOfVoucherTrips);
+    await t.expect(await numberOfAllTrips).gte(await numberOfVoucherTrips);
 
     await t.click(resultModule.voucherSwitch);
-    numberOfTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+    numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
     numberOfVoucherTrips = await getNumberOfElements(
       '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
     );
 
-    await t.expect(await numberOfVoucherTrips).eql(await numberOfTrips);
+    await t.expect(await numberOfVoucherTrips).eql(await numberOfAllTrips);
 
+    // Verify voucher price
     await t.click(resultModule.cheapestFilterButton);
-    await selectTripNumber(0);
+    const tripPriceStandard = getTripPricePound(await resultModule.tripPriceStandard.innerText);
+    const tripPriceFlex = getTripPricePound(await resultModule.tripPriceFlex.innerText);
+    const voucherPriceFlex = getVoucherPricePound(await resultModule.voucherFlexPrice.innerText);
+    const voucherPriceStandard = getVoucherPricePound(
+      await resultModule.voucherStandardPrice.innerText,
+    );
 
+    await t.expect(resultModule.voucherStandardPrice.visible).ok();
+    await t.expect(resultModule.voucherFlexPrice().visible).ok();
+    await t.expect(tripPriceStandard).gt(voucherPriceStandard);
+    await t.expect(tripPriceFlex).gt(voucherPriceFlex);
+
+    await selectTripNumber(0);
     // verify TD-page
     await addContact(travelers[0]);
 
