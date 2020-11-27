@@ -41,6 +41,7 @@ export default {
   orderNumber: Selector('[data-testid="orderPage-ReceiptInformation-orderNumber"]'),
   orderPage: Selector('[data-testid="order-page"]'),
   owcInformation: Selector('[data-testid="tripDetails-oneWayCombination-wrapper"]'),
+  pdfIframe: Selector('iframe'),
   printConfirmationButton: Selector('[data-testid="printConfirmation-button"]'),
   printBusinessReceiptDropdown: Selector('[data-testid="printable-orders-dropdown"]'),
   printBusinessReceiptButton: Selector('[data-testid="receiptPrintModal-printCompany-button"]'),

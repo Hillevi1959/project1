@@ -88,6 +88,9 @@ test('Verify order number in pdf url for invoice created on order page after pay
     .typeText(orderModule.companyInformationZipCode, travelers[0].zipCode)
     .typeText(orderModule.companyInformationVatNumber, travelers[0].vatNumber);
   await t.click(orderModule.printBusinessReceiptButton);
+  // await t.switchToIframe(orderModule.pdfIframe);
+  await t.expect(orderModule.pdfIframe.visible).ok();
+  // await t.expect(orderModule.openPdfFileButton.visible).ok();
   const orderNumberInUrl = await getOrderNumberFromUrl();
 
   await t.expect(orderNumberOnOrderPage).eql(orderNumberInUrl);
