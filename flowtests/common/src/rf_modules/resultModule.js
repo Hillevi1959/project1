@@ -66,6 +66,9 @@ export default {
   filterTravelTimeSlider: Selector(
     '[data-testid="resultPage-TRAVEL_TIMEFilter-content"] [data-testid="handle-0"]',
   ),
+  firstBoundPlaneIcon: Selector(
+    '.resultPage-flightResults-0 [data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
+  ),
   headerNavigationMenu: Selector('[data-testid="siteheader-button"]'),
   nextMonth: Selector('[data-testid="searchForm-nextMonth-input"]'),
   openFlightButton: Selector('[data-testid="searchResults-arrowDown-button"]'),
@@ -97,9 +100,6 @@ export default {
   smallTrainIcon: Selector('[data-testid="tripDetails-bound-train-icon"]'),
   timeStampSegmentOrigin: Selector('[data-testid="trip-segment-origin-time"]'),
   timeStampSegmentDestination: Selector('[data-testid="trip-segment-destination-time"]'),
-  firstBoundPlaneIcon: Selector(
-    '.resultPage-flightResults-0 [data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
-  ),
   secondBoundTrainIcon: Selector(
     '.resultPage-flightResults-0 [data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-bound-train-icon"]',
   ),
@@ -108,6 +108,7 @@ export default {
   ),
   tripDetailBound: Selector('[data-testid="tripDetails-bound"]'),
   tripInfoText: Selector('.resultPage-flightResults-4 [data-testid="tripDetails-segment-event"]'),
+  tripPriceFlex: Selector('[data-testid="result-trip-price-flex"]'),
   tripPriceStandard: Selector('[data-testid="result-trip-price-standard"]'),
   tripTitleFlight: Selector('[data-testid="tripDetails-title-TitleText"]'),
   tripTitleDate: Selector('[data-testid="tripDetails-title-date-desktop"]'),
@@ -125,6 +126,8 @@ export default {
   tripChange: Selector('[data-testid="searchResults-segment-stops"]'),
   tripInformationHeader: Selector('.header'),
   tripSegment: Selector('[data-testid="tripDetails-segment"]'),
+  voucherStandardPrice: Selector('[data-testid="result-trip-discounted-price-standard"]'),
+  voucherFlexPrice: Selector('[data-testid="result-trip-discounted-price-flex"]'),
   voucherSwitch: Selector('[data-testid="slider-valid-with-voucher-switch"]'),
   childAgeCounterPlus: childNr =>
     Selector(`[data-testid="child-${childNr}-age-option"] .etiCounter__button--plus`),

@@ -46,11 +46,11 @@ import resultModule from '../../../common/src/rf_modules/resultModule';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
+import { getTripPricePound, getVoucherPricePound } from '../../../common/src/util/price';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
 const props = {
-  'PaymentService.CascadingPaymentsBehavior.Enabled': false,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
   'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
@@ -171,6 +171,20 @@ test('Create order in self service rebooking flow', async () => {
     await t.expect(await numberOfVoucherTrips).eql(await numberOfTrips);
 
     await t.click(resultModule.cheapestFilterButton);
+
+    await t.expect(resultModule.voucherStandardPrice.visible).ok();
+    await t.expect(resultModule.voucherFlexPrice().visible).ok();
+
+    const tripPriceStandard = getTripPricePound(await resultModule.tripPriceStandard.innerText);
+    const tripPriceFlex = getTripPricePound(await resultModule.tripPriceFlex.innerText);
+    const voucherPriceFlex = getVoucherPricePound(await resultModule.voucherFlexPrice.innerText);
+    const voucherPriceStandard = getVoucherPricePound(
+      await resultModule.voucherStandardPrice.innerText,
+    );
+
+    await t.expect(tripPriceStandard).gt(voucherPriceStandard);
+    await t.expect(tripPriceFlex).gt(voucherPriceFlex);
+
     await selectTripNumber(0);
 
     // verify TD-page
