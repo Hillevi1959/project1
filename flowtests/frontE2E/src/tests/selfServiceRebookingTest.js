@@ -103,7 +103,6 @@ async function prepareSelfServiceRebookingFlow() {
   await t.navigateTo(url);
   await enableDebug();
   await selectProvider('Sabre');
-  await selectProvider('Amadeus');
   await setProps(props);
   await t.navigateTo(getDiscountCodeUrl());
   console.log('Go to SSR start page');
@@ -118,7 +117,6 @@ fixture('Verify self service rebooking flow')
   .beforeEach(async () => {
     await enableDebug();
     await selectProvider('Sabre');
-    await selectProvider('Amadeus');
     await setProps(props);
     await acceptCookies();
     await closeHeaderUrgencyBanner();
