@@ -92,12 +92,12 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
   await makeSearch('return trip', 'NYO', 'TOJ', 10);
   await filterSasLufthansa();
-  await t.click(resultModule.toggleTrip(0));
+  await t.click(resultModule.toggleTrip(1));
 
   await t.expect(resultModule.owcInformation.visible).ok();
   await t.expect(resultModule.discountInformation.visible).ok();
 
-  await selectTripNumber(0);
+  await selectTripNumber(2);
   const tripPrice = await getTotalPriceForTrip();
   await toggleTripDetailsTravelerDetails();
 
