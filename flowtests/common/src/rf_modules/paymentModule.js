@@ -68,6 +68,8 @@ export default {
   ),
   cartAllInclusiveProduct: Selector('[data-testid="cart-product-allInclusiveProtection"]'),
   cartAllInclusivePrice: Selector('[data-testid="cart-product-allInclusiveProtection-price"]'),
+  cartCancellationWithinEuProductPrice: Selector('[data-testid="cart-product-cancellationInsideEu-price"]'),
+  cartCancellationOutsideEuProductPrice: Selector('[data-testid="cart-product-cancellationOutsideEu-price"]'),
   cartTrips: Selector('[data-testid="cart-content-Trips"]'),
   cartTripsMobile: Selector('[data-testid="cart-content-Trips-drawer"]'),
   cartTrip: Selector('[data-testid="cart-content-Trip"] div'),
