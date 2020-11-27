@@ -109,7 +109,8 @@ async function prepareSelfServiceRebookingFlow() {
   console.log('Go to SSR start page');
 }
 /*
-  To make this test run without errors after first deploy, run test 'Edvin warm up' in aEdvinOrderWarmUpTest.js
+  To make this test run without errors after first deploy when starting the test in a terminal,
+   run test 'Edvin warm up' in aEdvinOrderWarmUpTest.js
   or do a manual search for an order
  */
 fixture('Verify self service rebooking flow')
@@ -153,28 +154,24 @@ test('Create order in self service rebooking flow', async () => {
     await t.expect(resultModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
 
     await t.click(resultModule.searchFormButton);
-
     // Verify voucher tags
     let numberOfVoucherTrips = await getNumberOfElements(
       '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
     );
-    let numberOfTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+    let numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
 
-    await t.expect(await numberOfTrips).gte(await numberOfVoucherTrips);
+    await t.expect(await numberOfAllTrips).gte(await numberOfVoucherTrips);
 
     await t.click(resultModule.voucherSwitch);
-    numberOfTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+    numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
     numberOfVoucherTrips = await getNumberOfElements(
       '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
     );
 
-    await t.expect(await numberOfVoucherTrips).eql(await numberOfTrips);
+    await t.expect(await numberOfVoucherTrips).eql(await numberOfAllTrips);
 
+    // Verify voucher price
     await t.click(resultModule.cheapestFilterButton);
-
-    await t.expect(resultModule.voucherStandardPrice.visible).ok();
-    await t.expect(resultModule.voucherFlexPrice().visible).ok();
-
     const tripPriceStandard = getTripPricePound(await resultModule.tripPriceStandard.innerText);
     const tripPriceFlex = getTripPricePound(await resultModule.tripPriceFlex.innerText);
     const voucherPriceFlex = getVoucherPricePound(await resultModule.voucherFlexPrice.innerText);
@@ -182,11 +179,12 @@ test('Create order in self service rebooking flow', async () => {
       await resultModule.voucherStandardPrice.innerText,
     );
 
+    await t.expect(resultModule.voucherStandardPrice.visible).ok();
+    await t.expect(resultModule.voucherFlexPrice().visible).ok();
     await t.expect(tripPriceStandard).gt(voucherPriceStandard);
     await t.expect(tripPriceFlex).gt(voucherPriceFlex);
 
     await selectTripNumber(0);
-
     // verify TD-page
     await addContact(travelers[0]);
 
