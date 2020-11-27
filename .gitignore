@@ -10,3 +10,5 @@ reports/*
 target/*
 uitest.iml
 node_modules/*
+flowtests/frontE2E/src/testdata.json
+flowtests/team-ancillary/src/tests/testdata.json
