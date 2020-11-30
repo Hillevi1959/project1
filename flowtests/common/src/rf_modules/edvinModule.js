@@ -31,4 +31,14 @@ export default {
   dummyDiscountGeneratorButton: Selector('.group.noToggler.left > .button.button-green').nth(0),
   submitButton: Selector('[name="__submit"]'),
   userNameInput: Selector('[name="userName"]'),
+  addOnPurchaseButton: Selector('#goToAddOnPurchases'),
+  createAddOnCartButton: Selector('#addOnPurchasePlaceholder button').nth(0),
+  addOnProductsModal: Selector('.availableAddOnProducts'),
+  activatePaymentLinkButton: Selector('footer button').nth(0),
+  avaliableAddOnProducts: productNr =>
+    Selector(
+      `.availableAddOnProducts > div > div > div > div > div:nth-child(${productNr}) .fa.fa-shopping-cart`,
+    ),
+  activatePaymentLinkTextArea: Selector('[role="dialog"] textarea'),
+  createPaymentLinkButton: Selector('div[role="dialog"] > div > div:nth-child(3) button').nth(0),
 };

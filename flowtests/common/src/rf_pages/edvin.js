@@ -92,6 +92,14 @@ export function getDiscountCode() {
   return discountCode;
 }
 
+export async function logInToEdvin(urlEdvin) {
+  await t.navigateTo(urlEdvin);
+  await t
+    .typeText(edvinModule.userNameInput, 'autotest')
+    .typeText(edvinModule.passwordInput, 'gurkburk')
+    .click(edvinModule.logInButton);
+}
+
 export async function searchFirstOrderInEdvin() {
   const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
   await t.navigateTo(`${urlEdvin}/order/Order.list.action?_s=true&searching=true`);
@@ -115,7 +123,7 @@ export async function searchFirstOrderInEdvin() {
   }
 }
 
-async function searchOrder(site, orderNumber) {
+export async function searchOrder(site, orderNumber) {
   await t.navigateTo(`${site}${config.host}/edvin/order/Order.list.action?_s=true&searching=true`);
   const currentUrl = await getCurrentUrl();
   if (!currentUrl.includes('edvin/gui/?url=/edvin/core/order/OrderContainer.edit.action%3Fid')) {
