@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
-import { Selector, t } from 'testcafe';
+import { ClientFunction, Selector, t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider } from '../../../common/src/util/debugOptions';
@@ -16,8 +16,9 @@ import { createOrderWithNoProducts } from '../../../common/src/util/createOrder'
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { logInToEdvin, searchOrder } from '../../../common/src/rf_pages/edvin';
 import { isMobile, isTablet } from '../../../common/src/util/device';
-import { navigateToUrl } from '../../../common/src/util/clientFunction';
+import { getCurrentUrl, navigateToUrl } from '../../../common/src/util/clientFunction';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
+import { openDropdown } from '../../../common/src/util/dropdownSelect';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getFirstInfant()]);
@@ -54,7 +55,7 @@ test('Create add on cart in Edvin and verify payment link', async () => {
     'Paris',
     'CARD',
   );
-  // const orderNumber = 'DTESTG61X';
+  // const orderNumber = 'DTESTG6GY';
   const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number: ', orderNumber);
   await logInToEdvin(getSiteUrl('gotogate-uk-edvin', config.host));
@@ -83,6 +84,64 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   await t.click(edvinModule.avaliableAddOnProducts(checkIn));
   await t.click(edvinModule.activatePaymentLinkButton);
   await t.typeText(edvinModule.activatePaymentLinkTextArea, 'TEST');
+  await t.click(edvinModule.paymentLinkSendEmailCheckbox);
   await t.click(edvinModule.createPaymentLinkButton);
+
+  const originUrl = await getCurrentUrl();
+  console.log('Origin url: ', originUrl);
+  const url0 = originUrl.split('3D')[1];
+  const orderId = url0.split('%')[0];
+  console.log('OrderId: ', orderId);
+  const orderUrl = `https://gotogate-uk${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=${orderId}`;
+  await t.navigateTo(orderUrl);
+  await openDropdown(edvinModule.addOnCartActionsDropdown);
+  // await t.setNativeDialogHandler(() => true).click(edvinModule.copyPaymentLinkSelection);
   await t.debug();
+
+  const execPaste = ClientFunction(() => document.execCommand('paste'));
+  await t.click(Selector('#addOnPurchasePlaceholder>div>div:nth-child(2)'));
+  console.log(await execPaste());
+  await t.debug();
+
+  // const execCopy = ClientFunction( () => document.execCommand('copy'));
+  // const overrideClipboardCopy = ClientFunction(() => {
+  //   document.getElementById('createCartSection').innerHTML = 'TEST av execCommand';
+  //   const { execCommand } = document;
+  //   document.execCommand = (action, ...args) => {
+  //     if (action === 'copy') {
+  //       console.log(args);
+  //       console.log(...args);
+  //     } else {
+  //       return execCommand.call(document, ...args);
+  //     }
+  //   };
+  // });
+
+  // await t.setNativeDialogHandler(overrideClipboardCopy).click(edvinModule.createPaymentLinkButton);
+
+  // ClientFunction(() => document.execCommand('copy'));
+  //
+  // ClientFunction(() => document.execCommand('paste'));
+  //
+  //   navigator.clipboard.readText().then(clipText => console.log(clipText)),
+  // );
+  // console.log(text);
+  //
+  // await t.setNativeDialogHandler(() => true).click(edvinModule.copyPaymentLinkSelection);
 });
+//
+// function copy(str) {
+//   var sandbox = $('#sandbox').val(str).select();
+//   document.execCommand('copy');
+//   sandbox.val('');
+// }
+//
+// function paste() {
+//   var result = '',
+//     sandbox = $('#sandbox').val('').select();
+//   if (document.execCommand('paste')) {
+//     result = sandbox.val();
+//   }
+//   sandbox.val('');
+//   return result;
+// }
