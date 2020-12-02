@@ -20,10 +20,7 @@ import {
   saveSeatMapSelections,
   selectSeatsForAllSegmentTypes,
 } from '../../../common/src/rf_pages/seatMap';
-import {
-  logInToCheckoutAndChangeUrl,
-  payWithCreditCard,
-} from '../../../common/src/rf_pages/payment';
+import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { selectTripNumber } from '../../../common/src/rf_pages/result';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
@@ -83,14 +80,14 @@ test('Go to order page with seatMap product', async () => {
   await saveSeatMapSelections();
   // Payment page
   await payWithCreditCard();
-  await logInToCheckoutAndChangeUrl();
+  await addCheckoutData();
   // Order page
   await waitForOrderPageToLoad();
   const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number = ', orderNumber);
   await t.debug();
   // Go manually to postbooking and fill in data. When you need to fill in checkout, press resume
-  await logInToCheckoutAndChangeUrl();
+  await addCheckoutData();
   await t.debug();
 });
 
@@ -119,13 +116,13 @@ test('Go to order page without extra products', async () => {
   await closeSeatMapModal();
   // Payment page
   await payWithCreditCard();
-  await logInToCheckoutAndChangeUrl();
+  await addCheckoutData();
   // Order page
   await waitForOrderPageToLoad();
   const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number = ', orderNumber);
   await t.debug();
   // Go manually to postbooking and fill in data. When you need to fill in checkout, press resume
-  await logInToCheckoutAndChangeUrl();
+  await addCheckoutData();
   await t.debug();
 });
