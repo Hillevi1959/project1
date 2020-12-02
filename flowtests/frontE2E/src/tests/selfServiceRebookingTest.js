@@ -5,11 +5,7 @@ import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getNumberOfElements, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider } from '../../../common/src/util/debugOptions';
 import setProps from '../../../common/src/util/props';
-import {
-  closeHeaderUrgencyBanner,
-  makeSearch,
-  selectTravelers,
-} from '../../../common/src/rf_pages/start';
+import { closeHeaderUrgencyBanner, makeSearch } from '../../../common/src/rf_pages/start';
 import config from '../../testdata.json';
 import {
   addNumberToTraveler,
@@ -21,11 +17,7 @@ import {
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import startModule from '../../../common/src/rf_modules/startModule';
 import { selectTripNumber } from '../../../common/src/rf_pages/result';
-import {
-  addContact,
-  addTravelerInformation,
-  bookFlight,
-} from '../../../common/src/rf_pages/travelerDetails';
+import { addContact, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
@@ -33,23 +25,18 @@ import {
   acceptPriceChange,
   addPaymentData,
   checkPaymentConditions,
-  payWithCreditCard,
 } from '../../../common/src/rf_pages/payment';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
-import {
-  createVoucherInEdvin,
-  getDiscountCode,
-  getDiscountCodeUrl,
-} from '../../../common/src/rf_pages/edvin';
+import { getDiscountCode, getDiscountCodeUrl } from '../../../common/src/rf_pages/edvin';
 import { getWindowWidth } from '../../../common/src/util/device';
 import resultModule from '../../../common/src/rf_modules/resultModule';
-import { scrollToElement } from '../../../common/src/util/clientFunction';
-import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
-import edvinModule from '../../../common/src/rf_modules/edvinModule';
 import { getTripPricePound, getVoucherPricePound } from '../../../common/src/util/price';
+import {
+  createOrderAndDiscountCode,
+  prepareSelfServiceRebookingFlow,
+} from '../../../common/src/util/selfServiceRebboking';
 
 const url = getSiteUrl('gotogate-uk', config.host);
-const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
 const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
@@ -64,54 +51,9 @@ const travelers = addNumberToTraveler([
 ]);
 const numberOfAdults = 2;
 const numberOfChildren = 1;
-const numberOfInfants = 1;
 const origin = 'Mauritius';
 const destination = 'New Delhi';
 
-async function createOrderAndDiscountCode() {
-  const site = 'https://gotogate-uk';
-  await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
-  await makeSearch('one way trip', origin, destination, 10);
-  await t.expect(resultModule.toggleFilterButton.visible).ok('', { timeout: 20000 });
-  await scrollToElement('[data-testid="resultPage-toggleFiltersButton-button"]');
-  await t
-    .click(resultModule.toggleFilterButton)
-    .click(resultModule.clearAirlines)
-    .click(resultModule.filterAirlineMauritiusCheckbox)
-    .click(resultModule.toggleFilterButton);
-  await selectTripNumber(0);
-  await addTravelerInformation(travelers);
-  await addNoExtraProducts(numberOfAdults + numberOfChildren);
-  await bookFlight();
-  await closeSeatMapModal();
-  await payWithCreditCard();
-  await acceptPriceChange();
-  await waitForOrderPageToLoad();
-  const orderNumber = await orderModule.orderNumber.innerText;
-  console.log('Order number: ', orderNumber);
-  await t.navigateTo(`${urlEdvin}/order/Order.list.action?_s=true&searching=true`);
-  if (await edvinModule.userNameInput.visible) {
-    await t
-      .typeText(edvinModule.userNameInput, 'autotest')
-      .typeText(edvinModule.passwordInput, 'gurkburk')
-      .click(edvinModule.logInButton);
-  }
-  await createVoucherInEdvin(site, orderNumber);
-}
-
-async function prepareSelfServiceRebookingFlow() {
-  await t.navigateTo(url);
-  await enableDebug();
-  await selectProvider('Sabre');
-  await setProps(props);
-  await t.navigateTo(getDiscountCodeUrl());
-  console.log('Go to SSR start page');
-}
-/*
-  To make this test run without errors after first deploy when starting the test in a terminal,
-   run test 'Edvin warm up' in aEdvinOrderWarmUpTest.js
-  or do a manual search for an order
- */
 fixture('Verify self service rebooking flow')
   .page(url)
   .beforeEach(async () => {
@@ -129,7 +71,7 @@ test('Create order in self service rebooking flow', async () => {
     await createOrderAndDiscountCode();
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
-    await prepareSelfServiceRebookingFlow();
+    await prepareSelfServiceRebookingFlow(url, props);
     // Verify start page
     const voucherMessageRow1 = 'Welcome! You are a few steps away from using your voucher.';
     const voucherMessageRow2 =
