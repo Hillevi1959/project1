@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
@@ -13,10 +14,7 @@ import {
   getSecondAdult,
 } from '../../../common/src/util/travelerData';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
-import {
-  addAllExtraProducts,
-  addNoExtraProducts,
-} from '../../../common/src/rf_pages/travelerDetailsProducts';
+import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import {
   closeSeatMapModal,
   saveSeatMapSelections,
@@ -62,9 +60,9 @@ fixture('Go to order page')
 /*
    To fill in the Checkout modal after postbooking, press "Resume" to get to order page
    To start this test in terminal:
-   testcafe "chrome" origin/uitest/flowtests/semi-automated/src/tests/*.js -e -t 'Go to order page with all extra products'
+   testcafe "chrome" flowtests/semi-automated/src/tests/*.js -e -t 'Go to order page with all extra products'
   */
-test('Go to order page with all extra products', async () => {
+test('Go to order page with seatMap product', async () => {
   // Start page
   await searchTrip(
     numberOfAdults,
@@ -78,7 +76,7 @@ test('Go to order page with all extra products', async () => {
   await selectTripNumber(0);
   // TD-page
   await addTravelerInformation(travelers);
-  await addAllExtraProducts(numberOfAdults + numberOfChildren, travelers);
+  await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await bookFlight();
   // Seatmap
   await selectSeatsForAllSegmentTypes();
@@ -91,12 +89,15 @@ test('Go to order page with all extra products', async () => {
   const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number = ', orderNumber);
   await t.debug();
+  // Go manually to postbooking and fill in data. When you need to fill in checkout, press resume
+  await logInToCheckoutAndChangeUrl();
+  await t.debug();
 });
 
 /*
  To fill in the Checkout modal after postbooking, press "Resume" to get to order page
  To start this test in terminal:
- testcafe "chrome" origin/uitest/flowtests/semi-automated/src/tests/*.js -e -t 'Go to order page without extra products'
+ testcafe "chrome" flowtests/semi-automated/src/tests/*.js -e -t 'Go to order page without extra products'
 */
 test('Go to order page without extra products', async () => {
   // Start page
@@ -124,6 +125,7 @@ test('Go to order page without extra products', async () => {
   const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number = ', orderNumber);
   await t.debug();
+  // Go manually to postbooking and fill in data. When you need to fill in checkout, press resume
   await logInToCheckoutAndChangeUrl();
   await t.debug();
 });
