@@ -87,14 +87,17 @@ test('Create order in self service rebooking flow', async () => {
     await t.expect(startModule.voucherMessage2.innerText).contains(voucherMessageRow2);
 
     await t.click(startModule.travelerDropDown);
+
     await t.expect(startModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
     await t.expect(startModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
     await t.expect(startModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
+
     await makeSearch('one way trip', origin, destination, 20);
+
     // Verify result page
     await t.expect(resultModule.resultPage.visible).ok('', { timeout: 20000 });
-    await t.click(resultModule.searchFormButton);
-    await t.click(resultModule.travelerDropDown);
+
+    await t.click(resultModule.searchFormButton).click(resultModule.travelerDropDown);
 
     await t.expect(resultModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
     await t.expect(resultModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
@@ -163,7 +166,6 @@ test('Create order in self service rebooking flow', async () => {
     await addNoExtraProducts(numberOfAdults + numberOfChildren);
     await bookFlight();
     await closeSeatMapModal();
-
     // Verify payment page
     await t.click(paymentModule.cardLabel);
     await addPaymentData();
@@ -193,14 +195,11 @@ test('Choose trip that does not match the voucher, verify message, add new trave
   ]);
   const dummyPaymentTrue = true;
   props = {
-    // 'Payment.FraudAssessment.Accertify.ShadowMode': true,
-    // 'Payment.provider.creditcard': 'Checkout',
     'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
     'Payment.RemoveAdressForBank.Enable': false,
   };
   if ((await getWindowWidth()) < 970) {
-    // eslint-disable-next-line no-console
     console.warn('This test is not run on mobile or tablet device');
   } else {
     await t.navigateTo(url);
@@ -241,7 +240,6 @@ test('Choose trip that does not match the voucher, verify message, add new trave
       `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="resultPage-book-button"]`,
     ).nth(0);
     await t.click(tripWithoutVoucher);
-
     // Verify TD-page
     await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
 
@@ -257,9 +255,10 @@ test('Choose trip that does not match the voucher, verify message, add new trave
     await t.expect(paymentModule.paymentContainer.visible).ok();
     await t.expect(paymentModule.voucherNotValidInfo.visible).ok();
 
-    await t.click(paymentModule.discountCodeToggleInput);
-    await t.typeText(paymentModule.discountCodeInput, getDiscountCode());
-    await t.click(paymentModule.discountCodeButton);
+    await t
+      .click(paymentModule.discountCodeToggleInput)
+      .typeText(paymentModule.discountCodeInput, getDiscountCode())
+      .click(paymentModule.discountCodeButton);
 
     await t.expect(paymentModule.discountCodeError.visible).ok();
 
