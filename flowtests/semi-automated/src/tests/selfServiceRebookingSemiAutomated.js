@@ -11,10 +11,9 @@ import { getWindowWidth } from '../../../common/src/util/device';
 import {
   prepareSelfServiceRebookingFlow,
   createOrderAndDiscountCode,
-} from '../../../common/src/util/selfServiceRebboking';
+} from '../../../common/src/util/selfServiceReboking';
 
 const url = getSiteUrl('gotogate-uk', config.host);
-// const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
 const props = {
   'PaymentService.CascadingPaymentsBehavior.Enabled': false,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
@@ -22,6 +21,7 @@ const props = {
   'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
   'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
 };
+const dummyPaymentFalse = false;
 
 fixture('Verify self service rebooking flow semi automated')
   .page(url)
@@ -45,10 +45,10 @@ test('Create order in self service rebooking flow semi automated', async () => {
     // eslint-disable-next-line no-console
     console.warn('This test is not run on mobile or tablet device');
   } else {
-    await createOrderAndDiscountCode();
+    await createOrderAndDiscountCode('https://gotogate-uk', 'gotogate-uk-edvin', dummyPaymentFalse);
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
-    await prepareSelfServiceRebookingFlow(url, props);
+    await prepareSelfServiceRebookingFlow(url);
     await t.debug();
   }
 });

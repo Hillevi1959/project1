@@ -8,7 +8,7 @@ import { selectTripNumber } from '../rf_pages/result';
 import { addTravelerInformation, bookFlight } from '../rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../rf_pages/seatMap';
-import { acceptPriceChange, payWithCreditCard } from '../rf_pages/payment';
+import { acceptPriceChange, payWithCreditCard, payWithDummyBank } from '../rf_pages/payment';
 import { waitForOrderPageToLoad } from '../rf_pages/order';
 import orderModule from '../rf_modules/orderModule';
 import edvinModule from '../rf_modules/edvinModule';
@@ -21,21 +21,17 @@ import {
   getSecondAdult,
 } from './travelerData';
 import { getSiteUrl } from './common';
-import setProps from './props';
-import { selectProvider } from './debugOptions';
 import enableDebug from './debug';
 
-export async function prepareSelfServiceRebookingFlow(url, props) {
+export async function prepareSelfServiceRebookingFlow(url) {
   await t.navigateTo(url);
   await enableDebug();
-  await selectProvider('Sabre');
-  await setProps(props);
   await t.navigateTo(getDiscountCodeUrl());
   console.log('Go to SSR start page');
 }
 
-export async function createOrderAndDiscountCode() {
-  const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
+export async function createOrderAndDiscountCode(site, siteEdvin, paymentServiceProvider) {
+  const urlEdvin = getSiteUrl(siteEdvin, config.host);
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
@@ -47,7 +43,7 @@ export async function createOrderAndDiscountCode() {
   const numberOfInfants = 1;
   const origin = 'Mauritius';
   const destination = 'New Delhi';
-  const site = 'https://gotogate-uk';
+  // const site = 'https://gotogate-uk';
 
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
   console.log('Search for trip');
@@ -64,7 +60,11 @@ export async function createOrderAndDiscountCode() {
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await bookFlight();
   await closeSeatMapModal();
-  await payWithCreditCard();
+  if (paymentServiceProvider) {
+    await payWithDummyBank(travelers[0]);
+  } else {
+    await payWithCreditCard();
+  }
   await acceptPriceChange();
   await waitForOrderPageToLoad();
   const orderNumber = await orderModule.orderNumber.innerText;

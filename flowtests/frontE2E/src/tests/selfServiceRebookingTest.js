@@ -1,9 +1,9 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
-import { t } from 'testcafe';
+import { Selector, t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getNumberOfElements, getSiteUrl } from '../../../common/src/util/common';
-import { selectProvider } from '../../../common/src/util/debugOptions';
+import { selectProvider, setIBEDummyPaymentBankOn } from '../../../common/src/util/debugOptions';
 import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, makeSearch } from '../../../common/src/rf_pages/start';
 import config from '../../testdata.json';
@@ -13,11 +13,15 @@ import {
   getFirstAdult,
   getFirstInfant,
   getSecondAdult,
+  getThirdAdult,
+  getFourthAdult,
+  getSecondChild,
+  getSecondInfant,
 } from '../../../common/src/util/travelerData';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import startModule from '../../../common/src/rf_modules/startModule';
 import { selectTripNumber } from '../../../common/src/rf_pages/result';
-import { addContact, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
+import { addContact, addTraveler, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
@@ -25,6 +29,7 @@ import {
   acceptPriceChange,
   addPaymentData,
   checkPaymentConditions,
+  payWithDummyBank,
 } from '../../../common/src/rf_pages/payment';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { getDiscountCode, getDiscountCodeUrl } from '../../../common/src/rf_pages/edvin';
@@ -34,10 +39,11 @@ import { getTripPricePound, getVoucherPricePound } from '../../../common/src/uti
 import {
   createOrderAndDiscountCode,
   prepareSelfServiceRebookingFlow,
-} from '../../../common/src/util/selfServiceRebboking';
+} from '../../../common/src/util/selfServiceReboking';
+import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
-const url = getSiteUrl('gotogate-uk', config.host);
-const props = {
+let url = getSiteUrl('gotogate-uk', config.host);
+let props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
   'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
@@ -68,10 +74,11 @@ test('Create order in self service rebooking flow', async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
-    await createOrderAndDiscountCode();
+    const dummyPaymentFalse = false;
+    await createOrderAndDiscountCode('https://gotogate-uk', 'gotogate-uk-edvin', dummyPaymentFalse);
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
-    await prepareSelfServiceRebookingFlow(url, props);
+    await prepareSelfServiceRebookingFlow(url);
     // Verify start page
     const voucherMessageRow1 = 'Welcome! You are a few steps away from using your voucher.';
     const voucherMessageRow2 =
@@ -174,4 +181,103 @@ test('Create order in self service rebooking flow', async () => {
     await t.expect(orderModule.selfServiceRebookingInfoText.innerText).contains(infoText);
     console.log('Create order in self service rebooking flow PASSED!');
   }
+});
+
+test('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
+  url = getSiteUrl('supersaver-se', config.host);
+  const newTravelers = addNumberToTraveler([
+    getThirdAdult(),
+    getFourthAdult(),
+    getSecondChild(),
+    getSecondInfant(),
+  ]);
+  const dummyPaymentTrue = true;
+  props = {
+    // 'Payment.FraudAssessment.Accertify.ShadowMode': true,
+    // 'Payment.provider.creditcard': 'Checkout',
+    'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
+    'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
+    'Payment.RemoveAdressForBank.Enable': false,
+  };
+  if ((await getWindowWidth()) < 970) {
+    // eslint-disable-next-line no-console
+    console.warn('This test is not run on mobile or tablet device');
+  } else {
+    await t.navigateTo(url);
+    await enableDebug();
+    await selectProvider('Sabre');
+    await setProps(props);
+    await setIBEDummyPaymentBankOn();
+    await acceptCookies();
+    await closeHeaderUrgencyBanner();
+    await createOrderAndDiscountCode(
+      'https://supersaver-se',
+      'supersaver-se-edvin',
+      dummyPaymentTrue,
+    );
+    console.log('Voucher code: ', getDiscountCode());
+    console.log('Voucher url: ', getDiscountCodeUrl());
+    await prepareSelfServiceRebookingFlow(url);
+    await makeSearch('one way trip', origin, destination, 20);
+
+    let tripNumber = 0;
+    await t.expect(resultModule.resultPage.visible).ok('', { timeout: 5000 });
+    // Select trip without voucher tag
+    while (
+      (await getNumberOfElements(
+        `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="valid-with-voucher-tag"]`,
+      )) === 1
+    ) {
+      tripNumber += 1;
+      if (tripNumber === 10) {
+        await t.click(resultModule.searchFormButton);
+        await t.click(resultModule.departureDate);
+        await t.click(Selector('.DayPicker-Day').nth(27));
+        await t.click(resultModule.searchFlight);
+        tripNumber = 0;
+      }
+    }
+    const tripWithoutVoucher = Selector(
+      `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="resultPage-book-button"]`,
+    ).nth(0);
+    await t.click(tripWithoutVoucher);
+
+    // Verify TD-page
+    await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
+
+    await addContact(travelers[0], true);
+    for (const traveler of newTravelers) {
+      await addTraveler(traveler);
+    }
+    await addNoExtraProducts(numberOfAdults + numberOfChildren);
+    await bookFlight();
+    await closeSeatMapModal();
+
+    // Verify payment page
+    await t.expect(paymentModule.paymentContainer.visible).ok();
+    await t.expect(paymentModule.voucherNotValidInfo.visible).ok();
+
+    await t.click(paymentModule.discountCodeToggleInput);
+    await t.typeText(paymentModule.discountCodeInput, getDiscountCode());
+    await t.click(paymentModule.discountCodeButton);
+
+    await t.expect(paymentModule.discountCodeError.visible).ok();
+
+    await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
+    await payWithDummyBank(travelers[0]);
+    await acceptPriceChange();
+    // Verify order page
+    await waitForOrderPageToLoad();
+
+    await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
+
+    await t.click(orderModule.showBaggageButton);
+
+    for (let i = 0; i < newTravelers.length; i += 1) {
+      await t
+        .expect(orderModule.travelerName.nth(i).innerText)
+        .contains(`${newTravelers[i].firstName} ${newTravelers[i].lastName}`);
+    }
+  }
+  console.log('Choose trip that does not match the voucher flow PASSED!');
 });
