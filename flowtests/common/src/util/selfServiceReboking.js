@@ -43,7 +43,6 @@ export async function createOrderAndDiscountCode(site, siteEdvin, paymentService
   const numberOfInfants = 1;
   const origin = 'Mauritius';
   const destination = 'New Delhi';
-  // const site = 'https://gotogate-uk';
 
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
   console.log('Search for trip');
