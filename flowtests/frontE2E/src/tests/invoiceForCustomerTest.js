@@ -1,6 +1,6 @@
 import { t } from 'testcafe';
 // eslint-disable-next-line import/named
-import { acceptCookies, getSiteUrl, getOrderNumberFromUrl } from '../../../common/src/util/common';
+import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import config from '../../testdata.json';
 import {
   addNumberToTraveler,
@@ -41,7 +41,6 @@ const props = {
 const numberOfAdults = 2;
 const numberOfChildren = 1;
 const numberOfInfants = 1;
-let orderNumberOnOrderPage = '';
 
 async function selectTripAddProductsAndPay() {
   await searchAndSelectTrip(
@@ -75,19 +74,14 @@ fixture('Verify invoice possibility')
 test('Verify order number in pdf url for invoice created on order page after payment', async () => {
   await selectTripAddProductsAndPay();
   await waitForOrderPageToLoad();
-  orderNumberOnOrderPage = await orderModule.orderNumber.innerText;
   await t.click(orderModule.printConfirmationButton);
-
+  await t.expect(orderModule.companyInformationAddress.visible).ok();
   await t
     .typeText(orderModule.companyInformationAddress, travelers[0].street)
     .typeText(orderModule.companyInformationName, travelers[0].company)
     .typeText(orderModule.companyInformationCompanyAddress, 'Box 123')
     .typeText(orderModule.companyInformationCity, travelers[0].city)
     .typeText(orderModule.companyInformationZipCode, travelers[0].zipCode)
-    .typeText(orderModule.companyInformationVatNumber, travelers[0].vatNumber);
-  await t.click(orderModule.printBusinessReceiptButton);
-  await t.expect(orderModule.pdfIframe.visible).ok();
-  const orderNumberInUrl = await getOrderNumberFromUrl();
-
-  await t.expect(orderNumberOnOrderPage).eql(orderNumberInUrl);
+    .typeText(orderModule.companyInformationVatNumber, travelers[0].vatNumber)
+    .click(orderModule.printBusinessReceiptButton);
 });
