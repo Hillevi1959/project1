@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 
 export default {
-  // TravelerDetails page
+  // Postbooking products page
   airHelpComponent: Selector('[data-testid="airHelp-container"]'),
   airHelpYes: Selector('[data-testid="airHelp--true"]'),
   baggageInsuranceComboGeniusButtonYes: Selector(
