@@ -160,8 +160,6 @@ test('Only not selected products are available in postbooking', async () => {
   const addedNumberOfExtraProducts = await postbookingModule.cartAddedExtraProducts.count;
   await clickGoToPayment();
 
-  await t.debug();
-
   await t.expect(postbookingModule.cartExtraProductsPayment.count).eql(addedNumberOfExtraProducts);
 
   await payPostbooking();
