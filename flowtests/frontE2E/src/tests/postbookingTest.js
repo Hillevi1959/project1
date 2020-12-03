@@ -88,12 +88,11 @@ test('Go to postbooking from orderModule page, add all products', async () => {
   await t.expect(postbookingModule.cartAllExtraProductsTdPage.exists).ok('', { timeout: 50000 });
   const numberOfAddedProducts = await postbookingModule.cartAllExtraProductsTdPage.count;
   await clickGoToPayment();
-  await t.expect(postbookingModule.cartExtraProductsPayment.exists).ok('', { timeout: 50000 });
 
+  await t.expect(postbookingModule.cartContentPayment.exists).ok('', { timeout: 50000 });
   await t.expect(postbookingModule.cartExtraProductsPayment.count).eql(numberOfAddedProducts);
 
   await payPostbooking();
-
   const numberOfProducts = await orderModule.postBookingProducts.count;
 
   await t.expect(numberOfProducts).eql(numberOfAddedProducts);
@@ -129,7 +128,7 @@ test('Log in to postbooking from login page, and add all products', async () => 
   await t.expect(postbookingModule.cartAllExtraProductsTdPage.exists).ok('', { timeout: 50000 });
   const numberOfAddedProducts = await postbookingModule.cartAllExtraProductsTdPage.count;
   await clickGoToPayment();
-  await t.expect(postbookingModule.cartExtraProductsPayment.exists).ok('', { timeout: 50000 });
+  await t.expect(postbookingModule.cartContentPayment.exists).ok('', { timeout: 50000 });
 
   await t.expect(postbookingModule.cartExtraProductsPayment.count).eql(numberOfAddedProducts);
 
@@ -160,6 +159,8 @@ test('Only not selected products are available in postbooking', async () => {
   await t.expect(postbookingModule.cartAddedExtraProducts.exists).ok();
   const addedNumberOfExtraProducts = await postbookingModule.cartAddedExtraProducts.count;
   await clickGoToPayment();
+
+  await t.debug();
 
   await t.expect(postbookingModule.cartExtraProductsPayment.count).eql(addedNumberOfExtraProducts);
 
