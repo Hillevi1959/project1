@@ -22,6 +22,7 @@ export async function fillInPaymentinfo() {
 
 export async function payPostbooking() {
   const paymentData = getPaymentData();
+  await t.click(postbookingModule.cardLabel);
   await t.typeText(postbookingModule.cardNumber, paymentData.cardNumber);
   await t.typeText(postbookingModule.ccExpInput, paymentData.exp);
   await t.typeText(postbookingModule.cvvInput, paymentData.cvc);

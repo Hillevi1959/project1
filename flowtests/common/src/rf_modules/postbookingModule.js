@@ -15,6 +15,7 @@ export default {
   bankruptcyInsuranceGeniusContainer: Selector(
     '[data-testid="coverGeniusInsurance-bankruptcyInsuranceCoverGenius-InsuranceProduct"]',
   ),
+  cardLabel: Selector('[data-testid="paymentMethods-CARD-label"]'),
   cardNumber: Selector('[data-testid="cardnumber-input"]'),
   cartAddedExtraProducts: Selector('#etiAccordionPanel-contentaddedExtraProducts li'),
   cartAllExtraProductsTdPage: Selector('[data-testid="sideBarWidget-list"] li'),
@@ -27,7 +28,10 @@ export default {
   cartContentExistingExtraProducts: Selector(
     '#etiAccordionPanel-contentextraProducts [data-testid="sideBarWidget-list"] li',
   ),
-  cartExtraProductsPayment: Selector('[data-testid="cartSummary-productList"] .etiListItem'),
+  // cartExtraProductsPayment: Selector('[data-testid="cartSummary-productList"] .etiListItem'),
+
+  cartContentPayment: Selector('[data-testid="cart-content-Content"]'),
+  cartExtraProductsPayment: Selector('[data-testid="cart-content-Content"] li'),
   cartOpenProductsButton: Selector('#etiAccordionPanel-headerextraProducts > div > h3'),
   cartSeatMapIcon: Selector('[data-testid="seatMap-ProductIcon"]'),
   ccExpInput: Selector('[data-testid="cc-exp-input"]'),
@@ -42,7 +46,7 @@ export default {
   onlineCheckinBaggageYes: Selector('[data-testid="onlineCheckIn--true"]'),
   onLineCheckinBaggageComponent: Selector('[data-testid="onlineCheckIn-container"]'),
   orderNumber: Selector('[data-testid="orderPage-ReceiptInformation-orderNumber"]'),
-  payPostBookingButton: Selector('[data-testid="postbookingPayment-payButton-Button"]'),
+  payPostBookingButton: Selector('[data-testid="payment-pay-button"]'),
   postBookingEmail: Selector('[data-testid="etiTextInput-label"]').nth(0),
   postBookingLogIn: Selector('[data-testid="login-button"]'),
   postBookingOrderNumber: Selector('[data-testid="etiTextInput-label"]').nth(1),
