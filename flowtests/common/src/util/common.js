@@ -33,6 +33,8 @@ export function getSiteUrl(site, host) {
       return `https://gotogate-uk${host}/flight`;
     case 'gotogate-uk-edvin':
       return `https://gotogate-uk${host}/edvin`;
+    case 'supersaver-se-edvin':
+      return `https://supersaver-se${host}/edvin`;
     default:
       return null;
   }

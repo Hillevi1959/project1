@@ -14,7 +14,6 @@ import { openCartIfClosed, payWithDummyBank } from '../../../common/src/rf_pages
 import { messageSupersaverSe } from '../../../common/src/rf_pages/order';
 import {
   selectSeatsAndVerifyNotIncludeInfants,
-  selectSeatsAndSeatingPreference,
   selectSeatsForAllSegmentTypes,
   saveSeatMapSelections,
 } from '../../../common/src/rf_pages/seatMap';
@@ -46,15 +45,15 @@ fixture('Seat map product verification')
     await acceptCookies();
     await setProps(props);
     await setIBEDummyPaymentBankOn();
-    await selectProvider('IbeGDSDummy');
     await closeHeaderUrgencyBanner();
   });
 
-test('SeatMap is visible after book is pressed, seats selected and verfied in cart', async () => {
+test('SeatMap is visible after book is pressed, seats selected and verified in cart', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);
   const numberOfTravelers = 1;
   const numberOfSeatsBooked = 4;
 
+  await selectProvider('IbeGDSDummy');
   await searchAndSelectTrip(numberOfTravelers, 0, 0, 'return trip', 'GOT', 'PAR');
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfTravelers);
@@ -82,7 +81,7 @@ test('SeatMap is visible after book is pressed, seats selected and verfied in ca
     .contains(`${numberOfSeatsBooked} Platsreservation`);
 });
 
-test('SeatMap is visible before book, not selectable for infant and verfied in cart', async () => {
+test('SeatMap is visible before book, not selectable for infant and verified in cart', async () => {
   const travelers = addNumberToTraveler([getFirstAdult(), getFirstInfant()]);
   const modalDisabled = {
     'IbeClient.TravelerDetails.Modal': 'NONE',
@@ -93,6 +92,7 @@ test('SeatMap is visible before book, not selectable for infant and verfied in c
 
   await setProps(modalDisabled);
 
+  await selectProvider('IbeGDSDummy');
   await searchAndSelectTrip(numberOfAdults, 0, numberOfInfants, 'return trip', 'GOT', 'PAR');
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
@@ -113,22 +113,26 @@ test('SeatMap is visible before book, not selectable for infant and verfied in c
 });
 
 test('SeatMap book seating light and beside', async () => {
-  const travelers = addNumberToTraveler([getFirstAdult(), getFirstInfant()]);
+  const travelers = addNumberToTraveler([getFirstAdult()]);
   const seatingComboProps = {
     'Product.SeatMap.SeatingCombo.Enable': true,
-    'IbeClient.TravelerDetails.Modal': 'NONE',
+    'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   };
   const numberOfAdults = 1;
-  const numberOfInfants = 1;
   const numberOfSegments = 4;
 
   await setProps(seatingComboProps);
-
-  await searchAndSelectTrip(numberOfAdults, 0, numberOfInfants, 'return trip', 'GOT', 'BKK');
+  await selectProvider('IbeDummy');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'GOT', 'LON');
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
-  await selectSeatsAndSeatingPreference();
-  await bookFlight();
+
+  await t.expect(travelerDetailsModule.cartExtraProductsContent.exists).notOk();
+  await t.expect(travelerDetailsModule.bookButton.hasAttribute('disabled')).notOk();
+  await t.click(travelerDetailsModule.bookButton);
+
+  await selectSeatsForAllSegmentTypes();
+  await saveSeatMapSelections();
 
   await t.expect(paymentModule.bankLabel.visible).ok();
   await openCartIfClosed();

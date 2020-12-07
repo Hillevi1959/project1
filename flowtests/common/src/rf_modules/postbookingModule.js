@@ -1,6 +1,7 @@
 import { Selector } from 'testcafe';
 
 export default {
+  // Postbooking products page
   airHelpComponent: Selector('[data-testid="airHelp-container"]'),
   airHelpYes: Selector('[data-testid="airHelp--true"]'),
   baggageInsuranceComboGeniusButtonYes: Selector(
@@ -15,7 +16,6 @@ export default {
   bankruptcyInsuranceGeniusContainer: Selector(
     '[data-testid="coverGeniusInsurance-bankruptcyInsuranceCoverGenius-InsuranceProduct"]',
   ),
-  cardNumber: Selector('[data-testid="cardnumber-input"]'),
   cartAddedExtraProducts: Selector('#etiAccordionPanel-contentaddedExtraProducts li'),
   cartAllExtraProductsTdPage: Selector('[data-testid="sideBarWidget-list"] li'),
   cartBaggageInsuranceComboCoverGeniusIcon: Selector(
@@ -27,25 +27,14 @@ export default {
   cartContentExistingExtraProducts: Selector(
     '#etiAccordionPanel-contentextraProducts [data-testid="sideBarWidget-list"] li',
   ),
-  cartExtraProductsPayment: Selector('[data-testid="cartSummary-productList"] .etiListItem'),
   cartOpenProductsButton: Selector('#etiAccordionPanel-headerextraProducts > div > h3'),
   cartSeatMapIcon: Selector('[data-testid="seatMap-ProductIcon"]'),
-  ccExpInput: Selector('[data-testid="cc-exp-input"]'),
   checkinBaggageYesAllPassengers: Selector('[data-testid="checkInBaggage-toggleTravelers-true"]'),
   checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-travelerModule-0-true"]'),
   checkInBaggageComponent: Selector('[data-testid="checkInBaggage-container"]'),
-  conditions: Selector('#conditions'),
-  cvvInput: Selector('[data-testid="cvc-input"]'),
-  firstName: Selector('[data-testid="firstName-input"]'),
   goToPayButton: Selector('[data-testid="postbookingProducts-payButton-Button"]'),
-  lastName: Selector('[data-testid="lastName-input"]'),
   onlineCheckinBaggageYes: Selector('[data-testid="onlineCheckIn--true"]'),
   onLineCheckinBaggageComponent: Selector('[data-testid="onlineCheckIn-container"]'),
-  orderNumber: Selector('[data-testid="orderPage-ReceiptInformation-orderNumber"]'),
-  payPostBookingButton: Selector('[data-testid="postbookingPayment-payButton-Button"]'),
-  postBookingEmail: Selector('[data-testid="etiTextInput-label"]').nth(0),
-  postBookingLogIn: Selector('[data-testid="login-button"]'),
-  postBookingOrderNumber: Selector('[data-testid="etiTextInput-label"]').nth(1),
   postBookingPage: Selector('#extraProductsForm'),
   seatMapComponent: Selector('[data-testid="seatMap-container"]'),
   seatMapYesButton: Selector('[data-testid="seatMap--true"]'),
@@ -60,4 +49,21 @@ export default {
   travelInsuranceComponent: Selector('[data-testid="travelInsuranceInsideEu-container"]'),
   travelInsuranceInEuYes: Selector('[data-testid="travelInsuranceInsideEu--true"]'),
   travelInsuranceModalYes: Selector('[data-testid="travelInsuranceInsideEuModal-confirm-button"]'),
+  // Payment page
+  cardLabel: Selector('[data-testid="paymentMethods-CARD-label"]'),
+  cardNumber: Selector('[data-testid="cardnumber-input"]'),
+  cartContentPayment: Selector('[data-testid="cart-content-Content"]'),
+  cartExtraProductsPayment: Selector('[data-testid="cart-content-Content"] li'),
+  ccExpInput: Selector('[data-testid="cc-exp-input"]'),
+  conditions: Selector('#conditions'),
+  cvvInput: Selector('[data-testid="cvc-input"]'),
+  firstName: Selector('[data-testid="firstName-input"]'),
+  lastName: Selector('[data-testid="lastName-input"]'),
+  payPostBookingButton: Selector('[data-testid="payment-pay-button"]'),
+  // Order page
+  orderNumber: Selector('[data-testid="orderPage-ReceiptInformation-orderNumber"]'),
+  // Log in page
+  postBookingEmail: Selector('[data-testid="etiTextInput-label"]').nth(0),
+  postBookingLogIn: Selector('[data-testid="login-button"]'),
+  postBookingOrderNumber: Selector('[data-testid="etiTextInput-label"]').nth(1),
 };

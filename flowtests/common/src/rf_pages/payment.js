@@ -93,7 +93,7 @@ export function travelerNamesAsString(travelers) {
   return `${travelers[0].firstName} ${travelers[0].lastName} ${travelers[1].firstName} ${travelers[1].lastName} ${travelers[2].firstName} ${travelers[2].lastName} ${travelers[3].firstName} ${travelers[3].lastName}`;
 }
 
-export async function logInToCheckoutAndChangeUrl() {
+export async function addCheckoutData() {
   await t
     .switchToIframe(paymentModule.checkoutIFrame)
     .typeText(paymentModule.checkoutPassword, 'Checkout1!')
