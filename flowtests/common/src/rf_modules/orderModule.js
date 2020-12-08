@@ -25,6 +25,7 @@ export default {
     '[data-testid="cart-product-tripCancellationProtection-price"]',
   ),
   cc2cEntries: Selector('[data-testid="cc2carrier-transaction-entry"]'),
+  chooseOrderButton: Selector('[data-testid*="order-button-"]'),
   downloadTripDocument: Selector('[data-testid="traveldoc-link"]'),
   flightInfoButton: Selector('[data-testid="order-show-flight-info-button"]'),
   infoTextOrderPage: Selector('[data-testid="order-page"] .etiContentWrapper span').nth(0),
