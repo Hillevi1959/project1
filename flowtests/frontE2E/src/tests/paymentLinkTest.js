@@ -95,6 +95,18 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   const orderUrl = `https://gotogate-uk${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=${orderId}`;
   await t.navigateTo(orderUrl);
   await openDropdown(edvinModule.addOnCartActionsDropdown);
+
+  await t
+    .setNativeDialogHandler(() => {
+      document.getElementById('createCartSection').innerHTML = 'TEST1';
+      document.getElementById('createCartSection').innerHTML += ' TEST2';
+      const action = document.execCommand('copy');
+      document.getElementById('createCartSection').innerHTML += ' TEST3';
+      // document.getElementById('createCartSection').innerHTML += action;
+      document.getElementById('createCartSection').innerHTML += 'TEST4';
+      return action;
+    })
+    .click(edvinModule.copyPaymentLinkSelection);
   // await t.setNativeDialogHandler(() => true).click(edvinModule.copyPaymentLinkSelection);
   await t.debug();
 
