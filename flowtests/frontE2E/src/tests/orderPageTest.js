@@ -118,7 +118,7 @@ test('Possible to show all information on order page', async () => {
     .click(orderModule.myBookingsLogInButton);
 
   // Verify all data
-  await t.click(orderModule.chooseOrderButton);
+  await t.click(orderModule.chooseFirstOrderButton);
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
   await t.expect(orderModule.travelDocumentButton.visible).ok();
