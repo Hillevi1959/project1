@@ -55,7 +55,7 @@ test('Create add on cart in Edvin and verify payment link', async () => {
     'Paris',
     'CARD',
   );
-  // const orderNumber = 'DTESTG6GY';
+  // const orderNumber = 'DTESTG7DC';
   const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number: ', orderNumber);
   await logInToEdvin(getSiteUrl('gotogate-uk-edvin', config.host));
@@ -85,6 +85,7 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   await t.click(edvinModule.activatePaymentLinkButton);
   await t.typeText(edvinModule.activatePaymentLinkTextArea, 'TEST');
   await t.click(edvinModule.paymentLinkSendEmailCheckbox);
+  // await t.click(edvinModule.paymentLinkCopyToClipboardCheckbox);
   await t.click(edvinModule.createPaymentLinkButton);
 
   const originUrl = await getCurrentUrl();
@@ -98,17 +99,24 @@ test('Create add on cart in Edvin and verify payment link', async () => {
 
   await t
     .setNativeDialogHandler(() => {
-      document.getElementById('createCartSection').innerHTML = 'TEST1';
-      document.getElementById('createCartSection').innerHTML += ' TEST2';
-      const action = document.execCommand('copy');
-      document.getElementById('createCartSection').innerHTML += ' TEST3';
-      // document.getElementById('createCartSection').innerHTML += action;
-      document.getElementById('createCartSection').innerHTML += 'TEST4';
-      return action;
+      edvinModule.copyPaymentLinkSelection.addEventListener('click', () => {
+        navigator.clipboard
+          .readText()
+          .then(text => {
+            document.getElementById('createCartSection').innerHTML = 'TEST1';
+            document.getElementById('createCartSection').innerText = text;
+          })
+          .catch(err => {
+            console.log('Something went wrong', err);
+          });
+      });
     })
     .click(edvinModule.copyPaymentLinkSelection);
-  // await t.setNativeDialogHandler(() => true).click(edvinModule.copyPaymentLinkSelection);
+
   await t.debug();
+
+  await t.click(edvinModule.copyPaymentLinkSelection);
+  // await t.setNativeDialogHandler(() => true).click(edvinModule.copyPaymentLinkSelection);
 
   const execPaste = ClientFunction(() => document.execCommand('paste'));
   await t.click(Selector('#addOnPurchasePlaceholder>div>div:nth-child(2)'));

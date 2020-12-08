@@ -42,6 +42,7 @@ export default {
   activatePaymentLinkTextArea: Selector('[role="dialog"] textarea'),
   createPaymentLinkButton: Selector('div[role="dialog"] > div > div:nth-child(3) button').nth(0),
   paymentLinkSendEmailCheckbox: Selector('div[role="dialog"] form [value="sendEmail"]'),
+  paymentLinkCopyToClipboardCheckbox: Selector('div[role="dialog"] form [value="copyToClipboard"]'),
   addOnCartActionsDropdown: Selector('[class*="Droplist__Trigger"]').nth(1),
   copyPaymentLinkSelection: Selector('#uid2 [role="menuitem"]').nth(5),
 };
