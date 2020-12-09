@@ -27,9 +27,9 @@ const props = {
   'Payment.provider.wallet.PayPal': 'Checkout',
   'Payment.Wallets': 'PayPal',
   'Payment.PayPal.NameFields.Enabled': true,
-  // 'Payment.FraudAssessment.Accertify.ShadowMode': true,
 };
 
+// The payment service provider is set up for Paypal on supersaver-uk
 fixture('Pay order with PayPal')
   .page(url)
   .beforeEach(async () => {

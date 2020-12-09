@@ -11,6 +11,8 @@ export function getSiteUrl(site, host) {
   switch (site) {
     case 'supersaver-se':
       return `https://supersaver-se${host}/rf/start`;
+    case 'supersaver-uk':
+      return `https://supersaver-uk${host}/rf/start`;
     case 'gotogate-uk':
       return `https://gotogate-uk${host}/rf/start`;
     case 'gotogate-ru':
