@@ -70,7 +70,7 @@ fixture('Verify self service rebooking flow')
     await closeHeaderUrgencyBanner();
   });
 
-test('Create order in self service rebooking flow', async () => {
+test.skip('Create order in self service rebooking flow', async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
@@ -185,7 +185,7 @@ test('Create order in self service rebooking flow', async () => {
   }
 });
 
-test('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
+test.skip('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
   url = getSiteUrl('supersaver-se', config.host);
   const newTravelers = addNumberToTraveler([
     getThirdAdult(),
