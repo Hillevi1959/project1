@@ -19,13 +19,11 @@ import { scrollToElement } from '../../../common/src/util/clientFunction';
 
 const url = getSiteUrl('test-uk', config.host);
 const props = {
-  'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
   'Payment.DiscountCode.Enabled': true,
-  'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
-  'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
 };
+const campaignId = 3355;
 
 fixture('Discount code verification')
   .page(url)
@@ -45,7 +43,7 @@ test('Verify discount use on payment and order page', async () => {
     // eslint-disable-next-line no-console
     console.warn('This test is not run on mobile or tablet device');
   } else {
-    await checkForDiscountCodes();
+    await checkForDiscountCodes(campaignId);
     await t.navigateTo(url);
     await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney');
     await addTravelerInformation(travelers);

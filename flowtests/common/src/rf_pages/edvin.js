@@ -4,19 +4,23 @@ import { Selector, t } from 'testcafe';
 import config from '../../../frontE2E/testdata.json';
 import edvinModule from '../rf_modules/edvinModule';
 import { getCurrentUrl, navigateToUrl } from '../util/clientFunction';
-import { getSiteUrl } from '../util/common';
 
 let discountCodeLinkResponsive = '';
 let discountCode = '';
 
-export async function checkForDiscountCodes() {
+async function logInToEdvin(url) {
   await t
-    .navigateTo(
-      `http://test-uk${config.host}/edvin/discount/DiscountItem.list.action?discountCampaignId=3355&_s=true`,
-    )
+    .navigateTo(url)
     .typeText(edvinModule.userNameInput, 'autotest')
     .typeText(edvinModule.passwordInput, 'gurkburk')
     .click(edvinModule.logInButton);
+}
+
+export async function checkForDiscountCodes(campaignId) {
+  logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
+  await t.navigateTo(
+    `http://test-uk${config.host}/edvin/discount/DiscountItem.list.action?discountCampaignId=${campaignId}&_s=true`,
+  );
   // Check if discount items exists and check number of items left
   if ((await edvinModule.numberOfDiscountRows.count) > 1) {
     await t.click(Selector('tr.odd').nth(1));
@@ -54,28 +58,6 @@ export async function convertUrl(site, url) {
   return urlWithSite.concat(id);
 }
 
-export async function generateReceiptFromEdvin(orderNumber) {
-  await t.navigateTo(
-    `http://supersaver-se${config.host}/edvin/order/Order.list.action?_s=true&searching=true`,
-  );
-  await t
-    .typeText(edvinModule.userNameInput, 'autotest')
-    .typeText(edvinModule.passwordInput, 'gurkburk')
-    .click(edvinModule.logInButton);
-  await t
-    .click(edvinModule.orderNumberInput)
-    .typeText(edvinModule.orderNumberInput, orderNumber)
-    .click(edvinModule.submitButton);
-  const orderUlrWithId = await convertUrl(
-    'http://supersaver-se',
-    `${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=`,
-  );
-  await t
-    .navigateTo(orderUlrWithId)
-    .click(edvinModule.messageList)
-    .click(edvinModule.messageListOption.withText('Generate Receipt'));
-}
-
 function setDiscountCodeUrl(url) {
   discountCodeLinkResponsive = url;
 }
@@ -90,29 +72,6 @@ function setDiscountCode(code) {
 
 export function getDiscountCode() {
   return discountCode;
-}
-
-export async function searchFirstOrderInEdvin() {
-  const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
-  await t.navigateTo(`${urlEdvin}/order/Order.list.action?_s=true&searching=true`);
-  if (await edvinModule.userNameInput.visible) {
-    await t
-      .typeText(edvinModule.userNameInput, 'autotest')
-      .typeText(edvinModule.passwordInput, 'gurkburk')
-      .click(edvinModule.logInButton);
-  }
-  const currentUrl = await getCurrentUrl();
-  if (!currentUrl.includes('edvin/gui/?url=/edvin/core/order/OrderContainer.edit.action%3Fid')) {
-    await t
-      .click(edvinModule.orderSearchDatePicker)
-      .click(edvinModule.orderSearchPreviousMonth)
-      .click(edvinModule.orderSearchDoneDateButton)
-      .click(edvinModule.orderNumberInput)
-      .typeText(edvinModule.orderNumberInput, 'L');
-    await t.click(edvinModule.submitButton);
-    console.log('Edvin warm up search for order');
-    await t.click(edvinModule.firstOrderNumberInResultTable);
-  }
 }
 
 async function searchOrder(site, orderNumber) {
@@ -138,7 +97,6 @@ export async function createVoucherInEdvin(site, orderNumber) {
     }
     await navigateToUrl(orderUrlWithId);
     iteration += 1;
-    console.log('Search for order: ', orderNumber);
   } while (!(await edvinModule.providerBookingIdLink.visible) && iteration < 20);
 
   await t.click(edvinModule.providerBookingIdLink);
