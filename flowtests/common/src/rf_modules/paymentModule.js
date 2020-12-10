@@ -124,6 +124,7 @@ export default {
   priceChangeYesButton: Selector(
     '.ReactModal__Content.ReactModal__Content--after-open button:nth-child(1)',
   ),
+  priceChangeModalCloseButton: Selector('.etiModal__footer button'),
   selfTransferInformationText: Selector('[data-testid="paymentPage-self-transfer-guarantee"]'),
   selfTransferHeader: Selector('[data-testid="self-transfer-header"]'),
   selfTransferText: Selector('[data-testid="self-transfer-content"]'),
