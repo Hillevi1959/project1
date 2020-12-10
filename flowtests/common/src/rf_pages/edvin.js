@@ -16,11 +16,12 @@ async function logInToEdvin(url) {
     .click(edvinModule.logInButton);
 }
 
-export async function checkForDiscountCodes(campaignId) {
+export async function checkForDiscountCodes(campaignId, discountName) {
   logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
   await t.navigateTo(
     `http://test-uk${config.host}/edvin/discount/DiscountItem.list.action?discountCampaignId=${campaignId}&_s=true`,
   );
+
   // Check if discount items exists and check number of items left
   if ((await edvinModule.numberOfDiscountRows.count) > 1) {
     await t.click(Selector('tr.odd').nth(1));
@@ -40,9 +41,9 @@ export async function checkForDiscountCodes(campaignId) {
   } else {
     // Create discount item
     await t.navigateTo(
-      `http://test-uk${config.host}/edvin/discount/DiscountGenerateCode.edit.action?_s=true&codeGenerationConfigType=PUBLIC_CODE&discountCampaignId=3355`,
+      `http://test-uk${config.host}/edvin/discount/DiscountGenerateCode.edit.action?_s=true&codeGenerationConfigType=PUBLIC_CODE&discountCampaignId=${campaignId}`,
     );
-    await t.typeText(edvinModule.codeName, 'TESTDISCOUNTCODE');
+    await t.typeText(edvinModule.codeName, discountName);
     await t
       .click(edvinModule.nuberOfCodes)
       .pressKey('ctrl+a delete')

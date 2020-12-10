@@ -24,6 +24,7 @@ const props = {
   'Payment.DiscountCode.Enabled': true,
 };
 const campaignId = 3355;
+const discountName = 'TESTDISCOUNTCODE';
 
 fixture('Discount code verification')
   .page(url)
@@ -43,7 +44,7 @@ test('Verify discount use on payment and order page', async () => {
     // eslint-disable-next-line no-console
     console.warn('This test is not run on mobile or tablet device');
   } else {
-    await checkForDiscountCodes(campaignId);
+    await checkForDiscountCodes(campaignId, discountName);
     await t.navigateTo(url);
     await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney');
     await addTravelerInformation(travelers);
@@ -59,37 +60,37 @@ test('Verify discount use on payment and order page', async () => {
     await t
       .expect(paymentModule.cartDiscountCode.exists)
       .notOk()
-      .expect(paymentModule.discountCodePriceBox.exists)
+      .expect(paymentModule.priceBoxDiscountCodeSum.exists)
       .notOk();
 
     await t.click(paymentModule.discountCodeToggleInput);
-    await t.typeText(paymentModule.discountCodeInput, 'TESTDISCOUNTCODE');
+    await t.typeText(paymentModule.discountCodeInput, discountName);
     await t.click(paymentModule.discountCodeButton);
 
     await t
       .expect(paymentModule.cartDiscountCode.visible)
       .ok()
-      .expect(paymentModule.discountCodePriceBox.visible)
+      .expect(paymentModule.priceBoxDiscountCodeSum.visible)
       .ok();
 
     await t.click(paymentModule.discountCodeRemoveButton);
 
     await t.expect(paymentModule.cartDiscountCode.exists).notOk();
-    await t.expect(paymentModule.discountCodePriceBox.exists).notOk();
+    await t.expect(paymentModule.priceBoxDiscountCodeSum.exists).notOk();
 
     await t
       .expect(paymentModule.cartDiscountCode.exists)
       .notOk()
-      .expect(paymentModule.discountCodePriceBox.exists)
+      .expect(paymentModule.priceBoxDiscountCodeSum.exists)
       .notOk()
-      .typeText(paymentModule.discountCodeInput, 'TESTDISCOUNTCODE');
+      .typeText(paymentModule.discountCodeInput, discountName);
 
     await t.click(paymentModule.discountCodeButton);
 
     await t
       .expect(paymentModule.cartDiscountCode.visible)
       .ok()
-      .expect(paymentModule.discountCodePriceBox.visible)
+      .expect(paymentModule.priceBoxDiscountCodeSum.visible)
       .ok();
 
     await checkPaymentConditions();
