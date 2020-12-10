@@ -26,7 +26,11 @@ export default {
   ),
   cc2cEntries: Selector('[data-testid="cc2carrier-transaction-entry"]'),
   chooseFirstOrderButton: Selector('[data-testid="order-button-0"]'),
+  discountPrice: Selector('[data-testid="orderPage-discountPrice"]'),
   downloadTripDocument: Selector('[data-testid="traveldoc-link"]'),
+  firstBoundPlaneIcon: Selector(
+    '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
+  ),
   flightInfoButton: Selector('[data-testid="order-show-flight-info-button"]'),
   infoTextOrderPage: Selector('[data-testid="order-page"] .etiContentWrapper span').nth(0),
   mailConfirmationButton: Selector('[data-testid="mailConfirmation-button"]'),
@@ -61,12 +65,11 @@ export default {
   selfTransferText: Selector('[data-testid="self-transfer-content"]'),
   shortConnectionNotification: Selector('[data-testid="short-connection-time-notification"]'),
   showBaggageButton: Selector('[data-testid="order-show-baggage-info-button"]'),
-  firstBoundPlaneIcon: Selector(
-    '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
-  ),
   secondBoundTrainIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-bound-train-icon"]',
   ),
+  ticketPrice: Selector('[class="cart-cartItem-price"]').nth(0),
+  totalPrice: Selector('[data-testid="orderPage-totalPrice"]'),
   trainTripSecondBoundTrainSegmentIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-segment-train"]',
   ),

@@ -68,8 +68,12 @@ export default {
   ),
   cartAllInclusiveProduct: Selector('[data-testid="cart-product-allInclusiveProtection"]'),
   cartAllInclusivePrice: Selector('[data-testid="cart-product-allInclusiveProtection-price"]'),
-  cartCancellationWithinEuProductPrice: Selector('[data-testid="cart-product-cancellationInsideEu-price"]'),
-  cartCancellationOutsideEuProductPrice: Selector('[data-testid="cart-product-cancellationOutsideEu-price"]'),
+  cartCancellationWithinEuProductPrice: Selector(
+    '[data-testid="cart-product-cancellationInsideEu-price"]',
+  ),
+  cartCancellationOutsideEuProductPrice: Selector(
+    '[data-testid="cart-product-cancellationOutsideEu-price"]',
+  ),
   cartTrips: Selector('[data-testid="cart-content-Trips"]'),
   cartTripsMobile: Selector('[data-testid="cart-content-Trips-drawer"]'),
   cartTrip: Selector('[data-testid="cart-content-Trip"] div'),
@@ -88,7 +92,6 @@ export default {
   discountCodeButton: Selector('[data-testid="discount-code-button"]'),
   discountCodeError: Selector('[data-testid="discount-code-error"]'),
   discountCodeInput: Selector('[data-testid="discount-code-input"]'),
-  discountCodePriceBox: Selector('[data-testid="payment-bottomContent-priceSummary-discount"]'),
   discountCodeRemoveButton: Selector('[data-testid="discount-code-remove-button"]'),
   discountCodeSuccess: Selector('[data-testid="discount-code-success"]'),
   discountCodeToggleInput: Selector('[data-testid="discount-form-toggle"]'),
@@ -113,6 +116,10 @@ export default {
   payCityInput: Selector('[data-testid="city-input"]'),
   payButton: Selector('[data-testid="payment-pay-button"]'),
   paymentContainer: Selector('[data-testid="paymentPage-paymentMethodsAndCart-container"]'),
+  priceBoxAmountToPay: Selector(
+    '[data-testid="payment-bottomContent-priceSummary-discount"] + div',
+  ),
+  priceBoxDiscountCodeSum: Selector('[data-testid="payment-bottomContent-priceSummary-discount"]'),
   priceChangeModal: Selector('.ReactModal__Content.ReactModal__Content--after-open.etiModal'),
   priceChangeYesButton: Selector(
     '.ReactModal__Content.ReactModal__Content--after-open button:nth-child(1)',
@@ -158,4 +165,5 @@ export default {
     .nextSibling(),
   trustlyLogo: Selector('[data-testid="paymentMethodLogo-trustly"]'),
   voucherNotValidInfo: Selector('[data-testid="payment-page-voucherNotValid"]'),
+  zeroCartNotification: Selector('[data-testid="payment-notification-zeroAmountCart"]'),
 };
