@@ -55,9 +55,9 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   //   'Paris',
   //   'CARD',
   // );
-  const orderNumber = 'DTESTG7DJ';
+  const orderNumber = 'DTESTG7JK';
   // const orderNumber = await orderModule.orderNumber.innerText;
-  // console.log('Order number: ', orderNumber);
+  console.log('Order number: ', orderNumber);
   await logInToEdvin(getSiteUrl('gotogate-uk-edvin', config.host));
 
   let iteration = 0;
@@ -87,45 +87,32 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   // await t.click(edvinModule.paymentLinkSendEmailCheckbox);
   await t.click(edvinModule.paymentLinkCopyToClipboardCheckbox);
 
-  async function getClipboardContents() {
-    try {
-      const text = await navigator.clipboard.readText();
-      console.log('Pasted content: ', text);
-    } catch (err) {
-      console.error('Failed to read clipboard contents: ', err);
-    }
-  }
-
-  // Failed to read clipboard contents:  ReferenceError: navigator is not defined
   await t
     .setNativeDialogHandler(() => {
       document.getElementById('createCartSection').innerHTML = 'TEST';
-      document.addEventListener('copy', e => {
-        e.preventDefault();
-        try {
-          const clipboardItems = [];
-          for (const item of e.clipboardData.items) {
-            if (!item.type.startsWith('image/')) {
-              continue;
-            }
-            clipboardItems.push(
-              new ClipboardItem({
-                [item.type]: item,
-              }),
-            );
-            navigator.clipboard.write(clipboardItems);
-            console.log('Image copied.');
-          }
-        } catch (err) {
-          console.error(err.name, err.message);
-        }
-      });
     })
     .click(edvinModule.createPaymentLinkButton);
 
-  console.log(await getClipboardContents());
+  // const getClipboardText = ClientFunction(() => {
+  //   document
+  //     .querySelector('div[role="dialog"] > div > div:nth-child(3) button')
+  //     .addEventListener('click', () => {
+  //       navigator.clipboard
+  //         .readText()
+  //         .then(text => {
+  //           document.getElementById('createCartSection').innerText = text;
+  //         })
+  //         .catch(err => {
+  //           console.log('Something went wrong', err);
+  //         });
+  //     });
+  //   return document.getElementById('createCartSection').innerText;
+  // });
 
-  await t.debug();
+  // await t
+  //   .setNativeDialogHandler(() => {
+  //     document.getElementById('createCartSection').innerHTML = 'TEST';
+  //   })
 
   const originUrl = await getCurrentUrl();
   console.log('Origin url: ', originUrl);
@@ -134,63 +121,36 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   console.log('OrderId: ', orderId);
   const orderUrl = `https://gotogate-uk${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=${orderId}`;
   await t.navigateTo(orderUrl);
-  // await openDropdown(edvinModule.addOnCartActionsDropdown);
-  // await t.click(edvinModule.copyPaymentLinkSelection);
 
-  await t.setNativeDialogHandler(() => {
-    document.getElementById('createCartSection').innerHTML = 'TEST';
-  });
   await openDropdown(edvinModule.addOnCartActionsDropdown);
-  await t.click(edvinModule.copyPaymentLinkSelection);
-
-  // await t.click(edvinModule.copyPaymentLinkSelection);
-  // await t.setNativeDialogHandler(() => true).click(edvinModule.copyPaymentLinkSelection);
+  await t.click(edvinModule.orderNotesSelection);
+  await t.click(edvinModule.orderNoteAddButton);
+  await t.click(edvinModule.orderNoteTitleInput);
+  await t.pressKey('ctrl+v');
 
   await t.debug();
+  const getClipboardText = ClientFunction(() => {
+    document.querySelector('[role="dialog"] [type="text"]').addEventListener('click', () => {
+      navigator.clipboard
+        .readText()
+        .then(text => {
+          document.querySelector('[role="dialog"] [type="text"]').innerText = text;
+        })
+        .catch(err => {
+          console.log('Something went wrong', err);
+        });
+      navigator.clipboard
+        .writeText()
+        .then(text => {
+          document.querySelector('[role="dialog"] [type="text"]').innerText = text;
+        })
+        .catch(err => {
+          console.log('Something went wrong', err);
+        });
+    });
+    return document.querySelector('[role="dialog"] [type="text"]').value;
+  });
 
-  const execPaste = ClientFunction(() => document.execCommand('paste'));
-  await t.click(Selector('#addOnPurchasePlaceholder>div>div:nth-child(2)'));
-  console.log(await execPaste());
-
-  // const execCopy = ClientFunction( () => document.execCommand('copy'));
-  // const overrideClipboardCopy = ClientFunction(() => {
-  //   document.getElementById('createCartSection').innerHTML = 'TEST av execCommand';
-  //   const { execCommand } = document;
-  //   document.execCommand = (action, ...args) => {
-  //     if (action === 'copy') {
-  //       console.log(args);
-  //       console.log(...args);
-  //     } else {
-  //       return execCommand.call(document, ...args);
-  //     }
-  //   };
-  // });
-
-  // await t.setNativeDialogHandler(overrideClipboardCopy).click(edvinModule.createPaymentLinkButton);
-
-  // ClientFunction(() => document.execCommand('copy'));
-  //
-  // ClientFunction(() => document.execCommand('paste'));
-  //
-  //   navigator.clipboard.readText().then(clipText => console.log(clipText)),
-  // );
-  // console.log(text);
-  //
-  // await t.setNativeDialogHandler(() => true).click(edvinModule.copyPaymentLinkSelection);
+  const Ctext = await getClipboardText();
+  console.log(`Clipboard: ${Ctext}`);
 });
-//
-// function copy(str) {
-//   var sandbox = $('#sandbox').val(str).select();
-//   document.execCommand('copy');
-//   sandbox.val('');
-// }
-//
-// function paste() {
-//   var result = '',
-//     sandbox = $('#sandbox').val('').select();
-//   if (document.execCommand('paste')) {
-//     result = sandbox.val();
-//   }
-//   sandbox.val('');
-//   return result;
-// }
