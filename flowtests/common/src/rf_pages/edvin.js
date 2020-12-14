@@ -16,6 +16,16 @@ export async function logInToEdvin(url) {
     .click(edvinModule.logInButton);
 }
 
+export async function setPriceForMobileTravelPlan(price) {
+  await t.navigateTo(`https://test-uk${config.host}/edvin/product/Product.list.action?_s=true`);
+  await t
+    .click(edvinModule.mobileTravelPlanProduct)
+    .click(edvinModule.mobileTravelPlanPrice)
+    .pressKey('ctrl+a delete')
+    .typeText(edvinModule.mobileTravelPlanPrice, price)
+    .click(edvinModule.saveProductButton);
+}
+
 export async function checkForDiscountCodes(campaignId, discountName) {
   logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
   await t.navigateTo(

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable consistent-return */
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import {
@@ -11,7 +11,11 @@ import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchAndSelectTrip } from '../../../common/src/rf_pages/start';
 import { addNumberToTraveler, getFirstAdult } from '../../../common/src/util/travelerData';
 import { isMobile, isTablet } from '../../../common/src/util/device';
-import { checkForDiscountCodes, logInToEdvin } from '../../../common/src/rf_pages/edvin';
+import {
+  checkForDiscountCodes,
+  logInToEdvin,
+  setPriceForMobileTravelPlan,
+} from '../../../common/src/rf_pages/edvin';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
@@ -125,17 +129,12 @@ test('Voucher does not cover price change', async () => {
 
 test('Zero cart in postbooking flow', async () => {
   const zeroPrice = '£0.00';
+  if ((await isMobile()) || (await isTablet())) {
+    return console.warn('This test is not run on mobile or tablet device');
+  }
   await logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
-
-  await t.navigateTo(`https://test-uk${config.host}/edvin/product/Product.list.action?_s=true`);
-  const mobileTravlePlanProduct = Selector('.resultSet:nth-child(2) tr:nth-child(24)');
-  const mobileTravelPlanPrice = Selector('[name="fullPrice"]');
-  const saveProductButton = Selector('[title="Save Product"]');
-  await t.click(mobileTravlePlanProduct);
-  await t.click(mobileTravelPlanPrice).pressKey('ctrl+a delete');
-  await t.typeText(mobileTravelPlanPrice, '0');
-  await t.click(saveProductButton);
-
+  await setPriceForMobileTravelPlan('0');
+  // Create order
   await t.navigateTo(url);
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London');
   await addTravelerInformation(travelers);
@@ -145,6 +144,7 @@ test('Zero cart in postbooking flow', async () => {
   await payWithCreditCard();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.visible).ok();
+  // Verify postbooking
   await goToPostbookingFromOrderPage();
   await t.click(postbookingModule.smsYesButton);
   await clickGoToPayment();
@@ -162,6 +162,7 @@ test('Zero cart in postbooking flow', async () => {
 
   await t.click(paymentModule.checkPaymentConditions);
   await t.click(paymentModule.payButton);
+  // Verify order page
   await waitForOrderPageToLoad();
 
   await t
@@ -171,5 +172,4 @@ test('Zero cart in postbooking flow', async () => {
   await t
     .expect(removeUnicodeFromTextPrice(await orderModule.posBookingProductPrice.innerText))
     .eql(zeroPrice);
-  await t.debug();
 });
