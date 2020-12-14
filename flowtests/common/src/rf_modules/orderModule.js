@@ -51,6 +51,10 @@ export default {
   printBusinessReceiptDropdown: Selector('[data-testid="printable-orders-dropdown"]'),
   printBusinessReceiptButton: Selector('[data-testid="receiptPrintModal-printCompany-button"]'),
   postBookingProducts: Selector('[data-testid="orderPage-postBooking-product"]'),
+  posBookingProductPrice: Selector('[data-testid="orderPage-postBooking-product"]>p:nth-child(2)'),
+  postBookingTotalPrice: Selector(
+    '[data-testid="orderPage-postBooking-order"] .cart-cartItem-price',
+  ),
   receiptInformation: Selector('[data-testid="orderPage-ReceiptInformation-section"]'),
   seatMapProduct: Selector('[data-testid="cart-product-seatMap"]'),
   seeAllProductsButton: Selector('[data-testid="order-postBooking-link"]'),

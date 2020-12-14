@@ -8,7 +8,7 @@ import { getCurrentUrl, navigateToUrl } from '../util/clientFunction';
 let discountCodeLinkResponsive = '';
 let discountCode = '';
 
-async function logInToEdvin(url) {
+export async function logInToEdvin(url) {
   await t
     .navigateTo(url)
     .typeText(edvinModule.userNameInput, 'autotest')

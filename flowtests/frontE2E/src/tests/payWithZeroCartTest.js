@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable consistent-return */
-import { t } from 'testcafe';
+import { Selector, t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import {
@@ -11,7 +11,7 @@ import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchAndSelectTrip } from '../../../common/src/rf_pages/start';
 import { addNumberToTraveler, getFirstAdult } from '../../../common/src/util/travelerData';
 import { isMobile, isTablet } from '../../../common/src/util/device';
-import { checkForDiscountCodes } from '../../../common/src/rf_pages/edvin';
+import { checkForDiscountCodes, logInToEdvin } from '../../../common/src/rf_pages/edvin';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
@@ -19,8 +19,13 @@ import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { checkPaymentConditions, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import config from '../../testdata.json';
 import orderModule from '../../../common/src/rf_modules/orderModule';
-import { getTripPricePound } from '../../../common/src/util/price';
-import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+import { getTripPricePound, removeUnicodeFromTextPrice } from '../../../common/src/util/price';
+import {
+  goToPostbookingFromOrderPage,
+  waitForOrderPageToLoad,
+} from '../../../common/src/rf_pages/order';
+import postbookingModule from '../../../common/src/rf_modules/postbookingModule';
+import { clickGoToPayment } from '../../../common/src/rf_pages/postBookingProduct';
 
 const url = getSiteUrl('test-uk', config.host);
 const props = {
@@ -116,4 +121,55 @@ test('Voucher does not cover price change', async () => {
   const totalPrice = getTripPricePound(await orderModule.totalPrice.innerText);
 
   await t.expect(totalPrice > 0).ok();
+});
+
+test('Zero cart in postbooking flow', async () => {
+  const zeroPrice = '£0.00';
+  await logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
+
+  await t.navigateTo(`https://test-uk${config.host}/edvin/product/Product.list.action?_s=true`);
+  const mobileTravlePlanProduct = Selector('.resultSet:nth-child(2) tr:nth-child(24)');
+  const mobileTravelPlanPrice = Selector('[name="fullPrice"]');
+  const saveProductButton = Selector('[title="Save Product"]');
+  await t.click(mobileTravlePlanProduct);
+  await t.click(mobileTravelPlanPrice).pressKey('ctrl+a delete');
+  await t.typeText(mobileTravelPlanPrice, '0');
+  await t.click(saveProductButton);
+
+  await t.navigateTo(url);
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London');
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults);
+  await bookFlight();
+  await closeSeatMapModal();
+  await payWithCreditCard();
+  await waitForOrderPageToLoad();
+  await t.expect(orderModule.infoTextOrderPage.visible).ok();
+  await goToPostbookingFromOrderPage();
+  await t.click(postbookingModule.smsYesButton);
+  await clickGoToPayment();
+
+  await t.expect(postbookingModule.payInternalPaymentMethod.visible).ok();
+  await t
+    .expect(removeUnicodeFromTextPrice(await postbookingModule.priceSummayPrice.innerText))
+    .eql(zeroPrice);
+  await t
+    .expect(removeUnicodeFromTextPrice(await postbookingModule.cartSmsProductPrice.innerText))
+    .eql(zeroPrice);
+  await t
+    .expect(removeUnicodeFromTextPrice(await postbookingModule.cartTotalPrice.innerText))
+    .eql(zeroPrice);
+
+  await t.click(paymentModule.checkPaymentConditions);
+  await t.click(paymentModule.payButton);
+  await waitForOrderPageToLoad();
+
+  await t
+    .expect(removeUnicodeFromTextPrice(await orderModule.postBookingTotalPrice.innerText))
+    .eql(zeroPrice);
+  await t.expect(orderModule.postBookingProducts.innerText).contains('Booking number by SMS');
+  await t
+    .expect(removeUnicodeFromTextPrice(await orderModule.posBookingProductPrice.innerText))
+    .eql(zeroPrice);
+  await t.debug();
 });

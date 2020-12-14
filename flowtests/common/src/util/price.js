@@ -14,3 +14,6 @@ export const getTripPricePound = priceText => {
   const stringPrice = priceText.substring(priceText.indexOf('£') + 1);
   return parseFloat(stringPrice.replace(',', ''), 10);
 };
+
+export const removeUnicodeFromTextPrice = stringPrice =>
+  stringPrice.slice(1, stringPrice.length - 1);
