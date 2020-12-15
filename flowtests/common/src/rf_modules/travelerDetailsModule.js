@@ -86,11 +86,17 @@ export default {
   cartFlightMobile: Selector('[data-testid="cart-content-Trip-drawer"] div'),
   cartPassengers: Selector('[data-testid="traveler-price-info-widget"]'),
   cartPassengersMobile: Selector('[data-testid="traveler-price-info-drawer"]'),
-  cartCancellationWithinEuProduct: Selector('[data-testid="cart-product-cancellationInsideEu-widget"]'),
+  cartCancellationWithinEuProduct: Selector(
+    '[data-testid="cart-product-cancellationInsideEu-widget"]',
+  ),
   cancellationWithinEuProductPrice: Selector('[data-testid="cancellationInsideEu-price"]'),
   cancellationOutsideEuProductPrice: Selector('[data-testid="cancellationOutsideEu-price"]'),
-  cartCancellationWithinEuProductPrice: Selector('[data-testid="cart-product-cancellationInsideEu-price-widget"]'),
-  cartCancellationOutsideEuProductPrice: Selector('[data-testid="cart-product-cancellationOutsideEu-price-widget"]'),
+  cartCancellationWithinEuProductPrice: Selector(
+    '[data-testid="cart-product-cancellationInsideEu-price-widget"]',
+  ),
+  cartCancellationOutsideEuProductPrice: Selector(
+    '[data-testid="cart-product-cancellationOutsideEu-price-widget"]',
+  ),
   cartCheckInBaggageProduct: Selector('[data-testid="cart-product-checkInBaggage-widget"]'),
   cartSeatMapProduct: Selector('[data-testid="cart-product-seatMap-widget"]'),
   cartSupportPackageProduct: Selector('[data-testid="cart-product-servicePackage-widget"]'),
@@ -103,9 +109,7 @@ export default {
   cartTagIcon: Selector('[data-testId="cart-tag-icon"]'),
   cartTravelerInfo: Selector('[data-testid="traveler-price-info"]'),
   cartTravelerToggleButton: Selector('[data-testid="cart-travelerInfoToggleButton-button"]'),
-  cartTravelerToggleButtonMobile: Selector(
-    '[data-testid="cart-travelerInfoToggleButton-button"]',
-  ).nth(1),
+  cartTravelerToggleButtonMobile: Selector('[data-testid="cart-travelerInfoToggleButton-button"]'),
   cartTrips: Selector('[data-testid="cart-content-Trips-widget"]'),
   cartTripsMobile: Selector('[data-testid="cart-content-Trips-drawer"]'),
   cartTrip: Selector('[data-testid="cart-content-Trip-widget"]'),

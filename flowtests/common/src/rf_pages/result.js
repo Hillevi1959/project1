@@ -2,7 +2,7 @@
 import { t } from 'testcafe';
 import resultModule from '../rf_modules/resultModule';
 import { dropdownSelect } from '../util/dropdownSelect';
-import {isMobile, isTablet} from "../util/device";
+import { isMobile } from '../util/device';
 
 export async function selectTripNumber(number) {
   await t.expect(resultModule.bookFlightButton.exists).ok('', { timeout: 60000 });
@@ -27,11 +27,13 @@ async function enterDates() {
 }
 
 async function enterFromCity(origin) {
+  await t.click(resultModule.originInput);
   await t.typeText(resultModule.originInput, origin);
   await t.pressKey('enter');
 }
 
 async function enterToCity(destination) {
+  await t.click(resultModule.destinationInput);
   await t.typeText(resultModule.destinationInput, destination);
   await t.pressKey('enter');
 }

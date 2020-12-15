@@ -123,8 +123,8 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   await addNoExtraProducts(numberOfTravelers - numberOfInfants);
 
   // Verify trip content in cart on traveler-details page
+  await t.expect(travelerDetailsModule.cartDiscountInformation.visible).ok();
   if ((await isMobile()) || (await isTablet())) {
-    await t.expect(travelerDetailsModule.cartDiscountInformation.nth(1).visible).ok();
     await toggleCart();
     await t.click(travelerDetailsModule.cartTravelerToggleButtonMobile);
 
@@ -140,7 +140,6 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
 
     await toggleCart();
   } else if (await isDesktop()) {
-    await t.expect(travelerDetailsModule.cartDiscountInformation.visible).ok();
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
 
     await t.expect(travelerDetailsModule.cartTripPrice.innerText).contains(tripPrice);

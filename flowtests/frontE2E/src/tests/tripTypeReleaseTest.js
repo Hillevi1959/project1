@@ -230,16 +230,18 @@ test('Multi destination, 4 adults', async () => {
   await addNoExtraProducts(numberOfAdults);
   if (await isMobile()) {
     await toggleCart();
-  }
-
-  await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Stockholm');
-  await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Köpenhamn');
-  await t.expect(travelerModule.cartTrip.nth(1).innerText).contains('Berlin');
-  await t.expect(travelerModule.cartTrip.nth(1).innerText).contains('Rom');
-
-  if (await isMobile()) {
+    await t.expect(travelerModule.cartTripMobile.nth(0).innerText).contains('Stockholm');
+    await t.expect(travelerModule.cartTripMobile.nth(1).innerText).contains('Köpenhamn');
+    await t.expect(travelerModule.cartTripMobile.nth(2).innerText).contains('Berlin');
+    await t.expect(travelerModule.cartTripMobile.nth(3).innerText).contains('Rom');
     await toggleCart();
+  } else {
+    await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Stockholm');
+    await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Köpenhamn');
+    await t.expect(travelerModule.cartTrip.nth(1).innerText).contains('Berlin');
+    await t.expect(travelerModule.cartTrip.nth(1).innerText).contains('Rom');
   }
+
   await bookFlight();
   await closeSeatMapModal();
   await t.expect(paymentModule.bankLabel.exists).ok('', { timeout: 30000 });
