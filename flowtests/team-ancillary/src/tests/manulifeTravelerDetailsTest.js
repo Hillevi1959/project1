@@ -43,7 +43,7 @@ const props = {
   'Payment.provider.creditcard': 'adyen',
 };
 
-fixture.skip('Manulife products verification')
+fixture('Manulife products verification')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
