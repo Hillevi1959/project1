@@ -65,14 +65,7 @@ test('Train icons and change to train information visible on all pages', async (
   await t.expect(travelerDetailsModule.firstBoundPlaneIcon.visible).ok();
   await t.expect(travelerDetailsModule.secondBoundTrainIcon.visible).ok();
   await t.expect(travelerDetailsModule.trainSegmentIcon.visible).ok();
-
-  if ((await isMobile()) || (await isTablet())) {
-    await toggleCart();
-    await t.expect(travelerDetailsModule.cartTagIcon.nth(1).visible).ok();
-    await toggleCart();
-  } else if (await isDesktop()) {
-    await t.expect(travelerDetailsModule.cartTagIcon.visible).ok();
-  }
+  await t.expect(travelerDetailsModule.cartTagIcon.visible).ok();
 
   await t.click(travelerDetailsModule.tripDetailsArrow);
   await addTravelerInformation(travelers);
