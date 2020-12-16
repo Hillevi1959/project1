@@ -129,7 +129,7 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   await addNoExtraProducts(numberOfTravelers - numberOfInfants);
 
   // Verify trip content in cart on traveler-details page
-    await t.expect(travelerDetailsModule.cartDiscountInformation.visible).ok();
+  await t.expect(travelerDetailsModule.cartDiscountInformation.visible).ok();
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
     await t.click(travelerDetailsModule.cartTravelerToggleButtonMobile);
@@ -209,7 +209,7 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
 
   await t.expect(paymentModule.travelerDetailsEmail.innerText).contains(travelers[0].email);
   await t.expect(paymentModule.travelerDetailsPhone.innerText).contains(travelers[0].phone);
-  for (let i = 0; i < (await count); i += 1) {
+  for (i = 0; i < (await count); i += 1) {
     await t
       .expect(travelersName)
       .contains(await paymentModule.travelerDetailsName.nth(i).innerText);

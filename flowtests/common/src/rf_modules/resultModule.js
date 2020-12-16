@@ -136,4 +136,12 @@ export default {
   toggleTrip: tripNumber => `[data-testid="resultPage-resultTrip-${tripNumber}-wrapper"]`,
   tripWithVoucherTag: tripNumber =>
     `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="valid-with-voucher-tag"]`,
+  tripBounds: tripNumber =>
+    Selector(
+      `[data-testid="resultPage-resultTrip-${tripNumber}-wrapper"] [data-testid="tripDetails-bound"]`,
+    ),
+  tripSegments: tripNumber =>
+    Selector(
+      `[data-testid="resultPage-resultTrip-${tripNumber}-wrapper"] [data-testid="tripDetails-segment"]`,
+    ),
 };
