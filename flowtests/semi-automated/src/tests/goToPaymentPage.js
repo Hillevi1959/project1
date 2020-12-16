@@ -15,7 +15,7 @@ import {
 } from '../../../common/src/util/debugOptions';
 import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchTrip } from '../../../common/src/rf_pages/start';
-import { selectTripNumber } from '../../../common/src/rf_pages/result';
+import { selectTripButtonNumber } from '../../../common/src/rf_pages/result';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import {
   addAllExtraProducts,
@@ -71,7 +71,7 @@ test('Payment page with PSP Adyen and without extra products', async () => {
     destination,
   );
   // Result page
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
   // TD-page
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
@@ -97,7 +97,7 @@ test('Payment page with PSP Adyen and with all extra products', async () => {
     destination,
   );
   // Result page
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
   // TD-page
   await addTravelerInformation(travelers);
   await addAllExtraProducts(numberOfAdults + numberOfChildren, travelers);
@@ -132,7 +132,7 @@ test('Payment page with PSP Adyen and price change', async () => {
     destination,
   );
   // Result page
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
   // TD-page
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);

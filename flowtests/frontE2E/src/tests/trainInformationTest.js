@@ -16,7 +16,7 @@ import {
 } from '../../../common/src/rf_pages/start';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import resultModule from '../../../common/src/rf_modules/resultModule';
-import { selectTripNumber } from '../../../common/src/rf_pages/result';
+import { selectTripButtonNumber } from '../../../common/src/rf_pages/result';
 import { addTravelerInformation, toggleCart } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import reviewModule from '../../../common/src/rf_modules/reviewModule';
@@ -57,7 +57,7 @@ test('Train icons and change to train information visible on all pages', async (
   await t.expect(resultModule.secondBoundTrainIcon.visible).ok();
   await t.expect(resultModule.trainSegmentIcon.visible).ok();
 
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
   // Verify on TD-page
   await t.click(travelerDetailsModule.tripDetailsArrow);
 

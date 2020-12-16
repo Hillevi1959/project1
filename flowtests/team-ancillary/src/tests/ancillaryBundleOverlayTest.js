@@ -26,7 +26,7 @@ import orderModule from '../../../common/src/rf_modules/orderModule';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { selectTripNumber } from '../../../common/src/rf_pages/result';
+import { selectTripButtonNumber } from '../../../common/src/rf_pages/result';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import config from './testdata.json';
 
@@ -56,7 +56,7 @@ test('Book and pay for a trip with bundled products', async () => {
   await selectProvider('IbeGDSDummy');
   await selectTravelers(numberOfAdults, 0, 0);
   await makeSearch('return trip', 'STO', 'LON', 10);
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
 
   await t.expect(resultModule.productBundleOption3.visible).ok();
   await t
