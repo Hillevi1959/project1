@@ -4,7 +4,7 @@ import { addNumberToTraveler, getFirstAdult } from '../../../common/src/util/tra
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import config from '../../testdata.json';
 import { selectProvider, setIBEDummyPaymentBankOn } from '../../../common/src/util/debugOptions';
-import { filterSasLufthansa, selectTripButtonNumber } from '../../../common/src/rf_pages/result';
+import { filterSasLufthansa, selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
@@ -43,7 +43,7 @@ fixture(`Verification of short connection time notification`)
 test('Show short connection time notification', async () => {
   await searchTrip(numberOfTravelers, 0, 0, 'return trip', 'Stockholm', 'Bangkok');
   await filterSasLufthansa();
-  await selectTripButtonNumber(0);
+  await selectTripButtonByIndex(0);
 
   // Verification on traveler-details page
   await t.expect(travelerDetailsModule.travelerDetailsPage.visible).ok();

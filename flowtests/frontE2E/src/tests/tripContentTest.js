@@ -41,7 +41,7 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import config from '../../testdata.json';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { filterSasLufthansa, selectTripButtonNumber } from '../../../common/src/rf_pages/result';
+import { filterSasLufthansa, selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 
 const url = getSiteUrl('supersaver-se', config.host);
@@ -101,9 +101,9 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   } while (nrSegments !== 2 && i < 10);
 
   if (i === 0) {
-    await selectTripButtonNumber(i);
+    await selectTripButtonByIndex(i);
   } else {
-    await selectTripButtonNumber(i + 1);
+    await selectTripButtonByIndex(i + 1);
   }
   const tripPrice = await getTotalPriceForTrip();
   await toggleTripDetailsTravelerDetails();
