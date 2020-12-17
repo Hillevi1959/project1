@@ -5,5 +5,8 @@ export default function getPaymentData() {
     cvc: '737',
     firstName: 'Kalle',
     lastName: 'Kula',
+    street: 'Teststreet 1',
+    zipCode: '12345',
+    city: 'Testcity',
   };
 }

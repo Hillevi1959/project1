@@ -21,7 +21,7 @@ import {
   selectSeatsForAllSegmentTypes,
 } from '../../../common/src/rf_pages/seatMap';
 import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
-import { selectTripNumber } from '../../../common/src/rf_pages/result';
+import { selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
@@ -70,7 +70,7 @@ test('Go to order page with seatMap product', async () => {
     destination,
   );
   // Result page
-  await selectTripNumber(0);
+  await selectTripButtonByIndex(0);
   // TD-page
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
@@ -107,7 +107,7 @@ test('Go to order page without extra products', async () => {
     destination,
   );
   // Result page
-  await selectTripNumber(0);
+  await selectTripButtonByIndex(0);
   // TD-page
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);

@@ -13,7 +13,7 @@ import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { payWithDummyBank } from '../../../common/src/rf_pages/payment';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import config from '../../testdata.json';
-import { filterSasLufthansa, selectTripNumber } from '../../../common/src/rf_pages/result';
+import { filterSasLufthansa, selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import enableDebug from '../../../common/src/util/debug';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
@@ -62,7 +62,7 @@ test('Self transfer information shown on all pages', async () => {
     await t.expect(resultModule.selfTransferText.nth(i).innerText).contains(selfTransferText[i]);
   }
 
-  await selectTripNumber(0);
+  await selectTripButtonByIndex(0);
 
   // Verification on traveler-details page
   await t.expect(travelerDetailsModule.selfTransferInformationText.visible).ok();
