@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-console */
 import { Selector, t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
@@ -20,6 +22,7 @@ import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import getPaymentData from '../../../common/src/util/paymentData';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
+import { getWindowWidth } from '../../../common/src/util/device';
 
 const url = getSiteUrl('supersaver-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -76,7 +79,9 @@ fixture('Pay order with PayPal')
 
 test('Search trip, book all products, pay with PayPal', async () => {
   const numberOfAdults = 2;
-
+  if ((await getWindowWidth()) < 970) {
+    return console.warn('This test is not run on mobile or tablet device');
+  }
   await createPaypalPropsInEdvin();
   await t.navigateTo(url);
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON');
