@@ -41,6 +41,11 @@ async function createPaypalPropsInEdvin() {
   const addPropCheckbox = Selector('[name="save"]');
   const searchButton = Selector('[name="__submit"]');
   const groupNameInput = Selector('[name="groupName"]');
+  const selectAllCheckboxes = Selector(
+    '[title="Click to Select/Deselect all Checkboxes. Mouse over the Checkboxes with SHIFT to select, Mouse over and ALT to deselect."]',
+  );
+  const reloadImmediatelyButton = Selector('[name="formButton"]');
+  const cacheTriggerAlert = Selector('[role="alert"]');
   await t
     .navigateTo(`http://supersaver-uk${config.host}/edvin`)
     .typeText(edvinModule.userNameInput, 'autotest')
@@ -63,10 +68,14 @@ async function createPaypalPropsInEdvin() {
     .pressKey('ctrl+a delete')
     .typeText(keyValue, 'true')
     .click(addPropCheckbox)
-    .click(searchButton)
-    .wait(20000);
+    .click(searchButton);
+  await t.navigateTo(
+    `http://supersaver-uk${config.host}/edvin/cache/PendingCacheTriggers.list.action?_s=true`,
+  );
+  if (!(await cacheTriggerAlert.visible)) {
+    await t.click(selectAllCheckboxes).click(reloadImmediatelyButton);
+  }
 }
-
 // The payment service provider is set up for Paypal on supersaver-uk
 fixture('Pay order with PayPal')
   .page(url)
