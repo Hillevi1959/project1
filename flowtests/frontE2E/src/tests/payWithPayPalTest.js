@@ -63,7 +63,8 @@ async function createPaypalPropsInEdvin() {
     .pressKey('ctrl+a delete')
     .typeText(keyValue, 'true')
     .click(addPropCheckbox)
-    .click(searchButton);
+    .click(searchButton)
+    .wait(20000);
 }
 
 // The payment service provider is set up for Paypal on supersaver-uk
