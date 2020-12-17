@@ -11,7 +11,7 @@ import { selectProvider } from '../../../common/src/util/debugOptions';
 import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchTrip } from '../../../common/src/rf_pages/start';
 import resultModule from '../../../common/src/rf_modules/resultModule';
-import { selectTripNumber } from '../../../common/src/rf_pages/result';
+import { selectTripButtonNumber } from '../../../common/src/rf_pages/result';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
@@ -45,7 +45,7 @@ test('Verify step indicator in booking flow', async () => {
 
   await t.expect(resultModule.headerNavigationMenu.visible).ok();
 
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
   // Traveler details page
   await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(1);
   await t.expect(travelerDetailsModule.stepIndicator.count).eql(4);
