@@ -4,7 +4,7 @@ import { createVoucherInEdvin, getDiscountCodeUrl } from '../rf_pages/edvin';
 import config from '../../../frontE2E/testdata.json';
 import { makeSearch, selectTravelers } from '../rf_pages/start';
 import resultModule from '../rf_modules/resultModule';
-import { selectTripButtonNumber } from '../rf_pages/result';
+import { selectTripButtonByIndex } from '../rf_pages/result';
 import { addTravelerInformation, bookFlight } from '../rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../rf_pages/seatMap';
@@ -54,7 +54,7 @@ export async function createOrderAndDiscountCode(site, siteEdvin, paymentService
     .click(resultModule.clearAirlines)
     .click(resultModule.filterAirlineMauritiusCheckbox)
     .click(resultModule.toggleFilterButton);
-  await selectTripButtonNumber(0);
+  await selectTripButtonByIndex(0);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await bookFlight();

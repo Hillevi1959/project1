@@ -4,7 +4,7 @@ import resultModule from '../rf_modules/resultModule';
 import { dropdownSelect } from '../util/dropdownSelect';
 import { isMobile } from '../util/device';
 
-export async function selectTripButtonNumber(number) {
+export async function selectTripButtonByIndex(number) {
   await t.expect(resultModule.bookFlightButton.exists).ok('', { timeout: 60000 });
   await t.click(resultModule.bookFlightButton.nth(number));
 }

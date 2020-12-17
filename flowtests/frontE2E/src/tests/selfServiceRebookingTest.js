@@ -20,7 +20,7 @@ import {
 } from '../../../common/src/util/travelerData';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import startModule from '../../../common/src/rf_modules/startModule';
-import { selectTripButtonNumber } from '../../../common/src/rf_pages/result';
+import { selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import { addContact, addTraveler, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
@@ -134,7 +134,7 @@ test.skip('Create order in self service rebooking flow', async () => {
     await t.expect(tripPriceStandard).gt(voucherPriceStandard);
     await t.expect(tripPriceFlex).gt(voucherPriceFlex);
 
-    await selectTripButtonNumber(0);
+    await selectTripButtonByIndex(0);
     // verify TD-page
     await addContact(travelers[0]);
 
