@@ -56,17 +56,22 @@ test('Back from result, forward from start', async () => {
   await t.expect(resultModule.tripTitleFlight.innerText).contains('Stockholm\n–\nWichita');
   if (await isMobile()) {
     await t.expect(resultModule.tripTitleDateMobile.innerText).contains(tripDate);
+    await t.click(resultModule.bookFlightButton);
+    await t.expect(travelerDetailsModule.travelerDetailsPage.visible).ok();
+    await t.click(travelerDetailsModule.cartToggleButtonMobile);
+    await t.expect(travelerDetailsModule.cartFlightMobile.nth(0).innerText).contains('Stockholm');
+    await t.expect(travelerDetailsModule.cartFlightMobile.nth(1).innerText).contains('Wichita');
   } else if ((await isTablet()) || (await isDesktop())) {
     await t.expect(resultModule.tripTitleDate.innerText).contains(tripDate);
-  }
-  await t.click(resultModule.bookFlightButton);
-  await t.expect(travelerDetailsModule.travelerDetailsPage.visible).ok();
-  if ((await isMobile()) || (await isTablet())) {
-    await toggleCart();
-    await t.expect(travelerDetailsModule.cartFlightMobile.nth(0).innerText).contains('Stockholm');
-    await t.expect(travelerDetailsModule.cartFlightMobile().nth(1).innerText).contains('Wichita');
-  } else {
-    await t.expect(travelerDetailsModule.cartFlight.nth(0).innerText).contains('Stockholm');
-    await t.expect(travelerDetailsModule.cartFlight.nth(1).innerText).contains('Wichita');
+    await t.click(resultModule.bookFlightButton);
+    await t.expect(travelerDetailsModule.travelerDetailsPage.visible).ok();
+    if ((await isMobile()) || (await isTablet())) {
+      await toggleCart();
+      await t.expect(travelerDetailsModule.cartFlightMobile.nth(0).innerText).contains('Stockholm');
+      await t.expect(travelerDetailsModule.cartFlightMobile().nth(1).innerText).contains('Wichita');
+    } else {
+      await t.expect(travelerDetailsModule.cartFlight.nth(0).innerText).contains('Stockholm');
+      await t.expect(travelerDetailsModule.cartFlight.nth(1).innerText).contains('Wichita');
+    }
   }
 });

@@ -9,7 +9,7 @@ import {
   searchAndSelectTrip,
   selectTravelers,
 } from '../../../common/src/rf_pages/start';
-import { selectTripNumber } from '../../../common/src/rf_pages/result';
+import { selectTripButtonNumber } from '../../../common/src/rf_pages/result';
 import setProps from '../../../common/src/util/props';
 import {
   addTravelerInformation,
@@ -63,7 +63,7 @@ test('Return trip, 1 adult, direct flight', async () => {
 
   await t.click(startModule.directFlightBox);
   await makeSearch('return trip', 'STO', 'LON', 10);
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
 
   await t.expect(travelerModule.travelerDetailsForm.exists).ok();
 
@@ -113,7 +113,7 @@ test('One way trip, 1 adult, 1 child, direct flight', async () => {
 
   await selectTravelers(numberOfAdults, numberOfChildern, 0);
   await makeSearch('one way trip', 'STO', 'NEW', 10);
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
 
   await t.expect(travelerModule.travelerDetailsForm.visible).ok();
 
@@ -225,17 +225,17 @@ test('Multi destination, 4 adults', async () => {
   await chooseTripType('multi trip');
   await selectTravelers(numberOfAdults, 0, 0);
   await makeSearchMultiTrip(['STO', 'CPH'], ['BER', 'ROM']);
-  await selectTripNumber(0);
+  await selectTripButtonNumber(0);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   if (await isMobile()) {
     await toggleCart();
-    await t.expect(travelerModule.cartTripMobile.nth(0).innerText).contains('Stockholm');
-    await t.expect(travelerModule.cartTripMobile.nth(1).innerText).contains('Köpenhamn');
-    await t.expect(travelerModule.cartTripMobile.nth(2).innerText).contains('Berlin');
-    await t.expect(travelerModule.cartTripMobile.nth(3).innerText).contains('Rom');
+    await t.expect(travelerModule.cartTripMobile().nth(0).innerText).contains('Stockholm');
+    await t.expect(travelerModule.cartTripMobile().nth(1).innerText).contains('Köpenhamn');
+    await t.expect(travelerModule.cartTripMobile().nth(2).innerText).contains('Berlin');
+    await t.expect(travelerModule.cartTripMobile().nth(3).innerText).contains('Rom');
     await toggleCart();
-  } else {
+  } else if (await isDesktop()) {
     await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Stockholm');
     await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Köpenhamn');
     await t.expect(travelerModule.cartTrip.nth(1).innerText).contains('Berlin');

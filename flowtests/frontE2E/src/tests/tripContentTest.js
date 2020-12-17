@@ -41,11 +41,10 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import config from '../../testdata.json';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { filterSasLufthansa, selectTripNumber } from '../../../common/src/rf_pages/result';
+import { filterSasLufthansa, selectTripButtonNumber } from '../../../common/src/rf_pages/result';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 
 const url = getSiteUrl('supersaver-se', config.host);
-const nrBounds = 2;
 const travelers = addNumberToTraveler([
   getFirstAdult(),
   getSecondAdult(),
@@ -81,7 +80,6 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   const numberOfTravelers = 4;
   const origin = 'Stockholm';
   const destination = 'Madrid';
-  const nrSegments = 2;
   const originFlightNr = 'SK900';
   const destinationFlightNr = 'SK900';
   const { count } = paymentModule.travelerDetailsName;
@@ -92,15 +90,23 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
   await makeSearch('return trip', 'NYO', 'TOJ', 10);
   await filterSasLufthansa();
-  await t.click(resultModule.toggleTrip(1));
+  let nrSegments;
+  let nrBounds;
+  let i = -1;
+  do {
+    i += 1;
+    await t.click(resultModule.toggleTrip(i));
+    nrBounds = await resultModule.tripBounds(i).count;
+    nrSegments = await resultModule.tripSegments(i).count;
+  } while (nrSegments !== 2 && i < 10);
 
-  await t.expect(resultModule.owcInformation.visible).ok();
-  await t.expect(resultModule.discountInformation.visible).ok();
-
-  await selectTripNumber(2);
+  if (i === 0) {
+    await selectTripButtonNumber(i);
+  } else {
+    await selectTripButtonNumber(i + 1);
+  }
   const tripPrice = await getTotalPriceForTrip();
   await toggleTripDetailsTravelerDetails();
-
   // Verify trip content in flight information on traveler-details page
   await t.expect(travelerDetailsModule.cabinClassInfo.nth(0).innerText).contains('Premium');
   await t.expect(travelerDetailsModule.cabinClassInfo.nth(1).innerText).contains('Premium');
@@ -203,7 +209,7 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
 
   await t.expect(paymentModule.travelerDetailsEmail.innerText).contains(travelers[0].email);
   await t.expect(paymentModule.travelerDetailsPhone.innerText).contains(travelers[0].phone);
-  for (let i = 0; i < (await count); i += 1) {
+  for (i = 0; i < (await count); i += 1) {
     await t
       .expect(travelersName)
       .contains(await paymentModule.travelerDetailsName.nth(i).innerText);

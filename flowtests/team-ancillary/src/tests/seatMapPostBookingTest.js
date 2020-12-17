@@ -17,7 +17,7 @@ import {
 } from '../../../common/src/rf_pages/postBookingProduct';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
-import { fillInPaymentinfo, logInToPostBooking } from '../../../common/src/rf_pages/postBooking';
+import { logInToPostBooking } from '../../../common/src/rf_pages/postBooking';
 import { payWithDummyBank } from '../../../common/src/rf_pages/payment';
 import {
   addNumberToTraveler,
@@ -90,6 +90,6 @@ test('SeatMap book seating light and beside', async () => {
     await t.expect(postbookingModule.cartSeatMapIcon.exists).ok();
 
     await clickGoToPayment();
-    await fillInPaymentinfo();
+    await payWithDummyBank(travelers[0]);
   }
 });

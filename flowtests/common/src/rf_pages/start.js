@@ -3,7 +3,7 @@
 import { t } from 'testcafe';
 import { dropdownSelect } from '../util/dropdownSelect';
 import startModule from '../rf_modules/startModule';
-import { selectTripNumber } from './result';
+import { selectTripButtonNumber } from './result';
 
 export async function selectTravelers(nrOfAdults, nrOfChildren, nrOfInfants) {
   await dropdownSelect(startModule.travelerDropDown, 0);
@@ -58,11 +58,11 @@ export async function searchAndSelectTrip(
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
   await makeSearch(tripType, origin, destination, 10);
   if (tripSelection === 'PREMIUM_ECONOMY') {
-    await selectTripNumber(2);
+    await selectTripButtonNumber(2);
   } else if (tripSelection === 'ReviewTrip') {
-    await selectTripNumber(4);
+    await selectTripButtonNumber(4);
   } else {
-    await selectTripNumber(0);
+    await selectTripButtonNumber(0);
   }
 }
 
