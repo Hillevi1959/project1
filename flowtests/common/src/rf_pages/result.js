@@ -2,9 +2,9 @@
 import { t } from 'testcafe';
 import resultModule from '../rf_modules/resultModule';
 import { dropdownSelect } from '../util/dropdownSelect';
-import {isMobile, isTablet} from "../util/device";
+import { isMobile } from '../util/device';
 
-export async function selectTripNumber(number) {
+export async function selectTripButtonNumber(number) {
   await t.expect(resultModule.bookFlightButton.exists).ok('', { timeout: 60000 });
   await t.click(resultModule.bookFlightButton.nth(number));
 }
