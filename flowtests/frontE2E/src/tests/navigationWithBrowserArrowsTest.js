@@ -13,6 +13,7 @@ import { goBack, goForward } from '../../../common/src/util/clientFunction';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import startModule from '../../../common/src/rf_modules/startModule';
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
+import { toggleCart } from '../../../common/src/rf_pages/travelerDetails';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const numberOfAdults = 2;
@@ -64,7 +65,13 @@ test('Back from result, forward from start', async () => {
     await t.expect(resultModule.tripTitleDate.innerText).contains(tripDate);
     await t.click(resultModule.bookFlightButton);
     await t.expect(travelerDetailsModule.travelerDetailsPage.visible).ok();
-    await t.expect(travelerDetailsModule.cartFlight.nth(0).innerText).contains('Stockholm');
-    await t.expect(travelerDetailsModule.cartFlight.nth(1).innerText).contains('Wichita');
+    if ((await isMobile()) || (await isTablet())) {
+      await toggleCart();
+      await t.expect(travelerDetailsModule.cartFlightMobile.nth(0).innerText).contains('Stockholm');
+      await t.expect(travelerDetailsModule.cartFlightMobile().nth(1).innerText).contains('Wichita');
+    } else {
+      await t.expect(travelerDetailsModule.cartFlight.nth(0).innerText).contains('Stockholm');
+      await t.expect(travelerDetailsModule.cartFlight.nth(1).innerText).contains('Wichita');
+    }
   }
 });

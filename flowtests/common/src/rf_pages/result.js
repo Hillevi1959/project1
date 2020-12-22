@@ -27,11 +27,13 @@ async function enterDates() {
 }
 
 async function enterFromCity(origin) {
+  await t.click(resultModule.originInput);
   await t.typeText(resultModule.originInput, origin);
   await t.pressKey('enter');
 }
 
 async function enterToCity(destination) {
+  await t.click(resultModule.destinationInput);
   await t.typeText(resultModule.destinationInput, destination);
   await t.pressKey('enter');
 }
