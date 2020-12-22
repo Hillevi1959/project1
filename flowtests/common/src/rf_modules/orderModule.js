@@ -26,6 +26,7 @@ export default {
   ),
   cc2cEntries: Selector('[data-testid="cc2carrier-transaction-entry"]'),
   chooseFirstOrderButton: Selector('[data-testid="order-button-0"]'),
+  contactPersonEmail: Selector('[data-testid="orderPage-ReceiptInformation-customerEmail"]'),
   downloadTripDocument: Selector('[data-testid="traveldoc-link"]'),
   flightInfoButton: Selector('[data-testid="order-show-flight-info-button"]'),
   infoTextOrderPage: Selector('[data-testid="order-page"] .etiContentWrapper span').nth(0),
