@@ -14,7 +14,7 @@ import { isMobile, isTablet } from '../../../common/src/util/device';
 import {
   checkForDiscountCodes,
   logInToEdvin,
-  setPriceForMobileTravelPlan,
+  setPriceBookingNumberBySms,
 } from '../../../common/src/rf_pages/edvin';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
@@ -133,7 +133,7 @@ test('Zero cart in postbooking flow', async () => {
     return console.warn('This test is not run on mobile or tablet device');
   }
   await logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
-  await setPriceForMobileTravelPlan('0');
+  await setPriceBookingNumberBySms('0');
   // Create order
   await t.navigateTo(url);
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London');

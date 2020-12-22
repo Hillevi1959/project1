@@ -16,18 +16,18 @@ export async function logInToEdvin(url) {
     .click(edvinModule.logInButton);
 }
 
-export async function setPriceForMobileTravelPlan(price) {
+export async function setPriceBookingNumberBySms(price) {
   await t.navigateTo(`https://test-uk${config.host}/edvin/product/Product.list.action?_s=true`);
   await t
-    .click(edvinModule.mobileTravelPlanProduct)
-    .click(edvinModule.mobileTravelPlanPrice)
+    .click(edvinModule.bookingNumberBySmsProduct)
+    .click(edvinModule.productPrice)
     .pressKey('ctrl+a delete')
-    .typeText(edvinModule.mobileTravelPlanPrice, price)
+    .typeText(edvinModule.productPrice, price)
     .click(edvinModule.saveProductButton);
 }
 
 export async function checkForDiscountCodes(campaignId, discountName) {
-  logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
+  await logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
   await t.navigateTo(
     `http://test-uk${config.host}/edvin/discount/DiscountItem.list.action?discountCampaignId=${campaignId}&_s=true`,
   );
