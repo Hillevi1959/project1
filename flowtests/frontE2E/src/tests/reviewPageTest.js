@@ -1,7 +1,7 @@
 import { t } from 'testcafe';
 import {
   acceptCookies,
-  emptyField,
+  clearField,
   getDateOfBirth,
   getSiteUrl,
 } from '../../../common/src/util/common';
@@ -81,13 +81,13 @@ test('Edit travelers on review page', async () => {
   await t.expect(reviewModule.traveler(3).innerText).contains(travelers[3].firstName);
 
   await t.click(reviewModule.editTravelersButton);
-  await emptyField(travelerDetailsModule.contactPersonPhone);
+  await clearField(travelerDetailsModule.contactPersonPhone);
   await t.typeText(travelerDetailsModule.contactPersonPhone, newPhoneNumber);
-  await emptyField(travelerDetailsModule.setLastName(travelers[1].nr));
+  await clearField(travelerDetailsModule.setLastName(travelers[1].nr));
   await t.typeText(travelerDetailsModule.setLastName(travelers[1].nr), newLastName);
-  await emptyField(travelerDetailsModule.setDateOfBirth(travelers[2].nr));
+  await clearField(travelerDetailsModule.setDateOfBirth(travelers[2].nr));
   await t.typeText(travelerDetailsModule.setDateOfBirth(travelers[2].nr), newChildDob);
-  await emptyField(travelerDetailsModule.setFirstName(travelers[3].nr));
+  await clearField(travelerDetailsModule.setFirstName(travelers[3].nr));
   await t.typeText(travelerDetailsModule.setFirstName(travelers[3].nr), newInfantFirstName);
   await clickProceedToReviewButton();
 
@@ -109,7 +109,7 @@ test('Edit traveler and extra products on review page and proceed to payment pag
   await clickProceedToReviewButton();
   // Edit travelers
   await t.click(reviewModule.editTravelersButton);
-  await emptyField(travelerDetailsModule.setLastName(travelers[1].nr));
+  await clearField(travelerDetailsModule.setLastName(travelers[1].nr));
   await t.typeText(travelerDetailsModule.setLastName(travelers[1].nr), newLastName);
   await clickProceedToReviewButton();
   // Edit extra products
