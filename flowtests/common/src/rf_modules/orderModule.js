@@ -27,7 +27,11 @@ export default {
   cc2cEntries: Selector('[data-testid="cc2carrier-transaction-entry"]'),
   chooseFirstOrderButton: Selector('[data-testid="order-button-0"]'),
   contactPersonEmail: Selector('[data-testid="orderPage-ReceiptInformation-customerEmail"]'),
+  discountPrice: Selector('[data-testid="orderPage-discountPrice"]'),
   downloadTripDocument: Selector('[data-testid="traveldoc-link"]'),
+  firstBoundPlaneIcon: Selector(
+    '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
+  ),
   flightInfoButton: Selector('[data-testid="order-show-flight-info-button"]'),
   infoTextOrderPage: Selector('[data-testid="order-page"] .etiContentWrapper span').nth(0),
   mailConfirmationButton: Selector('[data-testid="mailConfirmation-button"]'),
@@ -49,6 +53,10 @@ export default {
   printBusinessReceiptDropdown: Selector('[data-testid="printable-orders-dropdown"]'),
   printBusinessReceiptButton: Selector('[data-testid="receiptPrintModal-printCompany-button"]'),
   postBookingProducts: Selector('[data-testid="orderPage-postBooking-product"]'),
+  posBookingProductPrice: Selector('[data-testid="orderPage-postBooking-product"]>p:nth-child(2)'),
+  postBookingTotalPrice: Selector(
+    '[data-testid="orderPage-postBooking-order"] .cart-cartItem-price',
+  ),
   receiptInformation: Selector('[data-testid="orderPage-ReceiptInformation-section"]'),
   seatMapProduct: Selector('[data-testid="cart-product-seatMap"]'),
   seeAllProductsButton: Selector('[data-testid="order-postBooking-link"]'),
@@ -63,12 +71,11 @@ export default {
   selfTransferText: Selector('[data-testid="self-transfer-content"]'),
   shortConnectionNotification: Selector('[data-testid="short-connection-time-notification"]'),
   showBaggageButton: Selector('[data-testid="order-show-baggage-info-button"]'),
-  firstBoundPlaneIcon: Selector(
-    '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
-  ),
   secondBoundTrainIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-bound-train-icon"]',
   ),
+  ticketPrice: Selector('[class="cart-cartItem-price"]').nth(0),
+  totalPrice: Selector('[data-testid="orderPage-totalPrice"]'),
   trainTripSecondBoundTrainSegmentIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-segment-train"]',
   ),
