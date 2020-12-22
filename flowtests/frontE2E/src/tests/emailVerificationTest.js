@@ -65,8 +65,7 @@ test('Syntatic and domain validaton of email', async () => {
   await t.typeText(travelerDetailsModule.contactPersonMail, travelers[0].email);
   await t.click(travelerDetailsModule.contactPersonPhone);
 
-  await t.expect(travelerDetailsModule.errorMessage.nth(0), { visibilityCheck: false }).ok();
-  // await t.expect(travelerDetailsModule.errorMessage.nth(0).visible).notOk();
+  await t.expect(travelerDetailsModule.errorMessage.nth(0).exists).notOk();
 
   for (const traveler of travelers) {
     await addTraveler(traveler);
