@@ -25,6 +25,14 @@ export async function addSupportPackageBasic() {
   }
 }
 
+export async function addNewSupportPackageBasic() {
+  await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
+  await t.click(travelerDetailsModule.newSupportPackageBasic);
+  if (await travelerDetailsModule.supportPackageModalNoButton.exists) {
+    await t.click(travelerDetailsModule.supportPackageModalNoButton);
+  }
+}
+
 export async function addSupportPackagePremium() {
   await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
   if (await isMobile()) {
@@ -32,6 +40,11 @@ export async function addSupportPackagePremium() {
   } else if ((await isTablet()) || (await isDesktop())) {
     await t.click(travelerDetailsModule.supportPackagePremium);
   }
+}
+
+export async function addNewSupportPackagePremium() {
+  await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
+  await t.click(travelerDetailsModule.newSupportPackagePremium);
 }
 
 export async function addNoBaggage(numberOfTravelers) {
@@ -338,10 +351,16 @@ export async function addNoExtraProducts(numberOfTravelers) {
     await addNoBaggageService();
   }
   if (
-    (await travelerDetailsModule.supportPackageComponent.exists) &&
-    (await travelerDetailsModule.supportPackageComponent.visible)
+    (await travelerDetailsModule.supportPackageBasic.exists || await travelerDetailsModule.supportPackageBasicMobile.exists) &&
+    (await travelerDetailsModule.supportPackageBasic.visible || await travelerDetailsModule.supportPackageBasicMobile.visible)
   ) {
     await addSupportPackageBasic();
+  }
+  if (
+    (await travelerDetailsModule.newSupportPackageBasic.exists) &&
+    (await travelerDetailsModule.newSupportPackageBasic.visible)
+  ) {
+    await addNewSupportPackageBasic();
   }
   if (
     (await travelerDetailsModule.checkInBaggageNoOnePassenger.exists) ||
@@ -493,10 +512,16 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addFlexibleTicketAllTravelers();
   }
   if (
-    (await travelerDetailsModule.supportPackageComponent.exists) &&
-    (await travelerDetailsModule.supportPackageComponent.visible)
+    (await travelerDetailsModule.supportPackagePremium.exists || await travelerDetailsModule.supportPackagePremiumMobile.exist) &&
+    (await travelerDetailsModule.supportPackagePremium.visible || await travelerDetailsModule.supportPackagePremiumMobile.visible)
   ) {
     await addSupportPackagePremium();
+  }
+  if (
+    (await travelerDetailsModule.newSupportPackagePremium.exists) &&
+    (await travelerDetailsModule.newSupportPackagePremium.visible)
+  ) {
+    await addNewSupportPackagePremium();
   }
   if (
     (await travelerDetailsModule.onlineCheckinBaggageContainer.exists) &&
