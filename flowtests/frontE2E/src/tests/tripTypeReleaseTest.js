@@ -221,8 +221,9 @@ test('Multi destination, 4 adults', async () => {
   const multiStopProps = {
     'IbeClient.MultiStop.Enabled': true,
   };
-  const inputDate1 = getInputTripDate(10);
+  const inputDate1 = getInputTripDate(1);
   console.log('input date: ', inputDate1);
+  console.log('input date: ', typeof inputDate1);
 
   await setProps(multiStopProps);
   await chooseTripType('multi trip');

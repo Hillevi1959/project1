@@ -12,16 +12,13 @@ export function dateToDDMMYYYY(date) {
   return `${d <= 9 ? `0${d}` : d}-${m <= 9 ? `0${m}` : m}-${String(y)}`;
 }
 
-export function getInputTripDate(days, dateFormat) {
+export function getInputTripDate(months, dateFormat) {
   const now = new Date(Date.now());
-  let date;
+  const m = now.setMonth() + months;
+  const y = now.getFullYear();
 
-  const newDate = now.setMonth(now.getMonth() + 1);
-  newDate.setDate(now.getDate() + days);
   if (dateFormat === 'DDMMYYYY') {
-    date = dateToDDMMYYYY(now);
-  } else {
-    date = dateToYMD(now);
+    return `${m <= 9 ? `0${m}` : m}-${String(y)}`;
   }
-  return date;
+  return `${String(y)}-${m <= 9 ? `0${m}` : m}`;
 }
