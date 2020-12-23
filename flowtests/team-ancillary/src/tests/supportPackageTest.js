@@ -8,7 +8,7 @@ import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import {
   addNoExtraProducts,
-  addNewSupportPackagePremium,
+  addSupportPackagePremiumNew,
 } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { messageUk } from '../../../common/src/rf_pages/order';
 import {
@@ -61,7 +61,7 @@ test('Book and pay for a trip with bundled support package', async () => {
     .notOk();
 
   await addNoExtraProducts(travelers.length, travelers);
-  await addNewSupportPackagePremium();
+  await addSupportPackagePremiumNew();
 
   await t
     .expect(travelerDetailsModule.cartSupportPackageProduct.exists)

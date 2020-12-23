@@ -25,9 +25,9 @@ export async function addSupportPackageBasic() {
   }
 }
 
-export async function addNewSupportPackageBasic() {
+export async function addSupportPackageBasicNew() {
   await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
-  await t.click(travelerDetailsModule.newSupportPackageBasic);
+  await t.click(travelerDetailsModule.supportPackageBasicNew);
   if (await travelerDetailsModule.supportPackageModalNoButton.exists) {
     await t.click(travelerDetailsModule.supportPackageModalNoButton);
   }
@@ -42,9 +42,9 @@ export async function addSupportPackagePremium() {
   }
 }
 
-export async function addNewSupportPackagePremium() {
+export async function addSupportPackagePremiumNew() {
   await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
-  await t.click(travelerDetailsModule.newSupportPackagePremium);
+  await t.click(travelerDetailsModule.supportPackagePremiumNew);
 }
 
 export async function addNoBaggage(numberOfTravelers) {
@@ -357,10 +357,10 @@ export async function addNoExtraProducts(numberOfTravelers) {
     await addSupportPackageBasic();
   }
   if (
-    (await travelerDetailsModule.newSupportPackageBasic.exists) &&
-    (await travelerDetailsModule.newSupportPackageBasic.visible)
+    (await travelerDetailsModule.supportPackageBasicNew.exists) &&
+    (await travelerDetailsModule.supportPackageBasicNew.visible)
   ) {
-    await addNewSupportPackageBasic();
+    await addSupportPackageBasicNew();
   }
   if (
     (await travelerDetailsModule.checkInBaggageNoOnePassenger.exists) ||
@@ -518,10 +518,10 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addSupportPackagePremium();
   }
   if (
-    (await travelerDetailsModule.newSupportPackagePremium.exists) &&
-    (await travelerDetailsModule.newSupportPackagePremium.visible)
+    (await travelerDetailsModule.supportPackagePremiumNew.exists) &&
+    (await travelerDetailsModule.supportPackagePremiumNew.visible)
   ) {
-    await addNewSupportPackagePremium();
+    await addSupportPackagePremiumNew();
   }
   if (
     (await travelerDetailsModule.onlineCheckinBaggageContainer.exists) &&
