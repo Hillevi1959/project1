@@ -16,10 +16,10 @@ export async function logInToEdvin(url) {
     .click(edvinModule.logInButton);
 }
 
-export async function setPriceBookingNumberBySms(price) {
+export async function setPriceOnproduct(price, productText) {
   await t.navigateTo(`https://test-uk${config.host}/edvin/product/Product.list.action?_s=true`);
   await t
-    .click(edvinModule.bookingNumberBySmsProduct)
+    .click(edvinModule.product.withText(productText))
     .click(edvinModule.productPrice)
     .pressKey('ctrl+a delete')
     .typeText(edvinModule.productPrice, price)
