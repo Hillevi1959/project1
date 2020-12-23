@@ -12,13 +12,10 @@ export function dateToDDMMYYYY(date) {
   return `${d <= 9 ? `0${d}` : d}-${m <= 9 ? `0${m}` : m}-${String(y)}`;
 }
 
-export function getInputTripDate(months, dateFormat) {
+export function getDateNow() {
   const now = new Date(Date.now());
-  const m = now.setMonth() + months;
+  const m = now.getMonth() + 1;
   const y = now.getFullYear();
 
-  if (dateFormat === 'DDMMYYYY') {
-    return `${m <= 9 ? `0${m}` : m}-${String(y)}`;
-  }
   return `${String(y)}-${m <= 9 ? `0${m}` : m}`;
 }

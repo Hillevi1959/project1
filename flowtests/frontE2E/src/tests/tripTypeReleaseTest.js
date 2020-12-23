@@ -1,9 +1,11 @@
-import { Selector, t } from 'testcafe';
+/* eslint-disable no-console */
+import { t } from 'testcafe';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import enableDebug from '../../../common/src/util/debug';
 import {
   chooseTripType,
-  closeHeaderUrgencyBanner, getTripDate,
+  closeHeaderUrgencyBanner,
+  getTripDate,
   makeSearch,
   makeSearchMultiTrip,
   searchAndSelectTrip,
@@ -36,7 +38,7 @@ import {
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import config from '../../testdata.json';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { getInputTripDate } from '../../../common/src/util/dateFunction';
+import { getDateNow } from '../../../common/src/util/dateFunction';
 
 const url = getSiteUrl('supersaver-se', config.host);
 const props = {
@@ -221,15 +223,15 @@ test('Multi destination, 4 adults', async () => {
   const multiStopProps = {
     'IbeClient.MultiStop.Enabled': true,
   };
-  const inputDate1 = getInputTripDate(1);
+
+  // I need a way to set a date by input text or to know what date is chosen in the datepicker.
+  const inputDate1 = getDateNow();
   console.log('input date: ', inputDate1);
-  console.log('input date: ', typeof inputDate1);
 
   await setProps(multiStopProps);
   await chooseTripType('multi trip');
   await selectTravelers(numberOfAdults, 0, 0);
   await makeSearchMultiTrip(['STO', 'CPH'], ['BER', 'ROM']);
-
 
   const date = await getTripDate(startModule.setMultiTripDate(0));
 
