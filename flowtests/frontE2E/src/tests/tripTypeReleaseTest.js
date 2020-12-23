@@ -1,9 +1,9 @@
-import { t } from 'testcafe';
+import { Selector, t } from 'testcafe';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import enableDebug from '../../../common/src/util/debug';
 import {
   chooseTripType,
-  closeHeaderUrgencyBanner,
+  closeHeaderUrgencyBanner, getTripDate,
   makeSearch,
   makeSearchMultiTrip,
   searchAndSelectTrip,
@@ -20,7 +20,7 @@ import { selectProvider, setIBEDummyPaymentBankOn } from '../../../common/src/ut
 import { openCartIfClosed, payWithDummyBank } from '../../../common/src/rf_pages/payment';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
-import travelerModule from '../../../common/src/rf_modules/travelerDetailsModule';
+import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import startModule from '../../../common/src/rf_modules/startModule';
 import orderModule from '../../../common/src/rf_modules/orderModule';
@@ -36,6 +36,7 @@ import {
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import config from '../../testdata.json';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
+import { getInputTripDate } from '../../../common/src/util/dateFunction';
 
 const url = getSiteUrl('supersaver-se', config.host);
 const props = {
@@ -65,17 +66,17 @@ test('Return trip, 1 adult, direct flight', async () => {
   await makeSearch('return trip', 'STO', 'LON', 10);
   await selectTripButtonByIndex(0);
 
-  await t.expect(travelerModule.travelerDetailsForm.exists).ok();
+  await t.expect(travelerDetailsModule.travelerDetailsForm.exists).ok();
 
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
 
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
-    await t.expect(travelerModule.cartTripsMobile.visible).ok();
+    await t.expect(travelerDetailsModule.cartTripsMobile.visible).ok();
     await toggleCart();
   } else if (await isDesktop()) {
-    await t.expect(travelerModule.cartTrips.visible).ok();
+    await t.expect(travelerDetailsModule.cartTrips.visible).ok();
   }
   await bookFlight();
   await closeSeatMapModal();
@@ -115,16 +116,16 @@ test('One way trip, 1 adult, 1 child, direct flight', async () => {
   await makeSearch('one way trip', 'STO', 'NEW', 10);
   await selectTripButtonByIndex(0);
 
-  await t.expect(travelerModule.travelerDetailsForm.visible).ok();
+  await t.expect(travelerDetailsModule.travelerDetailsForm.visible).ok();
 
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildern);
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
-    await t.expect(travelerModule.cartTripsMobile.visible).ok();
+    await t.expect(travelerDetailsModule.cartTripsMobile.visible).ok();
     await toggleCart();
   } else if (await isDesktop()) {
-    await t.expect(travelerModule.cartTrips.visible).ok();
+    await t.expect(travelerDetailsModule.cartTrips.visible).ok();
   }
   await bookFlight();
   await closeSeatMapModal();
@@ -173,16 +174,16 @@ test('One way combination return trip, 2 adults, 1 child, 1 infant', async () =>
     'ECONOMY',
   );
 
-  await t.expect(travelerModule.travelerDetailsForm.visible).ok();
+  await t.expect(travelerDetailsModule.travelerDetailsForm.visible).ok();
 
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
-    await t.expect(travelerModule.cartTripsMobile.visible).ok();
+    await t.expect(travelerDetailsModule.cartTripsMobile.visible).ok();
     await toggleCart();
   } else if (await isDesktop()) {
-    await t.expect(travelerModule.cartTrips.visible).ok();
+    await t.expect(travelerDetailsModule.cartTrips.visible).ok();
   }
   await bookFlight();
   await closeSeatMapModal();
@@ -220,26 +221,37 @@ test('Multi destination, 4 adults', async () => {
   const multiStopProps = {
     'IbeClient.MultiStop.Enabled': true,
   };
+  const inputDate1 = getInputTripDate(10);
+  console.log('input date: ', inputDate1);
 
   await setProps(multiStopProps);
   await chooseTripType('multi trip');
   await selectTravelers(numberOfAdults, 0, 0);
   await makeSearchMultiTrip(['STO', 'CPH'], ['BER', 'ROM']);
+
+
+  const date = await getTripDate(startModule.setMultiTripDate(0));
+
+  console.log(date);
+  console.log(typeof date);
+
+  await t.debug();
+
   await selectTripButtonByIndex(0);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   if (await isMobile()) {
     await toggleCart();
-    await t.expect(travelerModule.cartTripMobile().nth(0).innerText).contains('Stockholm');
-    await t.expect(travelerModule.cartTripMobile().nth(1).innerText).contains('Köpenhamn');
-    await t.expect(travelerModule.cartTripMobile().nth(2).innerText).contains('Berlin');
-    await t.expect(travelerModule.cartTripMobile().nth(3).innerText).contains('Rom');
+    await t.expect(travelerDetailsModule.cartTripMobile().nth(0).innerText).contains('Stockholm');
+    await t.expect(travelerDetailsModule.cartTripMobile().nth(1).innerText).contains('Köpenhamn');
+    await t.expect(travelerDetailsModule.cartTripMobile().nth(2).innerText).contains('Berlin');
+    await t.expect(travelerDetailsModule.cartTripMobile().nth(3).innerText).contains('Rom');
     await toggleCart();
   } else if (await isDesktop()) {
-    await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Stockholm');
-    await t.expect(travelerModule.cartTrip.nth(0).innerText).contains('Köpenhamn');
-    await t.expect(travelerModule.cartTrip.nth(1).innerText).contains('Berlin');
-    await t.expect(travelerModule.cartTrip.nth(1).innerText).contains('Rom');
+    await t.expect(travelerDetailsModule.cartTrip.nth(0).innerText).contains('Stockholm');
+    await t.expect(travelerDetailsModule.cartTrip.nth(0).innerText).contains('Köpenhamn');
+    await t.expect(travelerDetailsModule.cartTrip.nth(1).innerText).contains('Berlin');
+    await t.expect(travelerDetailsModule.cartTrip.nth(1).innerText).contains('Rom');
   }
 
   await bookFlight();

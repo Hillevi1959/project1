@@ -5,6 +5,10 @@ import { dropdownSelect } from '../util/dropdownSelect';
 import startModule from '../rf_modules/startModule';
 import { selectTripButtonByIndex } from './result';
 
+export async function getTripDate(dateSelector) {
+  return dateSelector.getAttribute('value');
+}
+
 export async function selectTravelers(nrOfAdults, nrOfChildren, nrOfInfants) {
   await dropdownSelect(startModule.travelerDropDown, 0);
   let i;
