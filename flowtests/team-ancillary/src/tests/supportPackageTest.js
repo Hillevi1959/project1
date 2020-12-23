@@ -29,7 +29,7 @@ const props = {
   'IbeClient.Products.SupportPackage.Bundling.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
-  'AB.Responsive.TravelerDetails.DisplayProductsBeforePassengerDetails.Enabled': true,
+  'AB.Responsive.SupportPackage.NewDesign.Enabled': true,
 };
 
 fixture('Support Package verification')
