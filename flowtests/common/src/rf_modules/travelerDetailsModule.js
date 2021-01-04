@@ -138,6 +138,7 @@ export default {
   contactForm: Selector('[data-testid="travelerDetails-contactForm"]'),
   contactPersonMail: Selector('[for="traveler-mail"]'),
   contactPersonPhone: Selector('[for="traveler-phone"]'),
+  errorMessage: Selector('[data-testid="components-textInput"] > .message > [type="error"]'),
   extraProductsContainer: Selector('[data-testid="travelerDetails-products"]'),
   flexibleTicketDropDown: Selector('.flexibleTicket .etiCheckboxDropdown'),
   flexibleTicketIcon: Selector('[data-testid="flexibleTicket-ProductIcon"]'),
