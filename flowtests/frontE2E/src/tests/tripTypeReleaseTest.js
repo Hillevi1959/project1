@@ -38,7 +38,7 @@ import {
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import config from '../../testdata.json';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { getDateNow } from '../../../common/src/util/dateFunction';
+import { getExpectedDate } from '../../../common/src/util/dateFunction';
 
 const url = getSiteUrl('supersaver-se', config.host);
 const props = {
@@ -223,22 +223,18 @@ test('Multi destination, 4 adults', async () => {
   const multiStopProps = {
     'IbeClient.MultiStop.Enabled': true,
   };
-
-  // I need a way to set a date by input text or to know what date is chosen in the datepicker.
-  const inputDate1 = getDateNow();
-  console.log('input date: ', inputDate1);
+  const expectedDateTrip1 = getExpectedDate(2, 1);
+  const expectedDateTrip2 = getExpectedDate(2, 10);
 
   await setProps(multiStopProps);
   await chooseTripType('multi trip');
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearchMultiTrip(['STO', 'CPH'], ['BER', 'ROM']);
+  await makeSearchMultiTrip(['STO', 'CPH'], ['BER', 'ROM'], [1, 10]);
+  const inputDateTrip1 = await getTripDate(startModule.setMultiTripDate(0));
+  const inputDateTrip2 = await getTripDate(startModule.setMultiTripDate(1));
 
-  const date = await getTripDate(startModule.setMultiTripDate(0));
-
-  console.log(date);
-  console.log(typeof date);
-
-  await t.debug();
+  await t.expect(inputDateTrip1).eql(expectedDateTrip1);
+  await t.expect(inputDateTrip2).eql(expectedDateTrip2);
 
   await selectTripButtonByIndex(0);
   await addTravelerInformation(travelers);

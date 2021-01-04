@@ -5,6 +5,7 @@ export default {
   airSystemIbeGDSDummy: Selector('[for=dbg_onlyRsrvSys111]'),
   cabinClassDropdown: Selector('[data-testid="searchForm-cabinClasses-dropdown"]'),
   headerUrgencyBanner: Selector('[data-testid="top-header-notification-close-button"]'),
+  date: Selector('[aria-disabled="false"]'),
   day: Selector('.DayPicker-Day'),
   destination: Selector('[data-testid="searchForm-singleBound-destination-input"]'),
   departureDate: Selector('[data-testid="singleBound.departureDate-input"]'),

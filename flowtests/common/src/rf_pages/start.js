@@ -84,10 +84,10 @@ export async function searchTrip(
   await makeSearch(tripType, origin, destination, 10);
 }
 
-export async function makeSearchMultiTrip(trip1, trip2) {
-  await enterDatesMultiTrip(0, 10);
+export async function makeSearchMultiTrip(trip1, trip2, day) {
+  await enterDatesMultiTrip(0, day[0]);
   await enterCitiesMulti(trip1, 0);
-  await enterDatesMultiTrip(1, 13);
+  await enterDatesMultiTrip(1, day[1]);
   await enterCitiesMulti(trip2, 1);
   await t.click(startModule.searchFlight);
 }
@@ -104,6 +104,10 @@ export async function chooseTripType(tripType) {
 
 async function chooseDate(dayNr) {
   await t.click(startModule.day.nth(dayNr));
+}
+
+async function chooseDayInMonth(day) {
+  await t.click(startModule.date.nth(day - 1));
 }
 
 async function clickNextMonth() {
@@ -139,12 +143,12 @@ async function enterDates(tripType, dayNr) {
   }
 }
 
-async function enterDatesMultiTrip(tripNr, dayNr) {
+async function enterDatesMultiTrip(tripNr, day) {
   await t.click(startModule.setMultiTripDate(tripNr));
   if (tripNr === 0) {
     await clickNextMonth();
   }
-  await chooseDate(dayNr);
+  await chooseDayInMonth(day);
 }
 
 async function enterCitiesMulti(trip, tripNr) {
