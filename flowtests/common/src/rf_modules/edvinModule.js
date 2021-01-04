@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 
 export default {
-  bookingNumberBySmsProduct: Selector('.resultSet:nth-child(2) tr:nth-child(25)'),
+  product: Selector('.resultSet:nth-child(2) tbody tr'),
   codeName: Selector('[name="code"]'),
   discountItemLink: Selector('[href*="DiscountItem"]'),
   discountCodeField: Selector('[name="code"]'),
