@@ -26,6 +26,7 @@ export default {
   ),
   cc2cEntries: Selector('[data-testid="cc2carrier-transaction-entry"]'),
   chooseFirstOrderButton: Selector('[data-testid="order-button-0"]'),
+  contactPersonEmail: Selector('[data-testid="orderPage-ReceiptInformation-customerEmail"]'),
   discountPrice: Selector('[data-testid="orderPage-discountPrice"]'),
   downloadTripDocument: Selector('[data-testid="traveldoc-link"]'),
   firstBoundPlaneIcon: Selector(
