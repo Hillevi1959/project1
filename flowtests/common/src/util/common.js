@@ -73,6 +73,6 @@ export async function getOrderNumberFromUrl() {
   return new URLSearchParams(await getUrlSearchParameters()).get('orderNumber');
 }
 
-export async function emptyField(selector) {
+export async function clearField(selector) {
   await t.click(selector).pressKey('ctrl+a delete');
 }
