@@ -1,5 +1,5 @@
-import { Selector, t } from 'testcafe';
-import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
+import { t } from 'testcafe';
+import { getSiteUrl } from '../../../common/src/util/common';
 import enableDebug from '../../../common/src/util/debug';
 import setProps from '../../../common/src/util/props';
 import { getTripFlexTicket } from '../util/metaTrips';

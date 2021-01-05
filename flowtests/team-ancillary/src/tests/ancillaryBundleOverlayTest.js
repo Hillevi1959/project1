@@ -55,7 +55,7 @@ test('Book and pay for a trip with bundled products', async () => {
   const numberOfAdults = 2;
   await selectProvider('IbeGDSDummy');
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'STO', 'LON', 10);
+  await makeSearch('return trip', 'STO', 'LON', [11, 24]);
   await selectTripButtonByIndex(0);
 
   await t.expect(resultModule.productBundleOption3.visible).ok();

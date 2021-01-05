@@ -27,10 +27,9 @@ import config from './testdata.json';
 
 const url = getSiteUrl('supersaver-se', config.host);
 const globalProps = {
-    'IbeClient.TravelerDetails.Modal': 'NONE',
-    'Payment.RemoveAdressForBank.Enable': false
+  'IbeClient.TravelerDetails.Modal': 'NONE',
+  'Payment.RemoveAdressForBank.Enable': false,
 };
-
 
 fixture('Cancellation Guarantee Product verification')
   .page(url)
@@ -44,16 +43,30 @@ fixture('Cancellation Guarantee Product verification')
   });
 
 test('Outside Europe - Price per bound and per traveler (except Infant)', async () => {
-  const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult(), getFirstChild(), getFirstInfant()]);
+  const travelers = addNumberToTraveler([
+    getFirstAdult(),
+    getSecondAdult(),
+    getFirstChild(),
+    getFirstInfant(),
+  ]);
   const numberOfAdults = 2;
   const numberOfChildren = 1;
   const numberOfInfants = 1;
 
   await setProps({
-    'IbeClient.Products.CancellationGuaranteeOutsideEu.ShowPricePerTraveler.Enabled': true
+    'IbeClient.Products.CancellationGuaranteeOutsideEu.ShowPricePerTraveler.Enabled': true,
   });
 
-  await searchAndSelectTrip(numberOfAdults, numberOfChildren, numberOfInfants, 'return trip', 'GOT', 'BKK');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    numberOfChildren,
+    numberOfInfants,
+    'return trip',
+    'GOT',
+    'BKK',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
 
@@ -66,8 +79,12 @@ test('Outside Europe - Price per bound and per traveler (except Infant)', async 
     await travelerDetailsModule.cancellationOutsideEuProductPrice.innerText,
   );
   const numberOfBounds = await getNumberOfBounds();
-  const cartPrice = getPriceFromText(await travelerDetailsModule.cartCancellationOutsideEuProductPrice.innerText);
-  const pricePerBoundAndTraveler = Math.floor(cartPrice/(numberOfBounds*(numberOfAdults + numberOfChildren)));
+  const cartPrice = getPriceFromText(
+    await travelerDetailsModule.cartCancellationOutsideEuProductPrice.innerText,
+  );
+  const pricePerBoundAndTraveler = Math.floor(
+    cartPrice / (numberOfBounds * (numberOfAdults + numberOfChildren)),
+  );
 
   await t
     .expect(pricePerBoundAndTraveler)
@@ -77,25 +94,40 @@ test('Outside Europe - Price per bound and per traveler (except Infant)', async 
 
   await bookFlight();
 
-  const paymentCartPrice = getPriceFromText(await paymentModule.cartCancellationOutsideEuProductPrice.innerText);
+  const paymentCartPrice = getPriceFromText(
+    await paymentModule.cartCancellationOutsideEuProductPrice.innerText,
+  );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
   await payWithDummyBank(travelers[0]);
-  await t.expect(orderModule.infoTextOrderPage.innerText)
-    .contains(messageSupersaverSe);
+  await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
 test('Outside Europe - Price per bound only', async () => {
-  const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult(), getFirstChild(), getFirstInfant()]);
+  const travelers = addNumberToTraveler([
+    getFirstAdult(),
+    getSecondAdult(),
+    getFirstChild(),
+    getFirstInfant(),
+  ]);
   const numberOfAdults = 2;
   const numberOfChildren = 1;
   const numberOfInfants = 1;
 
   await setProps({
-    'IbeClient.Products.CancellationGuaranteeOutsideEu.ShowPricePerTraveler.Enabled': false
+    'IbeClient.Products.CancellationGuaranteeOutsideEu.ShowPricePerTraveler.Enabled': false,
   });
 
-  await searchAndSelectTrip(numberOfAdults, numberOfChildren, numberOfInfants, 'return trip', 'GOT', 'BKK');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    numberOfChildren,
+    numberOfInfants,
+    'return trip',
+    'GOT',
+    'BKK',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await t
@@ -107,8 +139,10 @@ test('Outside Europe - Price per bound only', async () => {
     await travelerDetailsModule.cancellationOutsideEuProductPrice.innerText,
   );
   const numberOfBounds = await getNumberOfBounds();
-  const cartPrice = getPriceFromText(await travelerDetailsModule.cartCancellationOutsideEuProductPrice.innerText);
-  const pricePerBound = Math.floor(cartPrice/numberOfBounds);
+  const cartPrice = getPriceFromText(
+    await travelerDetailsModule.cartCancellationOutsideEuProductPrice.innerText,
+  );
+  const pricePerBound = Math.floor(cartPrice / numberOfBounds);
 
   await t
     .expect(pricePerBound)
@@ -118,26 +152,40 @@ test('Outside Europe - Price per bound only', async () => {
 
   await bookFlight();
 
-  const paymentCartPrice = getPriceFromText(await paymentModule.cartCancellationOutsideEuProductPrice.innerText);
+  const paymentCartPrice = getPriceFromText(
+    await paymentModule.cartCancellationOutsideEuProductPrice.innerText,
+  );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
   await payWithDummyBank(travelers[0]);
-  await t.expect(orderModule.infoTextOrderPage.innerText)
-    .contains(messageSupersaverSe);
+  await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
-
 test('Within Europe - Price per bound and per traveler (except Infant)', async () => {
-  const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult(), getFirstChild(), getFirstInfant()]);
+  const travelers = addNumberToTraveler([
+    getFirstAdult(),
+    getSecondAdult(),
+    getFirstChild(),
+    getFirstInfant(),
+  ]);
   const numberOfAdults = 2;
   const numberOfChildren = 1;
   const numberOfInfants = 1;
 
   await setProps({
-    'IbeClient.Products.CancellationGuaranteeWithinEu.ShowPricePerTraveler.Enabled': true
+    'IbeClient.Products.CancellationGuaranteeWithinEu.ShowPricePerTraveler.Enabled': true,
   });
 
-  await searchAndSelectTrip(numberOfAdults, numberOfChildren, numberOfInfants, 'return trip', 'GOT', 'BER');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    numberOfChildren,
+    numberOfInfants,
+    'return trip',
+    'GOT',
+    'BER',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
 
@@ -150,8 +198,12 @@ test('Within Europe - Price per bound and per traveler (except Infant)', async (
     await travelerDetailsModule.cancellationWithinEuProductPrice.innerText,
   );
   const numberOfBounds = await getNumberOfBounds();
-  const cartPrice = getPriceFromText(await travelerDetailsModule.cartCancellationWithinEuProductPrice.innerText);
-  const pricePerBoundAndTraveler = Math.floor(cartPrice/(numberOfBounds*(numberOfAdults + numberOfChildren)));
+  const cartPrice = getPriceFromText(
+    await travelerDetailsModule.cartCancellationWithinEuProductPrice.innerText,
+  );
+  const pricePerBoundAndTraveler = Math.floor(
+    cartPrice / (numberOfBounds * (numberOfAdults + numberOfChildren)),
+  );
 
   await t
     .expect(pricePerBoundAndTraveler)
@@ -160,26 +212,40 @@ test('Within Europe - Price per bound and per traveler (except Infant)', async (
     .contains(`per resväg och person`);
   await bookFlight();
 
-  const paymentCartPrice = getPriceFromText(await paymentModule.cartCancellationWithinEuProductPrice.innerText);
+  const paymentCartPrice = getPriceFromText(
+    await paymentModule.cartCancellationWithinEuProductPrice.innerText,
+  );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
   await payWithDummyBank(travelers[0]);
-  await t.expect(orderModule.infoTextOrderPage.innerText)
-    .contains(messageSupersaverSe);
-
+  await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
 test('Within Europe - Price per bound only', async () => {
-  const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult(), getFirstChild(), getFirstInfant()]);
+  const travelers = addNumberToTraveler([
+    getFirstAdult(),
+    getSecondAdult(),
+    getFirstChild(),
+    getFirstInfant(),
+  ]);
   const numberOfAdults = 2;
   const numberOfChildren = 1;
   const numberOfInfants = 1;
 
   await setProps({
-    'IbeClient.Products.CancellationGuaranteeWithinEu.ShowPricePerTraveler.Enabled': false
+    'IbeClient.Products.CancellationGuaranteeWithinEu.ShowPricePerTraveler.Enabled': false,
   });
 
-  await searchAndSelectTrip(numberOfAdults, numberOfChildren, numberOfInfants, 'return trip', 'GOT', 'BER');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    numberOfChildren,
+    numberOfInfants,
+    'return trip',
+    'GOT',
+    'BER',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await t
@@ -191,8 +257,10 @@ test('Within Europe - Price per bound only', async () => {
     await travelerDetailsModule.cancellationWithinEuProductPrice.innerText,
   );
   const numberOfBounds = await getNumberOfBounds();
-  const cartPrice = getPriceFromText(await travelerDetailsModule.cartCancellationWithinEuProductPrice.innerText);
-  const pricePerBound = Math.floor(cartPrice/numberOfBounds);
+  const cartPrice = getPriceFromText(
+    await travelerDetailsModule.cartCancellationWithinEuProductPrice.innerText,
+  );
+  const pricePerBound = Math.floor(cartPrice / numberOfBounds);
 
   await t
     .expect(pricePerBound)
@@ -202,10 +270,11 @@ test('Within Europe - Price per bound only', async () => {
 
   await bookFlight();
 
-  const paymentCartPrice = getPriceFromText(await paymentModule.cartCancellationWithinEuProductPrice.innerText);
+  const paymentCartPrice = getPriceFromText(
+    await paymentModule.cartCancellationWithinEuProductPrice.innerText,
+  );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
   await payWithDummyBank(travelers[0]);
-  await t.expect(orderModule.infoTextOrderPage.innerText)
-    .contains(messageSupersaverSe);
+  await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });

@@ -56,7 +56,10 @@ fixture('Manulife products verification')
 test('Book and pay for a one way trip with Trip Cancellation Protection for one adult traveler', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);
   await chooseTripType('one way trip');
-  await searchAndSelectTrip(travelers.length, 0, 0, 'one way trip', 'STO', 'LON');
+  await searchAndSelectTrip(travelers.length, 0, 0, 'one way trip', 'STO', 'LON', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
 
   await t
@@ -128,6 +131,8 @@ test('Book and pay for a return trip with All Inclusive Protection for 2 adults,
     'return trip',
     'STO',
     'LON',
+    'ECONOMY',
+    [11, 24],
   );
   await addTravelerInformation(travelers);
 

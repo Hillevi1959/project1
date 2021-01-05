@@ -66,7 +66,16 @@ test('SeatMap book seating light and beside', async () => {
 
     await setProps(seatingComboProps);
 
-    await searchAndSelectTrip(numberOfAdults, 0, numberOfInfants, 'return trip', 'GOT', 'BKK');
+    await searchAndSelectTrip(
+      numberOfAdults,
+      0,
+      numberOfInfants,
+      'return trip',
+      'GOT',
+      'BKK',
+      'ECONOMY',
+      [11, 24],
+    );
     await addTravelerInformation(travelers);
     await addNoExtraProducts(numberOfAdults);
     await bookFlight();
