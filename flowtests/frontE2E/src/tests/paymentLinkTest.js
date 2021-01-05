@@ -43,20 +43,21 @@ fixture('Verify payment link')
 // eslint-disable-next-line consistent-return
 test('Create add on cart in Edvin and verify payment link', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
-  // await createOrderWithNoProducts(
-  //   numberOfAdults,
-  //   0,
-  //   numberOfInfants,
-  //   travelers,
-  //   'return trip',
-  //   'STO',
-  //   'Paris',
-  //   'CARD',
-  // );
-  const orderNumber = 'DTESTG7JK';
-  // const orderNumber = await orderModule.orderNumber.innerText;
+  await createOrderWithNoProducts(
+    numberOfAdults,
+    0,
+    numberOfInfants,
+    travelers,
+    'return trip',
+    'STO',
+    'Paris',
+    'CARD',
+  );
+  // const orderNumber = 'DTESTG7JK';
+  const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number: ', orderNumber);
   await logInToEdvin(getSiteUrl('gotogate-uk-edvin', config.host));
 
@@ -123,12 +124,14 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   await t.navigateTo(orderUrl);
 
   await openDropdown(edvinModule.addOnCartActionsDropdown);
+
+  await t.debug();
+
   await t.click(edvinModule.orderNotesSelection);
   await t.click(edvinModule.orderNoteAddButton);
   await t.click(edvinModule.orderNoteTitleInput);
   await t.pressKey('ctrl+v');
 
-  await t.debug();
   const getClipboardText = ClientFunction(() => {
     document.querySelector('[role="dialog"] [type="text"]').addEventListener('click', () => {
       navigator.clipboard
