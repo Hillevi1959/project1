@@ -9,6 +9,7 @@ import headerModule from '../../../common/src/rf_modules/headerModule';
 import startModule from '../../../common/src/rf_modules/startModule';
 import { addSearchDataResultPage } from '../../../common/src/rf_pages/result';
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
+import resultModule from '../../../common/src/rf_modules/resultModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const props = {
@@ -52,6 +53,7 @@ test('Autofill search data on start page', async () => {
   const numberOfAdults = 2;
   await t.click(startModule.searchFlight);
   await addSearchDataResultPage(numberOfAdults, 'GOT', 'PAR', 1, 1);
+  await t.click(resultModule.searchFlight);
   if ((await isMobile()) || (await isTablet())) {
     await t.click(headerModule.flightMenuMobile);
     await t.click(headerModule.flightSelectionMobile);
