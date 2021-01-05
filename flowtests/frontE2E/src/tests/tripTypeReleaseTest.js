@@ -8,7 +8,7 @@ import {
   getTripDate,
   makeSearch,
   makeSearchMultiTrip,
-  searchAndSelectTrip,
+  searchAndSelectTrip, selectCabinClass,
   selectTravelers,
 } from '../../../common/src/rf_pages/start';
 import { selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
@@ -60,16 +60,25 @@ fixture('Search, book and pay different types of trips')
     await closeHeaderUrgencyBanner();
   });
 
+
 test('Return trip, 1 adult, direct flight', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);
   const numberOfAdults = 1;
 
+  const expectedDateDeparture = getExpectedDate(2, 11);
+  const expectedDateReturn = getExpectedDate(2, 25);
+
   await t.click(startModule.directFlightBox);
-  await makeSearch('return trip', 'STO', 'LON', 10);
+  await selectTravelers(numberOfAdults, 0, 0);
+  await makeSearch('return trip', 'STO', 'LON', [11, 25]);
+  const inputDateDeparture = await getTripDate(startModule.departureDate);
+  const inputDateReturn = await getTripDate(startModule.returnDate);
+
+  await t.expect(inputDateDeparture).eql(expectedDateDeparture);
+  await t.expect(inputDateReturn).eql(expectedDateReturn);
+
   await selectTripButtonByIndex(0);
-
   await t.expect(travelerDetailsModule.travelerDetailsForm.exists).ok();
-
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
 
@@ -110,16 +119,18 @@ test('One way trip, 1 adult, 1 child, direct flight', async () => {
   const travelers = addNumberToTraveler([getFirstAdult(), getFirstChild()]);
   const numberOfAdults = 1;
   const numberOfChildern = 1;
+  const expectedDateDeparture = getExpectedDate(2, 11);
 
   await chooseTripType('one way trip');
   await t.click(startModule.directFlightBox);
-
   await selectTravelers(numberOfAdults, numberOfChildern, 0);
-  await makeSearch('one way trip', 'STO', 'NEW', 10);
+  await makeSearch('one way trip', 'STO', 'NEW', [11]);
+  const inputDateDeparture = await getTripDate(startModule.departureDate);
+
+  await t.expect(inputDateDeparture).eql(expectedDateDeparture);
+
   await selectTripButtonByIndex(0);
-
   await t.expect(travelerDetailsModule.travelerDetailsForm.visible).ok();
-
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildern);
   if ((await isMobile()) || (await isTablet())) {
@@ -165,16 +176,19 @@ test('One way combination return trip, 2 adults, 1 child, 1 infant', async () =>
   const numberOfAdults = 2;
   const numberOfChildren = 1;
   const numberOfInfants = 1;
+  const expectedDateDeparture = getExpectedDate(2, 11);
+  const expectedDateReturn = getExpectedDate(2, 25);
 
-  await searchAndSelectTrip(
-    numberOfAdults,
-    numberOfChildren,
-    numberOfInfants,
-    'return trip',
-    'Stockholm Bromma',
-    'TOJ',
-    'ECONOMY',
-  );
+  await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
+  await chooseTripType('return trip');
+  await makeSearch('return trip', 'Stockholm Bromma', 'TOJ', [11, 25]);
+
+  const inputDateDeparture = await getTripDate(startModule.departureDate);
+  const inputDateReturn = await getTripDate(startModule.returnDate);
+
+  await t.expect(inputDateDeparture).eql(expectedDateDeparture);
+  await t.expect(inputDateReturn).eql(expectedDateReturn);
+  await selectTripButtonByIndex(0);
 
   await t.expect(travelerDetailsModule.travelerDetailsForm.visible).ok();
 
@@ -223,8 +237,8 @@ test('Multi destination, 4 adults', async () => {
   const multiStopProps = {
     'IbeClient.MultiStop.Enabled': true,
   };
-  const expectedDateTrip1 = getExpectedDate(2, 1);
-  const expectedDateTrip2 = getExpectedDate(2, 10);
+  const expectedDateTrip1 = getExpectedDate(1, 1);
+  const expectedDateTrip2 = getExpectedDate(1, 10);
 
   await setProps(multiStopProps);
   await chooseTripType('multi trip');

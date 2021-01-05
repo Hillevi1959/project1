@@ -12,9 +12,9 @@ export function dateToDDMMYYYY(date) {
   return `${d <= 9 ? `0${d}` : d}-${m <= 9 ? `0${m}` : m}-${String(y)}`;
 }
 
-export function getExpectedDate(month, day) {
+export function getExpectedDate(addedMonths, day) {
   const now = new Date(Date.now());
-  const m = now.getMonth() + month;
+  const m = now.getMonth() + 1 + addedMonths;
   let d = now.setDate(day);
   d = now.getDate();
   const y = now.getFullYear();
