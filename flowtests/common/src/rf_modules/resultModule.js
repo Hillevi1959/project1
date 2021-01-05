@@ -8,6 +8,7 @@ export default {
   clearAirlines: Selector(
     '[data-testid="resultPage-AIRLINESFilter-content"] > div > span:nth-child(1)',
   ),
+  date: Selector('[aria-disabled="false"]'),
   day: Selector('.DayPicker-Day'),
   destinationInput: Selector('[data-testid="searchForm-singleBound-destination-input"]'),
   departureDate: Selector('[data-testid="singleBound.departureDate-input"]'),

@@ -12,11 +12,11 @@ export async function selectTripButtonByIndex(number) {
 async function chooseDatesFrom() {
   await t.click(resultModule.nextMonth);
   await t.click(resultModule.nextMonth);
-  await t.click(resultModule.day.nth(10));
+  await t.click(resultModule.date.nth(10));
 }
 
 async function chooseDatesTo() {
-  await t.click(resultModule.day.nth(24));
+  await t.click(resultModule.date.nth(23));
 }
 
 async function enterDates() {
@@ -42,7 +42,6 @@ export async function makeSearchResultPage(origin, destination) {
   await enterDates();
   await enterFromCity(origin);
   await enterToCity(destination);
-  await t.click(resultModule.searchFlight);
 }
 
 export async function addSearchDataResultPage(
