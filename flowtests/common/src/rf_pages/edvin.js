@@ -85,7 +85,7 @@ export function getDiscountCode() {
   return discountCode;
 }
 
-async function searchOrder(site, orderNumber) {
+export async function searchOrder(site, orderNumber) {
   await t.navigateTo(`${site}${config.host}/edvin/order/Order.list.action?_s=true&searching=true`);
   const currentUrl = await getCurrentUrl();
   if (!currentUrl.includes('edvin/gui/?url=/edvin/core/order/OrderContainer.edit.action%3Fid')) {

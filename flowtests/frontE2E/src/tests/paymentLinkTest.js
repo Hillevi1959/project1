@@ -46,18 +46,18 @@ test('Create add on cart in Edvin and verify payment link', async () => {
     console.warn('This test is not run on mobile or tablet device');
     return;
   }
-  await createOrderWithNoProducts(
-    numberOfAdults,
-    0,
-    numberOfInfants,
-    travelers,
-    'return trip',
-    'STO',
-    'Paris',
-    'CARD',
-  );
-  // const orderNumber = 'DTESTG7JK';
-  const orderNumber = await orderModule.orderNumber.innerText;
+  // await createOrderWithNoProducts(
+  //   numberOfAdults,
+  //   0,
+  //   numberOfInfants,
+  //   travelers,
+  //   'return trip',
+  //   'STO',
+  //   'Paris',
+  //   'CARD',
+  // );
+  const orderNumber = 'DTESTGAP8';
+  // const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number: ', orderNumber);
   await logInToEdvin(getSiteUrl('gotogate-uk-edvin', config.host));
 
