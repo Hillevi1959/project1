@@ -29,7 +29,7 @@ fixture('Autofill search data on start page')
   });
 
 test('Autofill search data on start page', async () => {
-  await searchTrip(1, 0, 0, 'return trip', 'STO', 'BER');
+  await searchTrip(1, 0, 0, 'return trip', 'STO', 'BER', 'ECONOMY', [11, 24]);
   if ((await isMobile()) || (await isTablet())) {
     await t.click(headerModule.flightMenuMobile);
     await t.click(headerModule.flightSelectionMobile);

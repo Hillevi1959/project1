@@ -79,10 +79,11 @@ export async function searchTrip(
   origin,
   destination,
   cabinClass,
+  day,
 ) {
   await selectCabinClass(cabinClass);
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
-  await makeSearch(tripType, origin, destination, 10);
+  await makeSearch(tripType, origin, destination, day);
 }
 
 export async function makeSearchMultiTrip(trip1, trip2, day) {
@@ -101,10 +102,6 @@ export async function chooseTripType(tripType) {
     await t.expect(startModule.multiTrip.visible).ok('', { timeout: 30000 });
     await t.click(startModule.multiTrip);
   }
-}
-
-async function chooseDate(dayNr) {
-  await t.click(startModule.day.nth(dayNr));
 }
 
 async function chooseDayInMonth(day) {
@@ -132,9 +129,7 @@ async function enterDates(tripType, day) {
     await clickNextMonth();
     await clickNextMonth();
     await chooseDayInMonth(day[0]);
-    // await chooseDate(dayNr);
     await t.click(startModule.returnDate);
-    // await chooseDate(dayNr + 14);
     await chooseDayInMonth(day[1]);
   }
   if (tripType === 'one way trip') {
@@ -142,7 +137,6 @@ async function enterDates(tripType, day) {
     await t.click(startModule.departureDate);
     await clickNextMonth();
     await clickNextMonth();
-    // await chooseDate(dayNr);
     await chooseDayInMonth(day[0]);
   }
 }

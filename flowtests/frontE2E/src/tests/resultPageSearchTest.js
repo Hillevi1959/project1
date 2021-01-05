@@ -34,7 +34,7 @@ test('Possible to search for a new trip on result page', async () => {
   let numberOfAdults = 1;
 
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'UME', 'TYO', 10);
+  await makeSearch('return trip', 'UME', 'TYO', [11, 24]);
 
   await t
     .expect(resultModule.tripSegment.innerText)

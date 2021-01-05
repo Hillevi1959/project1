@@ -41,7 +41,7 @@ fixture('Error modal verification')
 test('Go back from payment page with browser back arrow', async () => {
   const errorText1 =
     "We're sorry! Unfortunately, you cannot return to this page. Click the button below to return to the payment page. If you would like to change a name or product, please start with a new booking.";
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();

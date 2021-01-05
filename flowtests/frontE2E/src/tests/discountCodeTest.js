@@ -46,7 +46,10 @@ test('Verify discount use on payment and order page', async () => {
   } else {
     await checkForDiscountCodes(campaignId, discountName);
     await t.navigateTo(url);
-    await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney');
+    await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney', 'ECONOMY', [
+      11,
+      24,
+    ]);
     await addTravelerInformation(travelers);
     await addNoExtraProducts(numberOfAdults);
     await bookFlight();

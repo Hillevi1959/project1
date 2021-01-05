@@ -8,7 +8,6 @@ import {
   getTripDate,
   makeSearch,
   makeSearchMultiTrip,
-  searchAndSelectTrip, selectCabinClass,
   selectTravelers,
 } from '../../../common/src/rf_pages/start';
 import { selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
@@ -59,7 +58,6 @@ fixture('Search, book and pay different types of trips')
     await setProps(props);
     await closeHeaderUrgencyBanner();
   });
-
 
 test('Return trip, 1 adult, direct flight', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);

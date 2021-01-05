@@ -69,6 +69,8 @@ test('Payment page with PSP Adyen and without extra products', async () => {
     'return trip',
     origin,
     destination,
+    'ECONOMY',
+    [11, 24],
   );
   // Result page
   await selectTripButtonByIndex(0);
@@ -95,6 +97,8 @@ test('Payment page with PSP Adyen and with all extra products', async () => {
     'return trip',
     origin,
     destination,
+    'ECONOMY',
+    [11, 24],
   );
   // Result page
   await selectTripButtonByIndex(0);
@@ -130,6 +134,8 @@ test('Payment page with PSP Adyen and price change', async () => {
     'return trip',
     origin,
     destination,
+    'ECONOMY',
+    [11, 24],
   );
   // Result page
   await selectTripButtonByIndex(0);
