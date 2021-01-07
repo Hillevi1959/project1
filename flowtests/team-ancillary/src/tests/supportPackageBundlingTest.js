@@ -45,7 +45,7 @@ fixture('Support Package Bundling verification')
 
 test('Book and pay for a trip with bundled support package', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);
-  await searchAndSelectTrip(travelers.length, 0, 0, 'return trip', 'STO', 'LON', [
+  await searchAndSelectTrip(travelers.length, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [
     11,
     24,
   ]);
