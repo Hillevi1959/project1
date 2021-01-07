@@ -42,8 +42,8 @@ export async function selectCabinClass(cabinClass) {
   }
 }
 
-export async function makeSearch(tripType, origin, destination, day) {
-  await enterDates(tripType, day);
+export async function makeSearch(tripType, origin, destination, days) {
+  await enterDates(tripType, days);
   await enterFromCity(origin);
   await enterToCity(destination);
   await t.click(startModule.searchFlight);
@@ -57,11 +57,11 @@ export async function searchAndSelectTrip(
   origin,
   destination,
   tripSelection,
-  day,
+  days,
 ) {
   await selectCabinClass(tripSelection);
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
-  await makeSearch(tripType, origin, destination, day);
+  await makeSearch(tripType, origin, destination, days);
   if (tripSelection === 'PREMIUM_ECONOMY') {
     await selectTripButtonByIndex(2);
   } else if (tripSelection === 'ReviewTrip') {
@@ -79,17 +79,17 @@ export async function searchTrip(
   origin,
   destination,
   cabinClass,
-  day,
+  days,
 ) {
   await selectCabinClass(cabinClass);
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
-  await makeSearch(tripType, origin, destination, day);
+  await makeSearch(tripType, origin, destination, days);
 }
 
-export async function makeSearchMultiTrip(trip1, trip2, day) {
-  await enterDatesMultiTrip(0, day[0]);
+export async function makeSearchMultiTrip(trip1, trip2, days) {
+  await enterDatesMultiTrip(0, days[0]);
   await enterCitiesMulti(trip1, 0);
-  await enterDatesMultiTrip(1, day[1]);
+  await enterDatesMultiTrip(1, days[1]);
   await enterCitiesMulti(trip2, 1);
   await t.click(startModule.searchFlight);
 }
@@ -123,21 +123,21 @@ async function enterToCity(destination) {
   await t.pressKey('enter');
 }
 
-async function enterDates(tripType, day) {
+async function enterDates(tripType, days) {
   if (tripType === 'return trip') {
     await t.click(startModule.departureDate);
     await clickNextMonth();
     await clickNextMonth();
-    await chooseDayInMonth(day[0]);
+    await chooseDayInMonth(days[0]);
     await t.click(startModule.returnDate);
-    await chooseDayInMonth(day[1]);
+    await chooseDayInMonth(days[1]);
   }
   if (tripType === 'one way trip') {
     await t.click(startModule.oneWayTrip);
     await t.click(startModule.departureDate);
     await clickNextMonth();
     await clickNextMonth();
-    await chooseDayInMonth(day[0]);
+    await chooseDayInMonth(days[0]);
   }
 }
 

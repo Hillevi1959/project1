@@ -13,7 +13,7 @@ export function dateToDDMMYYYY(date) {
 }
 
 export function getExpectedDate(addedMonths, day) {
-  const now = new Date(Date.now());
+  const now = new Date();
   const m = now.getMonth() + 1 + addedMonths;
   let d = now.setDate(day);
   d = now.getDate();
