@@ -29,7 +29,7 @@ fixture('Browser navigation verification')
 
 test('Click twice on select trip, go back from TD page', async () => {
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'STO', 'Wichita', 10);
+  await makeSearch('return trip', 'STO', 'Wichita', [11, 24]);
   await t.expect(resultModule.bookFlightButton.exists).ok('', { timeout: 60000 });
   await t.doubleClick(resultModule.bookFlightButton);
   await t.expect(travelerDetailsModule.travelerDetailsPage.visible).ok();
@@ -42,7 +42,7 @@ test('Click twice on select trip, go back from TD page', async () => {
 test('Back from result, forward from start', async () => {
   let tripDate;
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'STO', 'Wichita', 10);
+  await makeSearch('return trip', 'STO', 'Wichita', [11, 24]);
   await t.expect(resultModule.resultPage.exists).ok('', { timeout: 5000 });
   if (await isMobile()) {
     tripDate = await resultModule.tripTitleDateMobile.innerText;

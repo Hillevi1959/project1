@@ -59,7 +59,10 @@ test('Discount covers the whole trip cost', async () => {
   }
   await checkForDiscountCodes(campaignId, discountName);
   await t.navigateTo(url);
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
@@ -93,7 +96,10 @@ test('Voucher does not cover price change', async () => {
   await setChangeFlightPriceLargeIncrease();
   await checkForDiscountCodes(campaignId, discountName);
   await t.navigateTo(url);
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
@@ -136,7 +142,10 @@ test('Zero cart in postbooking flow', async () => {
   await setPriceOnproduct('0', 'Order Information SMS');
   // Create order
   await t.navigateTo(url);
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();

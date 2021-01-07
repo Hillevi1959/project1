@@ -70,7 +70,7 @@ test('Edit travelers on review page', async () => {
   const newPhoneNumber = '444444444444';
   const newChildDob = '2013-01-25';
   const newInfantFirstName = 'Anna';
-  await searchAndSelectTrip(numberOfAdults, 1, 1, 'return trip', 'STO', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 1, 1, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + 1);
   await clickProceedToReviewButton();
@@ -101,7 +101,7 @@ test('Edit traveler and extra products on review page and proceed to payment pag
   const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
 
   // Select trip
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await addBaggage(numberOfAdults);

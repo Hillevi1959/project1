@@ -60,7 +60,16 @@ test('Flexible Ticket not available for infant', async () => {
   const numberOfInfants = 1;
 
   await selectProvider('IbeGDSDummy');
-  await searchAndSelectTrip(numberOfAdults, 0, numberOfInfants, 'return trip', 'GOT', 'BER');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    0,
+    numberOfInfants,
+    'return trip',
+    'GOT',
+    'BER',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults, numberOfInfants);
   await addFlexibleTicketAllTravelers();
@@ -110,7 +119,7 @@ test('Different selections for flexible ticket', async () => {
   const numberOfAdults = 2;
   const numberOfFlexibleTickets = 1;
   await selectProvider('IbeGDSDummy');
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'NEW');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'NEW', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await addFlexibleTicketOneTraveler(numberOfFlexibleTickets);
@@ -156,7 +165,7 @@ test('Flexible ticket included in trip, added to cart', async () => {
   const numberOfAdults = 2;
   await selectProvider('IbeGDSDummy');
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'STO', 'SYD', 10);
+  await makeSearch('return trip', 'STO', 'SYD', [11, 24]);
   await t.click(resultModule.bookFlightWithFlexibleTicketButton);
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();

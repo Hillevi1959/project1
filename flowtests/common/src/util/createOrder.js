@@ -14,6 +14,7 @@ export async function createOrderWithNoProducts(
   destination,
   paymentMethod,
   tripSelection,
+  day,
 ) {
   await searchAndSelectTrip(
     numberOfAdults,
@@ -23,6 +24,7 @@ export async function createOrderWithNoProducts(
     origin,
     destination,
     tripSelection,
+    day,
   );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);

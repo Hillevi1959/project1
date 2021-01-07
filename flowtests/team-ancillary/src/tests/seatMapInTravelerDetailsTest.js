@@ -54,7 +54,10 @@ test('SeatMap is visible after book is pressed, seats selected and verified in c
   const numberOfSeatsBooked = 4;
 
   await selectProvider('IbeGDSDummy');
-  await searchAndSelectTrip(numberOfTravelers, 0, 0, 'return trip', 'GOT', 'PAR');
+  await searchAndSelectTrip(numberOfTravelers, 0, 0, 'return trip', 'GOT', 'PAR', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfTravelers);
   if ((await isMobile()) || (await isTablet())) {
@@ -93,7 +96,16 @@ test('SeatMap is visible before book, not selectable for infant and verified in 
   await setProps(modalDisabled);
 
   await selectProvider('IbeGDSDummy');
-  await searchAndSelectTrip(numberOfAdults, 0, numberOfInfants, 'return trip', 'GOT', 'PAR');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    0,
+    numberOfInfants,
+    'return trip',
+    'GOT',
+    'PAR',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await selectSeatsAndVerifyNotIncludeInfants(numberOfSegments);
@@ -123,7 +135,7 @@ test('SeatMap book seating light and beside', async () => {
 
   await setProps(seatingComboProps);
   await selectProvider('IbeDummy');
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'GOT', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'GOT', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
 

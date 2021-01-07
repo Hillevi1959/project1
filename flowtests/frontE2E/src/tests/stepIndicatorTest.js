@@ -41,7 +41,7 @@ fixture('Verify step indicator in booking flow')
 test('Verify step indicator in booking flow', async () => {
   const numberOfAdults = 2;
   // Result page
-  await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens');
+  await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens', 'ECONOMY', [11, 24]);
 
   await t.expect(resultModule.headerNavigationMenu.visible).ok();
 
