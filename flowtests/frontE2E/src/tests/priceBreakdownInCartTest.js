@@ -47,7 +47,10 @@ fixture('Price breakdown in cart for baggage and seating')
   });
 
 test('Price breakdown folded at start on TD-page and payment page', async () => {
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await addBaggageForTravelers(travelers);

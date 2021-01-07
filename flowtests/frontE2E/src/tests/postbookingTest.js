@@ -76,6 +76,8 @@ test('Go to postbooking from orderModule page, add all products', async () => {
     'STO',
     'AMS',
     'CARD',
+    'ECONOMY',
+    [11, 24],
   );
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
@@ -111,6 +113,8 @@ test('Log in to postbooking from login page, and add all products', async () => 
     'STO',
     'AMS',
     'CARD',
+    'ECONOMY',
+    [11, 24],
   );
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);

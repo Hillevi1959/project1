@@ -50,6 +50,8 @@ async function selectTripAddProductsAndPay() {
     'return trip',
     'NYO',
     'LON',
+    'ECONOMY',
+    [11, 24],
   );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);

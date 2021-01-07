@@ -28,7 +28,7 @@ fixture(`Verify quick filter sorting on result page`)
     await setProps(props);
     await closeHeaderUrgencyBanner();
     await selectTravelers(numberOfAdults, 0, 0);
-    await makeSearch('return trip', 'STO', 'SYD', 10);
+    await makeSearch('return trip', 'STO', 'SYD', [11, 24]);
   });
 
 test('Verify quick filter sorting on result page', async () => {

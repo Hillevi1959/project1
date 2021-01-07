@@ -35,7 +35,7 @@ fixture('Email format verification on TD-page')
   });
 
 test('Syntactic and domain validaton of email', async () => {
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'NYO', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'NYO', 'LON', 'ECONOMY', [11, 24]);
   await t.expect(travelerDetailsModule.contactPersonMail.visible).ok();
   await scrollToElement('[for="traveler-mail"]');
   await t.typeText(travelerDetailsModule.contactPersonMail, 'dev.test@gmail.com.');

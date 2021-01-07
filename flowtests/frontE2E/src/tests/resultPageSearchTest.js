@@ -5,6 +5,7 @@ import setProps from '../../../common/src/util/props';
 import { selectProvider } from '../../../common/src/util/debugOptions';
 import {
   closeHeaderUrgencyBanner,
+  getTripDate,
   makeSearch,
   selectTravelers,
 } from '../../../common/src/rf_pages/start';
@@ -14,6 +15,7 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import resultModule from '../../../common/src/rf_modules/resultModule';
 import config from '../../testdata.json';
 import { addSearchDataResultPage } from '../../../common/src/rf_pages/result';
+import { getExpectedDate } from '../../../common/src/util/dateFunction';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const props = {
@@ -34,17 +36,26 @@ test('Possible to search for a new trip on result page', async () => {
   let numberOfAdults = 1;
 
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'UME', 'TYO', 10);
+  await makeSearch('return trip', 'UME', 'TYO', [11, 24]);
 
   await t
     .expect(resultModule.tripSegment.innerText)
     .contains('Umeå')
     .expect(resultModule.tripSegment.innerText)
     .contains('Tokyo');
-
+  const expectedDateDeparture = getExpectedDate(4, 11);
+  const expectedDateReturn = getExpectedDate(4, 24);
   numberOfAdults = 2;
   await addSearchDataResultPage(numberOfAdults, 'STO', 'SYD', 1, 1);
+  const inputDateDeparture = await getTripDate(resultModule.departureDate);
+  const inputDateReturn = await getTripDate(resultModule.returnDate);
+  await t.click(resultModule.searchFlight);
+  await t.click(resultModule.searchFormButton);
 
+  await t.expect(inputDateDeparture).eql(expectedDateDeparture);
+  await t.expect(inputDateReturn).eql(expectedDateReturn);
+
+  await t.click(resultModule.searchFormButton);
   await t
     .expect(resultModule.tripSegment.innerText)
     .contains('Stockholm')

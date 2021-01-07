@@ -24,7 +24,12 @@ import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/
 import orderModule from '../../../common/src/rf_modules/orderModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
-const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult(), getFirstChild(), getFirstInfant()]);
+const travelers = addNumberToTraveler([
+  getFirstAdult(),
+  getSecondAdult(),
+  getFirstChild(),
+  getFirstInfant(),
+]);
 const props = {
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
@@ -55,6 +60,8 @@ test('Booking flow with extra products at the top of TD-page', async () => {
     'return trip',
     'STO',
     'LON',
+    'ECONOMY',
+    [11, 24],
   );
   const travelersTop = await travelerDetailsModule.travelerContainer.getBoundingClientRectProperty(
     'top',

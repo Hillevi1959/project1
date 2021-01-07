@@ -46,7 +46,7 @@ export async function createOrderAndDiscountCode(site, siteEdvin, paymentService
 
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
   console.log('Search for trip');
-  await makeSearch('one way trip', origin, destination, 10);
+  await makeSearch('one way trip', origin, destination, [11]);
   await t.expect(resultModule.toggleFilterButton.visible).ok('', { timeout: 20000 });
   await scrollToElement('[data-testid="resultPage-toggleFiltersButton-button"]');
   await t

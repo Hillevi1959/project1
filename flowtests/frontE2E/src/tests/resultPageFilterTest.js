@@ -23,7 +23,7 @@ const numberOfAdults = 1;
 
 async function searchForTrip() {
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'STO', 'BER', 10);
+  await makeSearch('return trip', 'STO', 'BER', [11, 24]);
 }
 
 fixture(`Verify filter feature on result page`)

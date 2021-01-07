@@ -88,7 +88,7 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
 
   await selectCabinClass('PREMIUM_ECONOMY');
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
-  await makeSearch('return trip', 'NYO', 'TOJ', 10);
+  await makeSearch('return trip', 'NYO', 'TOJ', [10, 24]);
   await filterSasLufthansa();
   let nrSegments;
   let nrBounds;

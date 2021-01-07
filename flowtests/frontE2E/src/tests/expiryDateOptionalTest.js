@@ -65,6 +65,8 @@ test('Expiry date for passport is optional', async () => {
     'return trip',
     'Moscow',
     'Aktau',
+    'ECONOMY',
+    [11, 24],
   );
   for (const traveler of travelers) {
     await t.click(travelerDetailsModule.expiryDateInput(traveler.nr));
@@ -89,6 +91,8 @@ test('Expiry date for passport is required', async () => {
     'return trip',
     'Moscow',
     'GOT',
+    'ECONOMY',
+    [11, 24],
   );
   await addTravelerInformation(travelers, 'DDMMYYYY');
   await addPassportInformation(travelers, false, 'DDMMYYYY');
@@ -132,6 +136,8 @@ test.before(async () => {
     'return trip',
     'London',
     'New York',
+    'ECONOMY',
+    [11, 24],
   );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
@@ -175,6 +181,8 @@ test.before(async () => {
     'return trip',
     'London',
     'Amsterdam',
+    'ECONOMY',
+    [11, 24],
   );
 
   for (const traveler of travelers) {

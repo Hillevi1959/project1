@@ -40,7 +40,7 @@ fixture('Pay with credit card to verify Payment Service Provider')
 test('Search trip, book all products, pay with credit card', async () => {
   const numberOfAdults = 2;
 
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addAllExtraProducts(numberOfAdults, travelers);
   await bookFlight();

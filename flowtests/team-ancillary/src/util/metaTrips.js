@@ -21,7 +21,7 @@ export async function getTripFlexTicket(host) {
 export async function getTrip(host) {
   const dateFrom = getDateFrom();
   const dateTo = getDateTo(dateFrom);
-  const url = `${host}/ws/ultrasearch/2.0/flygresor.se?bounds=STOLON${dateFrom},LONSTO${dateTo}&travellers=t1&brand=supersaver&country=SE&onlydirectflights=false&devicetype=PC&applicationtype=BROWSER&useragent=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_3)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/65.0.3325.181%20Safari/537.36&format=json&token=Zmx5Z3Jlc29yLnNlOiFydGdmODd1ag==`;
+  const url = `${host}/ws/ultrasearch/2.0/flygresor.se?bounds=BCNMAD${dateFrom},MADBCN${dateTo}&travellers=t1&brand=supersaver&country=SE&onlydirectflights=false&devicetype=PC&applicationtype=BROWSER&useragent=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_3)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/65.0.3325.181%20Safari/537.36&format=json&token=Zmx5Z3Jlc29yLnNlOiFydGdmODd1ag==`;
   console.log(`url: ${url}`);
   return (
     fetch(url, {
@@ -37,7 +37,7 @@ export async function getTrip(host) {
 export async function getTripBaggageIncluded(host) {
   const dateFrom = getDateFrom();
   const dateTo = getDateTo(dateFrom);
-  const url = `${host}/ws/ultrasearch/2.0/flygresor.se?bounds=STOIST${dateFrom},ISTSTO${dateTo}&travellers=t1&brand=supersaver&country=SE&onlydirectflights=false&devicetype=PC&applicationtype=BROWSER&useragent=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_3)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/65.0.3325.181%20Safari/537.36&format=json&token=Zmx5Z3Jlc29yLnNlOiFydGdmODd1ag==`;
+  const url = `${host}/ws/ultrasearch/2.0/flygresor.se?bounds=MADIST${dateFrom},ISTMAD${dateTo}&travellers=t1&brand=supersaver&country=SE&onlydirectflights=false&devicetype=PC&applicationtype=BROWSER&useragent=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_3)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/65.0.3325.181%20Safari/537.36&format=json&token=Zmx5Z3Jlc29yLnNlOiFydGdmODd1ag==`;
   console.log(`url: ${url}`);
   return (
     fetch(url, {

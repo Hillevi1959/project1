@@ -135,17 +135,8 @@ export async function clickGoToPayment() {
 
 export async function bookFlightWithNoProducts(travelers) {
   const numberOfAdults = 2;
-  const numberOfChildren = 0;
-  const numberOfInfants = 0;
 
-  await searchAndSelectTrip(
-    numberOfAdults,
-    numberOfChildren,
-    numberOfInfants,
-    'return trip',
-    'STO',
-    'AMS',
-  );
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'AMS', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
 
   await addNoExtraProducts(numberOfAdults);
@@ -179,6 +170,8 @@ export async function createOrderFlowWithProducts(travelers) {
     'return trip',
     'STO',
     'LON',
+    'ECONOMY',
+    [11, 24],
   );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);

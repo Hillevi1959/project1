@@ -23,7 +23,7 @@ async function selectTripAddNoProductsGoToPaymentPage() {
   const travelers = addNumberToTraveler([getFirstAdult()]);
   const numberOfAdults = 1;
 
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults, site);
   await bookFlight();

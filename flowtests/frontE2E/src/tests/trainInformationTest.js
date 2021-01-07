@@ -48,7 +48,7 @@ fixture('Verify train icons and information in booking flow')
 
 test('Train icons and change to train information visible on all pages', async () => {
   await selectTravelers(numberOfAdults, 0, 0);
-  await makeSearch('return trip', 'STO', 'Uppsala', 10);
+  await makeSearch('return trip', 'STO', 'Uppsala', [11, 24]);
   await t.click(resultModule.tripDetailBound.nth(0));
 
   // Verify on result page
