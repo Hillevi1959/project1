@@ -8,7 +8,7 @@ import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import {
   addNoExtraProducts,
-  addSupportPackagePremium,
+  addSupportPackagePremiumNew,
 } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { messageUk } from '../../../common/src/rf_pages/order';
 import {
@@ -29,10 +29,10 @@ const props = {
   'IbeClient.Products.SupportPackage.Bundling.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
-  'AB.Responsive.SupportPackage.NewDesign.Enabled': false,
+  'AB.Responsive.SupportPackage.NewDesign.Enabled': true,
 };
 
-fixture('Support Package Bundling verification')
+fixture('Support Package verification')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
@@ -64,7 +64,7 @@ test('Book and pay for a trip with bundled support package', async () => {
     .notOk();
 
   await addNoExtraProducts(travelers.length, travelers);
-  await addSupportPackagePremium();
+  await addSupportPackagePremiumNew();
 
   await t
     .expect(travelerDetailsModule.cartSupportPackageProduct.exists)

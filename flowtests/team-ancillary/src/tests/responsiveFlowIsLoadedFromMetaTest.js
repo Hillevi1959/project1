@@ -11,7 +11,8 @@ const props = {
   'Feature.NewResponsive.Enabled': true,
 };
 
-fixture('Meta trips in Responsive flow included flexticket')
+fixture
+  .skip('Meta trips in Responsive flow included flexticket')
   .page(url)
   .beforeEach(async () => {
     const offerUrl = await getTripFlexTicket(url);
