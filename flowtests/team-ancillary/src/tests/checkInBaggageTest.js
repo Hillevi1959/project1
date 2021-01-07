@@ -9,7 +9,7 @@ import {
   bookFlight,
   closeCart,
   getNumberOfBounds,
-  openCart,
+  toggleCart,
 } from '../../../common/src/rf_pages/travelerDetails';
 import {
   addBaggage,
@@ -65,13 +65,22 @@ test('Different choice of baggage for travellers', async () => {
   const numberOfAdults = 2;
   const numberOfChildren = 1;
   const numberOfTravelers = 3;
-  await searchAndSelectTrip(numberOfAdults, numberOfChildren, 0, 'return trip', 'STO', 'LON');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    numberOfChildren,
+    0,
+    'return trip',
+    'STO',
+    'LON',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addBaggage(numberOfTravelers);
 
   // Same choice for all travellers
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t
       .expect(travelerModule.cartCheckInBaggageProductMobile.visible)
       .ok()
@@ -90,7 +99,7 @@ test('Different choice of baggage for travellers', async () => {
   // No baggage for any travellers
   await addNoBaggage(numberOfTravelers);
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t.expect(travelerModule.cartCheckInBaggageProductMobile.exists).notOk();
     await closeCart();
   }
@@ -105,7 +114,7 @@ test('Different choice of baggage for travellers', async () => {
   const totalCalculatedBaggagePrice = baggagePrice * numberOfBounds * numberOfBaggages;
   await addBaggageForTravelers(travelers);
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t
       .expect(travelerModule.cartCheckInBaggageProductMobile.visible)
       .ok()
@@ -144,6 +153,8 @@ test('Baggage not available for infants', async () => {
     'return trip',
     'STO',
     'LON',
+    'ECONOMY',
+    [11, 24],
   );
   await addTravelerInformation(travelers);
 
@@ -155,7 +166,7 @@ test('Baggage not available for infants', async () => {
   await addBaggage(numberOfTravelers);
 
   if ((await isMobile()) || (await isTablet())) {
-    await openCart();
+    await toggleCart();
     await t.expect(travelerModule.cartCheckInBaggageProductMobile.visible).ok();
     await t
       .expect(travelerModule.cartCheckInBaggageProductMobile.innerText)

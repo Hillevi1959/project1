@@ -68,6 +68,8 @@ test('Go to order page with seatMap product', async () => {
     'return trip',
     origin,
     destination,
+    'ECONOMY',
+    [11, 24],
   );
   // Result page
   await selectTripButtonByIndex(0);
@@ -105,6 +107,8 @@ test('Go to order page without extra products', async () => {
     'return trip',
     origin,
     destination,
+    'ECONOMY',
+    [11, 24],
   );
   // Result page
   await selectTripButtonByIndex(0);

@@ -41,7 +41,10 @@ fixture(`Verification of short connection time notification`)
   });
 
 test('Show short connection time notification', async () => {
-  await searchTrip(numberOfTravelers, 0, 0, 'return trip', 'Stockholm', 'Bangkok');
+  await searchTrip(numberOfTravelers, 0, 0, 'return trip', 'Stockholm', 'Bangkok', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await filterSasLufthansa();
   await selectTripButtonByIndex(0);
 

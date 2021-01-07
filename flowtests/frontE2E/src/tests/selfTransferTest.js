@@ -48,7 +48,10 @@ fixture(`Verification of self transfer information on trip`)
 
 test('Self transfer information shown on all pages', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);
-  await searchTrip(numberOfTravelers, 0, 0, 'return trip', 'Stockholm', 'Bangkok');
+  await searchTrip(numberOfTravelers, 0, 0, 'return trip', 'Stockholm', 'Bangkok', 'ECONOMY', [
+    11,
+    24,
+  ]);
 
   // Verification on result page
   await t.expect(resultModule.resultPage.visible).ok('', { timeout: 20000 });

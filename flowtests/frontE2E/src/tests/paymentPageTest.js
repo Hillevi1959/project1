@@ -25,6 +25,7 @@ const props = {
   'Payment.RemoveAdressForBank.Enable': false,
 };
 const numberOfAdults = 1;
+const numberOfInfants = 0;
 
 fixture('Payment page verification')
   .page(url)
@@ -37,7 +38,16 @@ fixture('Payment page verification')
   });
 
 test('First payment option opened at start, fee and logos are displayed', async () => {
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London');
+  await searchAndSelectTrip(
+    numberOfAdults,
+    0,
+    numberOfInfants,
+    'return trip',
+    'Stockholm',
+    'London',
+    'ECONOMY',
+    [11, 24],
+  );
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
@@ -90,7 +100,10 @@ test('Pay with dummy bank with bank option opened and no address field', async (
   };
   await setProps(bankprop);
   await setIBEDummyPaymentBankOn();
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
@@ -107,7 +120,10 @@ test('Remove address field from bank payment option', async () => {
     'Payment.RemoveAdressForBank.Enable': true,
   };
   await setProps(bankprop);
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();

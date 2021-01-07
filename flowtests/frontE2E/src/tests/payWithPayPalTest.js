@@ -94,7 +94,7 @@ test('Search trip, book all products, pay with PayPal', async () => {
   }
   await createPaypalPropsInEdvin();
   await t.navigateTo(url);
-  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON');
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
   await addAllExtraProducts(numberOfAdults, travelers);
   await bookFlight();
