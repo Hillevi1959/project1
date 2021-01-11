@@ -10,8 +10,6 @@ import config from '../../testdata.json';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addAllExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
-import orderModule from '../../../common/src/rf_modules/orderModule';
 import {
   addNumberToTraveler,
   getFirstAdult,
@@ -83,8 +81,9 @@ fixture('Pay order with PayPal')
     await enableDebug();
     await acceptCookies();
     await selectProvider('IbeGDSDummy');
-    await setProps(props);
     await closeHeaderUrgencyBanner();
+    await createPaypalPropsInEdvin();
+    await setProps(props);
   });
 
 test('Search trip, book all products, pay with PayPal', async () => {
@@ -92,7 +91,6 @@ test('Search trip, book all products, pay with PayPal', async () => {
   if ((await getWindowWidth()) < 970) {
     return console.warn('This test is not run on mobile or tablet device');
   }
-  await createPaypalPropsInEdvin();
   await t.navigateTo(url);
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
@@ -124,9 +122,9 @@ test('Search trip, book all products, pay with PayPal', async () => {
   await t.expect(paymentModule.payPalPaymentOptions.visible).ok();
   await t.click(paymentModule.payPalPayButton);
 
-  await waitForOrderPageToLoad();
+  // Verification on order page will be performed when pay pal goes live
+  // await waitForOrderPageToLoad();
   // Text will be changed later and applicable to PayPal
-  await t
-    .expect(orderModule.paymentMethod.innerText)
-    .contains('Payment method: Wallet (Apple Pay)');
+  // eslint-disable-next-line no-irregular-whitespace
+  // await t.expect(orderModule.paymentMethod.innerText).contains('Payment method: Wallet (Apple Pay)');
 });
