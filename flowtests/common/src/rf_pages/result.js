@@ -71,14 +71,14 @@ export async function addSearchDataResultPage(
 export function convertTimeToFloat(time) {
   const textTime = time.slice(1);
   const indexHour = textTime.indexOf('h');
-  const indexComma = textTime.indexOf(',');
+  const indexSpace = textTime.indexOf(' ');
   const indexMin = textTime.indexOf('m');
   let minutes = '';
   let convertedTime;
 
-  const hours = parseFloat(textTime.substring(0, indexHour - 1));
-  if (indexComma !== -1) {
-    minutes = parseFloat(textTime.substring(indexComma + 2, indexMin)) / 60;
+  const hours = parseFloat(textTime.substring(0, indexHour));
+  if (indexSpace !== -1) {
+    minutes = parseFloat(textTime.substring(indexSpace + 1, indexMin)) / 60;
     convertedTime = hours + minutes;
   } else {
     convertedTime = hours;
