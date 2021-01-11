@@ -24,9 +24,9 @@ export default {
   filterAirlineToggleButton: Selector(
     '[data-testid="resultPage-filterHeader-AIRLINESToggleButton-button"]',
   ),
-  filterAirlineLufthansaCheckbox: Selector('#airline-LH'),
-  filterAirlineSasCheckbox: Selector('#airline-SK'),
-  filterAirlineMauritiusCheckbox: Selector('#airline-MK'),
+  filterAirlineLufthansaCheckbox: Selector('[for="airlines-LH"]'),
+  filterAirlineSasCheckbox: Selector('[for="airlines-SK"]'),
+  filterAirlineMauritiusCheckbox: Selector('[for="airlines-MK"]'),
   filterArrivalSecondBoundRadioButton: Selector(
     '[data-testid="resultPage-departureArrivalFilter-arrival1-radio"]',
   ),
