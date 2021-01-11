@@ -17,7 +17,7 @@ const url = getSiteUrl('gotogate-uk', config.host);
 const props = {
   'PaymentService.CascadingPaymentsBehavior.Enabled': false,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
   'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
 };
