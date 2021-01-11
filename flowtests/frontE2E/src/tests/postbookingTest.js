@@ -32,6 +32,7 @@ import config from '../../testdata.json';
 import { closeHeaderUrgencyBanner } from '../../../common/src/rf_pages/start';
 import { createOrderWithNoProducts } from '../../../common/src/util/createOrder';
 import { dropdownSelect } from '../../../common/src/util/dropdownSelect';
+import { addCheckoutData } from '../../../common/src/rf_pages/payment';
 
 const url = getSiteUrl('supersaver-se', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -44,9 +45,6 @@ const props = {
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
-};
-const postbookingProps = {
   'Payment.provider.creditcard': 'Checkout',
 };
 
@@ -81,7 +79,6 @@ test('Go to postbooking from orderModule page, add all products', async () => {
   );
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
-  await setProps(postbookingProps);
   await goToPostbookingFromOrderPage();
 
   await t.expect(postbookingModule.cartOpenProductsButton.exists).notOk();
@@ -95,6 +92,8 @@ test('Go to postbooking from orderModule page, add all products', async () => {
   await t.expect(postbookingModule.cartExtraProductsPayment.count).eql(numberOfAddedProducts);
 
   await payPostbooking();
+  await addCheckoutData();
+  await waitForOrderPageToLoad();
   const numberOfProducts = await orderModule.postBookingProducts.count;
 
   await t.expect(numberOfProducts).eql(numberOfAddedProducts);
@@ -119,7 +118,6 @@ test('Log in to postbooking from login page, and add all products', async () => 
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 
-  await setProps(postbookingProps);
   const orderModuleNumber = await getOrderNumber();
   const postBookingUrl = getSiteUrl('postbooking-supersaver-se', config.host);
   await loadPostBookingLogIn(postBookingUrl);
@@ -137,6 +135,8 @@ test('Log in to postbooking from login page, and add all products', async () => 
   await t.expect(postbookingModule.cartExtraProductsPayment.count).eql(numberOfAddedProducts);
 
   await payPostbooking();
+  await addCheckoutData();
+  await waitForOrderPageToLoad();
   const numberOfProducts = await orderModule.postBookingProducts.count;
 
   await t.expect(numberOfProducts).eql(numberOfAddedProducts);
@@ -148,10 +148,10 @@ test('Only not selected products are available in postbooking', async () => {
   }
   const numberOfAddedExtraProducts = 2;
   await createOrderFlowWithProducts(travelers);
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
   const orderNumberOnOrderPage = await orderModule.orderNumber.innerText;
-  await setProps(postbookingProps);
   await goToPostbookingFromOrderPage();
   await openProductsInCart();
 
@@ -167,6 +167,8 @@ test('Only not selected products are available in postbooking', async () => {
   await t.expect(postbookingModule.cartExtraProductsPayment.count).eql(addedNumberOfExtraProducts);
 
   await payPostbooking();
+  await addCheckoutData();
+  await waitForOrderPageToLoad();
 
   const numberOfExtraProductsOrderPage = await orderModule.postBookingProducts.count;
   await t.expect(numberOfExtraProductsOrderPage).eql(addedNumberOfExtraProducts);

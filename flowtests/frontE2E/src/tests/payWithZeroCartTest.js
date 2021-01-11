@@ -20,7 +20,11 @@ import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
-import { checkPaymentConditions, payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import {
+  addCheckoutData,
+  checkPaymentConditions,
+  payWithCreditCard,
+} from '../../../common/src/rf_pages/payment';
 import config from '../../testdata.json';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { getTripPricePound, removeUnicodeFromTextPrice } from '../../../common/src/util/price';
@@ -34,7 +38,7 @@ import { clickGoToPayment } from '../../../common/src/rf_pages/postBookingProduc
 const url = getSiteUrl('test-uk', config.host);
 const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'Payment.DiscountCode.Enabled': true,
 };
 const travelers = addNumberToTraveler([getFirstAdult()]);
@@ -126,6 +130,7 @@ test('Voucher does not cover price change', async () => {
   await t.expect(paymentModule.cartDiscountCode.visible).notOk();
 
   await payWithCreditCard();
+  await addCheckoutData();
   // Verify order page
   await waitForOrderPageToLoad();
   const totalPrice = getTripPricePound(await orderModule.totalPrice.innerText);
@@ -151,6 +156,7 @@ test('Zero cart in postbooking flow', async () => {
   await bookFlight();
   await closeSeatMapModal();
   await payWithCreditCard();
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.visible).ok();
   // Verify postbooking

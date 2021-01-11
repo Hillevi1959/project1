@@ -12,6 +12,7 @@ import {
 } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { messageUk } from '../../../common/src/rf_pages/order';
 import {
+  addCheckoutData,
   addPaymentData,
   checkPaymentConditions,
   openCartIfClosed,
@@ -28,7 +29,7 @@ const props = {
   'Feature.NewResponsive.Enabled': true,
   'IbeClient.Products.SupportPackage.Bundling.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'AB.Responsive.SupportPackage.NewDesign.Enabled': false,
 };
 
@@ -96,6 +97,7 @@ test('Book and pay for a trip with bundled support package', async () => {
   await addPaymentData();
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
+  await addCheckoutData();
 
   await t
     .expect(orderModule.infoTextOrderPage.visible)

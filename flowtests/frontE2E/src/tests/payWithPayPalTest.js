@@ -10,8 +10,6 @@ import config from '../../testdata.json';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addAllExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
-import orderModule from '../../../common/src/rf_modules/orderModule';
 import {
   addNumberToTraveler,
   getFirstAdult,
@@ -23,6 +21,8 @@ import getPaymentData from '../../../common/src/util/paymentData';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
 import { getWindowWidth } from '../../../common/src/util/device';
+import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+import orderModule from '../../../common/src/rf_modules/orderModule';
 
 const url = getSiteUrl('supersaver-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -83,8 +83,9 @@ fixture('Pay order with PayPal')
     await enableDebug();
     await acceptCookies();
     await selectProvider('IbeGDSDummy');
-    await setProps(props);
     await closeHeaderUrgencyBanner();
+    await createPaypalPropsInEdvin();
+    await setProps(props);
   });
 
 test('Search trip, book all products, pay with PayPal', async () => {
@@ -92,7 +93,6 @@ test('Search trip, book all products, pay with PayPal', async () => {
   if ((await getWindowWidth()) < 970) {
     return console.warn('This test is not run on mobile or tablet device');
   }
-  await createPaypalPropsInEdvin();
   await t.navigateTo(url);
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
