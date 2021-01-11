@@ -21,6 +21,8 @@ import getPaymentData from '../../../common/src/util/paymentData';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
 import { getWindowWidth } from '../../../common/src/util/device';
+import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+import orderModule from '../../../common/src/rf_modules/orderModule';
 
 const url = getSiteUrl('supersaver-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -122,9 +124,9 @@ test('Search trip, book all products, pay with PayPal', async () => {
   await t.expect(paymentModule.payPalPaymentOptions.visible).ok();
   await t.click(paymentModule.payPalPayButton);
 
-  // Verification on order page will be performed when pay pal goes live
-  // await waitForOrderPageToLoad();
+  await waitForOrderPageToLoad();
   // Text will be changed later and applicable to PayPal
-  // eslint-disable-next-line no-irregular-whitespace
-  // await t.expect(orderModule.paymentMethod.innerText).contains('Payment method: Wallet (Apple Pay)');
+  await t
+    .expect(orderModule.paymentMethod.innerText)
+    .contains('Payment method: Wallet (Apple Pay)');
 });
