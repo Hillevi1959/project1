@@ -20,7 +20,7 @@ import {
   bookFlight,
 } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
-import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
@@ -41,7 +41,7 @@ const props = {
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'GDSSecureFlightConfig.TravelDocumentExpiryDateOptional.OriginDestinations':
     'RU-RU, RU-BY, RU-KZ',
 };
@@ -78,6 +78,7 @@ test('Expiry date for passport is optional', async () => {
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await bookFlight();
   await payWithCreditCard();
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
 });
@@ -108,6 +109,7 @@ test('Expiry date for passport is required', async () => {
   await addPassportInformation(travelers, true, 'DDMMYYYY');
   await bookFlight();
   await payWithCreditCard();
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
 });
@@ -118,7 +120,7 @@ test.before(async () => {
     'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
     'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
     'Payment.FraudAssessment.Accertify.ShadowMode': true,
-    'Payment.provider.creditcard': 'adyen',
+    'Payment.provider.creditcard': 'Checkout',
     'GDSSecureFlightConfig.PassportRequiredWhenEnteringDOB': true,
   };
   const urlUk = getSiteUrl('gotogate-uk', config.host);
@@ -153,6 +155,7 @@ test.before(async () => {
   await bookFlight();
   await closeSeatMapModal();
   await payWithCreditCard();
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
 });
@@ -163,7 +166,7 @@ test.before(async () => {
     'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
     'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
     'Payment.FraudAssessment.Accertify.ShadowMode': true,
-    'Payment.provider.creditcard': 'adyen',
+    'Payment.provider.creditcard': 'Checkout',
     'GDSSecureFlightConfig.PassportRequiredWhenEnteringDOB': true,
   };
   const urlUk = getSiteUrl('gotogate-uk', config.host);
@@ -194,6 +197,7 @@ test.before(async () => {
   await bookFlight();
   await closeSeatMapModal();
   await payWithCreditCard();
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
 });

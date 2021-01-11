@@ -19,7 +19,7 @@ import {
   saveSeatMapSelections,
   selectSeatsForAllSegmentTypes,
 } from '../../../common/src/rf_pages/seatMap';
-import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 
@@ -35,7 +35,7 @@ const props = {
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'AB.Responsive.TravelerDetails.DisplayProductsBeforePassengerDetails.Enabled': true,
 };
 const numberOfAdults = 2;
@@ -76,6 +76,7 @@ test('Booking flow with extra products at the top of TD-page', async () => {
   await selectSeatsForAllSegmentTypes();
   await saveSeatMapSelections();
   await payWithCreditCard();
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
 });

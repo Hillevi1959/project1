@@ -17,6 +17,7 @@ import {
 } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { messageUk } from '../../../common/src/rf_pages/order';
 import {
+  addCheckoutData,
   addPaymentData,
   checkPaymentConditions,
   openCartIfClosed,
@@ -40,7 +41,7 @@ const props = {
   'Feature.NewResponsive.Enabled': true,
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
 };
 
 fixture('Manulife products verification')
@@ -105,6 +106,7 @@ test('Book and pay for a one way trip with Trip Cancellation Protection for one 
   await addPaymentData();
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
+  await addCheckoutData();
 
   await t
     .expect(orderModule.infoTextOrderPage.visible)
@@ -174,6 +176,7 @@ test('Book and pay for a return trip with All Inclusive Protection for 2 adults,
   await addPaymentData();
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
+  await addCheckoutData();
 
   await t
     .expect(orderModule.infoTextOrderPage.visible)

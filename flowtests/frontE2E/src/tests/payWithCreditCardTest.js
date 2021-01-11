@@ -11,7 +11,7 @@ import {
 import { closeHeaderUrgencyBanner, searchAndSelectTrip } from '../../../common/src/rf_pages/start';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addAllExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
-import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import config from '../../testdata.json';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
@@ -24,7 +24,7 @@ const props = {
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
 };
 
 fixture('Pay with credit card to verify Payment Service Provider')
@@ -46,7 +46,7 @@ test('Search trip, book all products, pay with credit card', async () => {
   await bookFlight();
   await closeSeatMapModal();
   await payWithCreditCard();
-
+  await addCheckoutData();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.receiptInformation.innerText).contains('Debitcard/Creditcard (VISA)');
 });

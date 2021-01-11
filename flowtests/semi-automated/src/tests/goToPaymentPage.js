@@ -26,7 +26,7 @@ import {
   saveSeatMapSelections,
   selectSeatsForAllSegmentTypes,
 } from '../../../common/src/rf_pages/seatMap';
-import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 
 const url = getSiteUrl('supersaver-se', config.host);
 
@@ -38,7 +38,6 @@ const travelers = addNumberToTraveler([
 ]);
 const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
 };
 const numberOfAdults = 2;
 const numberOfChildren = 1;
@@ -58,9 +57,9 @@ fixture('Go to payment page')
 
 /*
   To start this test in terminal:
- testcafe "chrome" origin/uitest/flowtests/semi-automated/src/tests/*.js -e -t 'Payment page with PSP Adyen and without extra products'
+ testcafe "chrome" flowtests/semi-automated/src/tests/*.js -e -t 'Payment page with PSP Checkout and without extra products' --disable-mutiple-windows
  */
-test('Payment page with PSP Adyen and without extra products', async () => {
+test('Payment page with PSP Checkout and without extra products', async () => {
   // Start page
   await searchTrip(
     numberOfAdults,
@@ -82,13 +81,15 @@ test('Payment page with PSP Adyen and without extra products', async () => {
   await closeSeatMapModal();
   // Payment page
   await t.debug();
+  await addCheckoutData();
+  await t.debug();
 });
 
 /*
   To start this test in terminal:
- testcafe "chrome" flowtests/semi-automated/src/tests/*.js -e -t 'Payment page with PSP Adyen and with all extra products'
+ testcafe "chrome" flowtests/semi-automated/src/tests/*.js -e -t 'Payment page with PSP Checkout and with all extra products' --disable-mutiple-windows
  */
-test('Payment page with PSP Adyen and with all extra products', async () => {
+test('Payment page with PSP Checkout and with all extra products', async () => {
   // Start page
   await searchTrip(
     numberOfAdults,
@@ -111,11 +112,13 @@ test('Payment page with PSP Adyen and with all extra products', async () => {
   await saveSeatMapSelections();
   // Payment page
   await t.debug();
+  await addCheckoutData();
+  await t.debug();
 });
 
 /*
   To start this test in terminal:
- testcafe "chrome" flowtests/semi-automated/src/tests/*.js -e -t 'Payment page with PSP Adyen and price change'
+ testcafe "chrome" flowtests/semi-automated/src/tests/*.js -e -t 'Payment page with PSP Adyen and price change' --disable-mutiple-windows
  */
 // This test renders a modal with price change info between payment page and order page
 test('Payment page with PSP Adyen and price change', async () => {
@@ -147,5 +150,7 @@ test('Payment page with PSP Adyen and price change', async () => {
   await closeSeatMapModal();
   // Payment page
   await payWithCreditCard();
+  await t.debug();
+  await addCheckoutData();
   await t.debug();
 });

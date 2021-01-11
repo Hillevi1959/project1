@@ -17,8 +17,6 @@ import { scrollToElement } from '../../../common/src/util/clientFunction';
 const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
 const props = {
-  'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
   'EmailValidation.RegEx.Enabled': true,
   'EmailValidation.MX.Enabled': true,
 };

@@ -8,7 +8,12 @@ import { selectTripButtonByIndex } from '../rf_pages/result';
 import { addTravelerInformation, bookFlight } from '../rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../rf_pages/seatMap';
-import { acceptPriceChange, payWithCreditCard, payWithDummyBank } from '../rf_pages/payment';
+import {
+  acceptPriceChange,
+  addCheckoutData,
+  payWithCreditCard,
+  payWithDummyBank,
+} from '../rf_pages/payment';
 import { waitForOrderPageToLoad } from '../rf_pages/order';
 import orderModule from '../rf_modules/orderModule';
 import edvinModule from '../rf_modules/edvinModule';
@@ -63,6 +68,7 @@ export async function createOrderAndDiscountCode(site, siteEdvin, paymentService
     await payWithDummyBank(travelers[0]);
   } else {
     await payWithCreditCard();
+    await addCheckoutData();
   }
   await acceptPriceChange();
   await waitForOrderPageToLoad();
