@@ -10,7 +10,11 @@ import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
-import { checkPaymentConditions, payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import {
+  addCheckoutData,
+  checkPaymentConditions,
+  payWithCreditCard,
+} from '../../../common/src/rf_pages/payment';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
@@ -21,7 +25,7 @@ const props = {
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   'Payment.FirstPaymentMethod.Open.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'Payment.RemoveAdressForBank.Enable': false,
 };
 const numberOfAdults = 1;
@@ -89,6 +93,7 @@ test('First payment option opened at start, fee and logos are displayed', async 
   await t.expect(paymentModule.klarnaPayLaterRadiobutton().checked).eql(true);
 
   await payWithCreditCard();
+  await addCheckoutData();
   await waitForOrderPageToLoad();
 
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);

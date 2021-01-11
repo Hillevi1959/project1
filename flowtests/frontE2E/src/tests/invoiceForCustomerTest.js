@@ -19,7 +19,7 @@ import {
   saveSeatMapSelections,
   selectSeatsForAllSegmentTypes,
 } from '../../../common/src/rf_pages/seatMap';
-import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import enableDebug from '../../../common/src/util/debug';
 import { selectProvider } from '../../../common/src/util/debugOptions';
 import setProps from '../../../common/src/util/props';
@@ -35,7 +35,7 @@ const travelers = addNumberToTraveler([
 ]);
 const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'Invoice.Generation.Enabled': 'true',
 };
 const numberOfAdults = 2;
@@ -60,6 +60,7 @@ async function selectTripAddProductsAndPay() {
   await selectSeatsForAllSegmentTypes();
   await saveSeatMapSelections();
   await payWithCreditCard();
+  await addCheckoutData();
   return nrOfProducts;
 }
 

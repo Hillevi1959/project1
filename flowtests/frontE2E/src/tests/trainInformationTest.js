@@ -21,7 +21,11 @@ import { addTravelerInformation, toggleCart } from '../../../common/src/rf_pages
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import reviewModule from '../../../common/src/rf_modules/reviewModule';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
-import { openCartIfClosed, payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import {
+  addCheckoutData,
+  openCartIfClosed,
+  payWithCreditCard,
+} from '../../../common/src/rf_pages/payment';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
@@ -32,7 +36,7 @@ const props = {
   'IbeClient.TravelerDetails.Modal': 'REVIEW',
   'PaymentService.CascadingPaymentsBehavior.Enabled': false,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
 };
 const numberOfAdults = 2;
 
@@ -95,6 +99,7 @@ test('Train icons and change to train information visible on all pages', async (
   }
   await t.click(paymentModule.tripDetailsToggleButton);
   await payWithCreditCard();
+  await addCheckoutData();
 
   // verify on order page
   await waitForOrderPageToLoad();

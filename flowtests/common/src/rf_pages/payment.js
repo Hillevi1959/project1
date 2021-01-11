@@ -94,6 +94,7 @@ export function travelerNamesAsString(travelers) {
 }
 
 export async function addCheckoutData() {
+  await t.expect(paymentModule.checkoutIFrame.visible).ok({ timeout: 20000 });
   await t
     .switchToIframe(paymentModule.checkoutIFrame)
     .typeText(paymentModule.checkoutPassword, 'Checkout1!')
