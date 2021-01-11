@@ -16,7 +16,7 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
 const url = getSiteUrl('gotogate-uk', config.host);
@@ -25,7 +25,7 @@ const props = {
   'IbeClient.DisplayProgressSteps.Enabled': true,
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
 };
 
 fixture('Verify step indicator in booking flow')
@@ -70,7 +70,7 @@ test('Verify step indicator in booking flow', async () => {
   await t.expect(travelerDetailsModule.stepIndicator.nth(0).innerText).contains('Payment');
 
   await payWithCreditCard();
-
+  await addCheckoutData();
   //  Order page
   await waitForOrderPageToLoad();
   await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(4);

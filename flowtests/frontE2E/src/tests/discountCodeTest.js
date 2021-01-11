@@ -9,7 +9,11 @@ import { checkForDiscountCodes } from '../../../common/src/rf_pages/edvin';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNumberToTraveler, getFirstAdult } from '../../../common/src/util/travelerData';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
-import { addPaymentData, checkPaymentConditions } from '../../../common/src/rf_pages/payment';
+import {
+  addCheckoutData,
+  addPaymentData,
+  checkPaymentConditions,
+} from '../../../common/src/rf_pages/payment';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
@@ -20,7 +24,7 @@ import { scrollToElement } from '../../../common/src/util/clientFunction';
 const url = getSiteUrl('test-uk', config.host);
 const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'Payment.DiscountCode.Enabled': true,
 };
 const campaignId = 3355;
@@ -98,6 +102,7 @@ test('Verify discount use on payment and order page', async () => {
 
     await checkPaymentConditions();
     await t.click(paymentModule.payButton);
+    await addCheckoutData();
     // Verification on order page
     await waitForOrderPageToLoad();
     await t.expect(orderModule.receiptInformation.innerText).contains('Your discount voucher');

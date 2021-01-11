@@ -16,6 +16,7 @@ import {
   getFirstAdult,
   getSecondAdult,
 } from '../../../common/src/util/travelerData';
+import { addCheckoutData } from '../../../common/src/rf_pages/payment';
 import config from './testdata.json';
 
 const url = getSiteUrl('test-uk', config.host);
@@ -25,7 +26,7 @@ const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
 const props = {
   'Feature.NewResponsive.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
 };
 
 fixture('Cover Genius products verification on postbooking')
@@ -41,6 +42,7 @@ fixture('Cover Genius products verification on postbooking')
 
 test('Buy Cover Genius products on postbooking', async () => {
   await createOrderFlowWithNoProductsCardPayment(travelers);
+  await addCheckoutData();
 
   await t
     .expect(orderModule.infoTextOrderPage.visible)

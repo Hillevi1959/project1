@@ -1,8 +1,6 @@
 import { t } from 'testcafe';
 import postbookingModule from '../rf_modules/postbookingModule';
 import getPaymentData from '../util/paymentData';
-import { addCheckoutData } from './payment';
-import { waitForOrderPageToLoad } from './order';
 
 export async function logInToPostBooking(email, orderNumber) {
   await t.typeText(postbookingModule.postBookingEmail, email);
@@ -30,6 +28,4 @@ export async function payPostbooking() {
   await t.typeText(postbookingModule.lastName, paymentData.lastName);
   await t.click(postbookingModule.conditions);
   await t.click(postbookingModule.payPostBookingButton);
-  await addCheckoutData();
-  await waitForOrderPageToLoad();
 }
