@@ -12,8 +12,7 @@ const props = {
   'Feature.NewResponsive.Enabled': true,
 };
 
-fixture
-  .skip('Climate compensation preselected from meta')
+fixture('Climate compensation preselected from meta')
   .page(url)
   .beforeEach(async () => {
     const offerUrl = await getTrip(url);

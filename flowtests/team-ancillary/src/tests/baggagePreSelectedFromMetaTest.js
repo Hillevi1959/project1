@@ -12,8 +12,7 @@ const props = {
   'Feature.NewResponsive.Enabled': true,
 };
 
-fixture
-  .skip('Meta trips in Responsive flow included checked baggage')
+fixture('Meta trips in Responsive flow included checked baggage')
   .page(url)
   .beforeEach(async () => {
     await enableDebug(false);
