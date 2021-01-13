@@ -86,11 +86,12 @@ test('Discount covers the whole trip cost', async () => {
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
   // Verify order page
+  await waitForOrderPageToLoad();
   const ticketPrice = getTripPricePound(await orderModule.ticketPrice.innerText);
   const voucherSum = getTripPricePound(await orderModule.discountPrice.innerText);
   const totalPrice = getTripPricePound(await orderModule.totalPrice.innerText);
 
-  await t.expect(totalPrice === ticketPrice + voucherSum).ok();
+  await t.expect(totalPrice).eql(ticketPrice + voucherSum);
 });
 
 test('Voucher does not cover price change', async () => {
