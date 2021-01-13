@@ -49,7 +49,7 @@ test('Different ways of selecting cards', async () => {
   await t.click(paymentModule.cardLabel);
   await t.click(paymentModule.cardVisa);
   await t.typeText(paymentModule.cardNumberInput, visaCardNumber);
-  await t.expect(paymentModule.cartCardFeeText.exists).notOk();
+  await t.expect(paymentModule.cartDiscountOrFeePrice.exists).notOk();
 
   // All cards can be selected before number is entered
   await t.click(paymentModule.cardNumberInput).pressKey('ctrl+a delete');
@@ -74,9 +74,9 @@ test('Different ways of selecting cards', async () => {
   await t
     .expect(paymentModule.cardInfoText.visible)
     .ok()
-    .expect(paymentModule.cartCardFeeText.exists)
+    .expect(paymentModule.cartDiscountOrFeePrice.exists)
     .ok()
-    .expect(paymentModule.cartCardFeeText.innerText)
+    .expect(paymentModule.cartDiscountOrFeePrice.innerText)
     .contains('MASTERCARD');
 
   // Card with lower fee cannot be selected when Mastercard number entered
@@ -86,9 +86,9 @@ test('Different ways of selecting cards', async () => {
     .click(paymentModule.cardMasterCard)
     .typeText(paymentModule.cardNumberInput, masterCardNumber);
   await t
-    .expect(paymentModule.cartCardFeeText.exists)
+    .expect(paymentModule.cartDiscountOrFeePrice.exists)
     .ok()
-    .expect(paymentModule.cartCardFeeText.innerText)
+    .expect(paymentModule.cartDiscountOrFeePrice.innerText)
     .contains('MASTERCARD');
   await t.click(paymentModule.cardVisa);
   await t.expect(paymentModule.cardRadioButtonVisa.checked).notOk();
@@ -100,14 +100,14 @@ test('Different ways of selecting cards', async () => {
     .pressKey('ctrl+a delete')
     .typeText(paymentModule.cardNumberInput, masterCardNumber);
   await t
-    .expect(paymentModule.cartCardFeeText.exists)
+    .expect(paymentModule.cartDiscountOrFeePrice.exists)
     .ok()
-    .expect(paymentModule.cartCardFeeText.innerText)
+    .expect(paymentModule.cartDiscountOrFeePrice.innerText)
     .contains('MASTERCARD');
   await t.click(paymentModule.cardAmericanExpress);
   await t
     .expect(paymentModule.cardRadioButtonAmericaExpress.checked)
     .ok()
-    .expect(paymentModule.cartCardFeeText.innerText)
+    .expect(paymentModule.cartDiscountOrFeePrice.innerText)
     .contains('AMERICAN EXPRESS');
 });

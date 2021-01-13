@@ -65,8 +65,8 @@ test('Add different card numbers', async () => {
     .pressKey('ctrl+a delete')
     .typeText(paymentModule.cardNumberInput, masterCardNumber);
   await t
-    .expect(paymentModule.cartCardFeeText.visible)
+    .expect(paymentModule.cart.visible)
     .ok()
-    .expect(paymentModule.cartCardFeeText.innerText)
+    .expect(paymentModule.cartDiscountOrFeePrice.innerText)
     .contains('MASTERCARD');
 });
