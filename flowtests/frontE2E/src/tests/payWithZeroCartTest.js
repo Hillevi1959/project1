@@ -62,7 +62,8 @@ fixture('Zero cart verification')
 
 test('Discount covers the whole trip cost', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
   await checkForDiscountCodes(campaignId, discountName);
   await t.navigateTo(url);
@@ -99,7 +100,8 @@ test('Discount covers the whole trip cost', async () => {
 
 test('Voucher does not cover price change', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
   await setChangeFlightPriceLargeIncrease();
   await checkForDiscountCodes(campaignId, discountName);
@@ -145,7 +147,8 @@ test('Voucher does not cover price change', async () => {
 test('Zero cart in postbooking flow', async () => {
   const zeroPrice = '£0.00';
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
   await logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
   await setPriceOnproduct('0', 'Order Information SMS');

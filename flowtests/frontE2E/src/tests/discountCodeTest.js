@@ -47,64 +47,64 @@ test('Verify discount use on payment and order page', async () => {
   if ((await getWindowWidth()) < 970) {
     // eslint-disable-next-line no-console
     console.warn('This test is not run on mobile or tablet device');
-  } else {
-    await checkForDiscountCodes(campaignId, discountName);
-    await t.navigateTo(url);
-    await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney', 'ECONOMY', [
-      11,
-      24,
-    ]);
-    await addTravelerInformation(travelers);
-    await addNoExtraProducts(numberOfAdults);
-    await bookFlight();
-    await closeSeatMapModal();
-    await t.click(paymentModule.cardLabel);
-    await scrollToElement('[for="CARD"]');
-    await t.click(paymentModule.cardLabel);
-    await addPaymentData();
-
-    // Verification on payment page
-    await t
-      .expect(paymentModule.cartDiscountCode.exists)
-      .notOk()
-      .expect(paymentModule.priceBoxDiscountCodeSum.exists)
-      .notOk();
-
-    await t.click(paymentModule.discountCodeToggleInput);
-    await t.typeText(paymentModule.discountCodeInput, discountName);
-    await t.click(paymentModule.discountCodeButton);
-
-    await t
-      .expect(paymentModule.cartDiscountCode.visible)
-      .ok()
-      .expect(paymentModule.priceBoxDiscountCodeSum.visible)
-      .ok();
-
-    await t.click(paymentModule.discountCodeRemoveButton);
-
-    await t.expect(paymentModule.cartDiscountCode.exists).notOk();
-    await t.expect(paymentModule.priceBoxDiscountCodeSum.exists).notOk();
-
-    await t
-      .expect(paymentModule.cartDiscountCode.exists)
-      .notOk()
-      .expect(paymentModule.priceBoxDiscountCodeSum.exists)
-      .notOk()
-      .typeText(paymentModule.discountCodeInput, discountName);
-
-    await t.click(paymentModule.discountCodeButton);
-
-    await t
-      .expect(paymentModule.cartDiscountCode.visible)
-      .ok()
-      .expect(paymentModule.priceBoxDiscountCodeSum.visible)
-      .ok();
-
-    await checkPaymentConditions();
-    await t.click(paymentModule.payButton);
-    await addCheckoutData();
-    // Verification on order page
-    await waitForOrderPageToLoad();
-    await t.expect(orderModule.receiptInformation.innerText).contains('Your discount voucher');
+    return;
   }
+  await checkForDiscountCodes(campaignId, discountName);
+  await t.navigateTo(url);
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Sydney', 'ECONOMY', [
+    11,
+    24,
+  ]);
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults);
+  await bookFlight();
+  await closeSeatMapModal();
+  await t.click(paymentModule.cardLabel);
+  await scrollToElement('[for="CARD"]');
+  await t.click(paymentModule.cardLabel);
+  await addPaymentData();
+
+  // Verification on payment page
+  await t
+    .expect(paymentModule.cartDiscountCode.exists)
+    .notOk()
+    .expect(paymentModule.priceBoxDiscountCodeSum.exists)
+    .notOk();
+
+  await t.click(paymentModule.discountCodeToggleInput);
+  await t.typeText(paymentModule.discountCodeInput, discountName);
+  await t.click(paymentModule.discountCodeButton);
+
+  await t
+    .expect(paymentModule.cartDiscountCode.visible)
+    .ok()
+    .expect(paymentModule.priceBoxDiscountCodeSum.visible)
+    .ok();
+
+  await t.click(paymentModule.discountCodeRemoveButton);
+
+  await t.expect(paymentModule.cartDiscountCode.exists).notOk();
+  await t.expect(paymentModule.priceBoxDiscountCodeSum.exists).notOk();
+
+  await t
+    .expect(paymentModule.cartDiscountCode.exists)
+    .notOk()
+    .expect(paymentModule.priceBoxDiscountCodeSum.exists)
+    .notOk()
+    .typeText(paymentModule.discountCodeInput, discountName);
+
+  await t.click(paymentModule.discountCodeButton);
+
+  await t
+    .expect(paymentModule.cartDiscountCode.visible)
+    .ok()
+    .expect(paymentModule.priceBoxDiscountCodeSum.visible)
+    .ok();
+
+  await checkPaymentConditions();
+  await t.click(paymentModule.payButton);
+  await addCheckoutData();
+  // Verification on order page
+  await waitForOrderPageToLoad();
+  await t.expect(orderModule.receiptInformation.innerText).contains('Your discount voucher');
 });
