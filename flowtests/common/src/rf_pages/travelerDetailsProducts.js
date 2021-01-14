@@ -303,7 +303,7 @@ export async function addManulifeAllInclusive(travelers) {
       dateOfBirth,
     );
   }
-  await t.click(travelerDetailsModule.manulifeAllinclisiveContainer);
+  await t.click(travelerDetailsModule.manulifeAllincluisiveContainer);
 }
 
 async function addNoManulifeCancellation() {
@@ -351,8 +351,10 @@ export async function addNoExtraProducts(numberOfTravelers) {
     await addNoBaggageService();
   }
   if (
-    (await travelerDetailsModule.supportPackageBasic.exists || await travelerDetailsModule.supportPackageBasicMobile.exists) &&
-    (await travelerDetailsModule.supportPackageBasic.visible || await travelerDetailsModule.supportPackageBasicMobile.visible)
+    ((await travelerDetailsModule.supportPackageBasic.exists) ||
+      (await travelerDetailsModule.supportPackageBasicMobile.exists)) &&
+    ((await travelerDetailsModule.supportPackageBasic.visible) ||
+      (await travelerDetailsModule.supportPackageBasicMobile.visible))
   ) {
     await addSupportPackageBasic();
   }
@@ -465,8 +467,8 @@ export async function addNoExtraProducts(numberOfTravelers) {
     await addNoBankruptcyInsuranceGenius();
   }
   if (
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.exists) &&
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.visible)
+    (await travelerDetailsModule.manulifeAllincluisiveContainer.exists) &&
+    (await travelerDetailsModule.manulifeAllincluisiveContainer.visible)
   ) {
     await addNoManulifeAllInclusive();
   }
@@ -512,8 +514,10 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addFlexibleTicketAllTravelers();
   }
   if (
-    (await travelerDetailsModule.supportPackagePremium.exists || await travelerDetailsModule.supportPackagePremiumMobile.exist) &&
-    (await travelerDetailsModule.supportPackagePremium.visible || await travelerDetailsModule.supportPackagePremiumMobile.visible)
+    ((await travelerDetailsModule.supportPackagePremium.exists) ||
+      (await travelerDetailsModule.supportPackagePremiumMobile.exist)) &&
+    ((await travelerDetailsModule.supportPackagePremium.visible) ||
+      (await travelerDetailsModule.supportPackagePremiumMobile.visible))
   ) {
     await addSupportPackagePremium();
   }
@@ -620,8 +624,8 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addMobileTravelPlan();
   }
   if (
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.exists) &&
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.visible)
+    (await travelerDetailsModule.manulifeAllincluisiveContainer.exists) &&
+    (await travelerDetailsModule.manulifeAllincluisiveContainer.visible)
   ) {
     await addManulifeAllInclusive(travelers);
   }
