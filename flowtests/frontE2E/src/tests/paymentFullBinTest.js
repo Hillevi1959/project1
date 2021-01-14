@@ -25,6 +25,7 @@ async function selectTripAddNoProductsGoToPaymentPage() {
 
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
+
   await addNoExtraProducts(numberOfAdults, site);
   await bookFlight();
 }
@@ -65,7 +66,7 @@ test('Add different card numbers', async () => {
     .pressKey('ctrl+a delete')
     .typeText(paymentModule.cardNumberInput, masterCardNumber);
   await t
-    .expect(paymentModule.cart.visible)
+    .expect(paymentModule.cartDiscountOrFeePrice.visible)
     .ok()
     .expect(paymentModule.cartDiscountOrFeePrice.innerText)
     .contains('MASTERCARD');
