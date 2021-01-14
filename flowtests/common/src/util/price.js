@@ -10,7 +10,7 @@ export const getVoucherPricePound = priceText => {
   return parseFloat(stringPrice.replace(',', ''), 10);
 };
 
-export const getTripPricePound = priceText => {
+export const convertTextPricePoundToNumber = priceText => {
   const stringPrice = priceText.substring(priceText.indexOf('£') + 1);
   return parseFloat(stringPrice.replace(',', ''), 10);
 };

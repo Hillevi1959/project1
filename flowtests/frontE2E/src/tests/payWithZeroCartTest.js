@@ -27,7 +27,10 @@ import {
 } from '../../../common/src/rf_pages/payment';
 import config from '../../testdata.json';
 import orderModule from '../../../common/src/rf_modules/orderModule';
-import { getTripPricePound, removeUnicodeFromTextPrice } from '../../../common/src/util/price';
+import {
+  convertTextPricePoundToNumber,
+  removeUnicodeFromTextPrice,
+} from '../../../common/src/util/price';
 import {
   goToPostbookingFromOrderPage,
   waitForOrderPageToLoad,
@@ -87,9 +90,9 @@ test('Discount covers the whole trip cost', async () => {
   await t.click(paymentModule.payButton);
   // Verify order page
   await waitForOrderPageToLoad();
-  const ticketPrice = getTripPricePound(await orderModule.ticketPrice.innerText);
-  const voucherSum = getTripPricePound(await orderModule.discountPrice.innerText);
-  const totalPrice = getTripPricePound(await orderModule.totalPrice.innerText);
+  const ticketPrice = convertTextPricePoundToNumber(await orderModule.ticketPrice.innerText);
+  const voucherSum = convertTextPricePoundToNumber(await orderModule.discountPrice.innerText);
+  const totalPrice = convertTextPricePoundToNumber(await orderModule.totalPrice.innerText);
 
   await t.expect(totalPrice).eql(ticketPrice + voucherSum);
 });
@@ -134,7 +137,7 @@ test('Voucher does not cover price change', async () => {
   await addCheckoutData();
   // Verify order page
   await waitForOrderPageToLoad();
-  const totalPrice = getTripPricePound(await orderModule.totalPrice.innerText);
+  const totalPrice = convertTextPricePoundToNumber(await orderModule.totalPrice.innerText);
 
   await t.expect(totalPrice > 0).ok();
 });
