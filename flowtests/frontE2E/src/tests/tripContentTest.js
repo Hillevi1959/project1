@@ -217,7 +217,7 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   }
 
   await t.click(paymentModule.travelerDetailsToggleButton);
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   // Verify trip content on order page
   await waitForOrderPageToLoad();

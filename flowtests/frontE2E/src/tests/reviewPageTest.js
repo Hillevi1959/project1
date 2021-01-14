@@ -169,7 +169,7 @@ test('Edit traveler and extra products on review page and proceed to payment pag
     await t.expect(paymentModule.cartCheckInBaggageProductMobile().visible).ok();
     await toggleCart();
   }
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 

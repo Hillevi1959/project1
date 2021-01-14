@@ -263,7 +263,7 @@ test.skip('Choose trip that does not match the voucher, verify message, add new 
     await t.expect(paymentModule.discountCodeError.visible).ok();
 
     await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
-    await payWithDummyBank(travelers[0]);
+    await payWithDummyBank();
     await acceptPriceChange();
     // Verify order page
     await waitForOrderPageToLoad();

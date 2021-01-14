@@ -107,7 +107,7 @@ test('Book and pay for a trip with bundled products', async () => {
       .contains(`${numberOfAdults} Avbokningsgaranti`);
   }
 
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await waitForOrderPageToLoad();
 
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);

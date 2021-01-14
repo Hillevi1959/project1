@@ -83,7 +83,7 @@ test('SeatMap book seating light and beside', async () => {
       await closeSeatMapModal();
     }
 
-    await payWithDummyBank(travelers[0]);
+    await payWithDummyBank();
 
     const orderModuleNumber = await getOrderNumber();
     const postBookingUrl = getSiteUrl('postbooking-supersaver-se', config.host);
@@ -99,6 +99,6 @@ test('SeatMap book seating light and beside', async () => {
     await t.expect(postbookingModule.cartSeatMapIcon.exists).ok();
 
     await clickGoToPayment();
-    await payWithDummyBank(travelers[0]);
+    await payWithDummyBank();
   }
 });

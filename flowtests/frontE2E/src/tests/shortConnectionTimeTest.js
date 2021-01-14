@@ -59,7 +59,7 @@ test('Show short connection time notification', async () => {
   // Verification on payment page
   await t.expect(paymentModule.paymentContainer.visible).ok('', { timeout: 60000 });
   await t.expect(paymentModule.shortConnectionNotification.visible).ok();
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   // Verification on order page
   await waitForOrderPageToLoad();
