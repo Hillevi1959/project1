@@ -13,6 +13,8 @@ export function getSiteUrl(site, host) {
       return `https://supersaver-se${host}/rf/start`;
     case 'supersaver-uk':
       return `https://supersaver-uk${host}/rf/start`;
+    case 'supersaver-us':
+      return `https://supersaver-us${host}/rf/start`;
     case 'gotogate-uk':
       return `https://gotogate-uk${host}/rf/start`;
     case 'gotogate-ru':

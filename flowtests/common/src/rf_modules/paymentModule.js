@@ -54,6 +54,12 @@ export default {
   cartCancellationInsideEuProductMobile: Selector(
     '[data-testid="cart-product-cancellationInsideEu-drawer"]',
   ),
+  cartComprehensiveInsuranceCoverGeniusProduct: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius"]',
+  ),
+  cartComprehensiveInsuranceCoverGeniusProductMobile: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius-drawer"]',
+  ),
   cartExtraProductsContent: Selector('[data-testid="cart-content-products"]'),
   cartExtraProductsContentMobile: Selector('[data-testid="cart-content-products-drawer"]'),
   cartFlexTicketProduct: Selector('[data-testid="cart-product-flexibleTicket"]'),

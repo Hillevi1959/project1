@@ -75,6 +75,12 @@ export default {
     '[data-testid="cart-product-cancellationInsideEu-price-drawer"]',
   ),
   cartCheckInBaggageProductMobile: Selector('[data-testid="cart-product-checkInBaggage-drawer"]'),
+  cartComprehensiveInsuranceCoverGeniusProduct: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius-widget"]',
+  ),
+  cartComprehensiveInsuranceCoverGeniusProductMobile: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius-drawer"]',
+  ),
   cartDiscountInformation: Selector('[data-testid="cart-payment-price"]'),
   cartSeatMapProductMobile: Selector('[data-testid="cart-product-seatMap-drawer"]'),
   cartBaggagePriceMobile: Selector('[data-testid="cart-product-checkInBaggage-price-drawer"]'),
@@ -138,6 +144,15 @@ export default {
   contactForm: Selector('[data-testid="travelerDetails-contactForm"]'),
   contactPersonMail: Selector('[for="traveler-mail"]'),
   contactPersonPhone: Selector('[for="traveler-phone"]'),
+  comprehensiveInsuranceGeniusContainer: Selector(
+    '[data-testid="coverGeniusInsurance-comprehensiveInsuranceCoverGenius-InsuranceProduct"]',
+  ),
+  comprehensiveInsuranceGeniusButtonYes: Selector(
+    '[data-testid="comprehensiveInsuranceCoverGenius--true"]',
+  ),
+  comprehensiveInsuranceGeniusButtonNo: Selector(
+    '[data-testid="comprehensiveInsuranceCoverGenius--false"]',
+  ),
   errorMessage: Selector('[data-testid="components-textInput"] > .message > [type="error"]'),
   extraProductsContainer: Selector('[data-testid="travelerDetails-products"]'),
   flexibleTicketDropDown: Selector('.flexibleTicket .etiCheckboxDropdown'),
