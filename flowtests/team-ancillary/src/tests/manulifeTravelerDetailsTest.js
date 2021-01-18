@@ -66,7 +66,7 @@ test('Book and pay for a one way trip with Trip Cancellation Protection for one 
   await t
     .expect(travelerDetailsModule.manulifeCancellationContainer.exists)
     .ok()
-    .expect(travelerDetailsModule.manulifeAllincluisiveContainer.exists)
+    .expect(travelerDetailsModule.manulifeAllinclusiveContainer.exists)
     .notOk();
 
   await addNoExtraProducts(travelers.length);
@@ -141,7 +141,7 @@ test('Book and pay for a return trip with All Inclusive Protection for 2 adults,
   await t
     .expect(travelerDetailsModule.manulifeCancellationContainer.exists)
     .ok()
-    .expect(travelerDetailsModule.manulifeAllincluisiveContainer.exists)
+    .expect(travelerDetailsModule.manulifeAllinclusiveContainer.exists)
     .ok();
 
   await addNoExtraProducts(adults.length + children.length);

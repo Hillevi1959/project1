@@ -14,7 +14,7 @@ export default {
   mailSelfTransferInfo: Selector('.tripInformationItem.VirtualInterlining'),
   messageList: Selector('[name="msg"]'),
   messageListOption: Selector('[name="msg"]').find('option'),
-  nuberOfCodes: Selector('[name="numUsages"]'),
+  numberOfCodes: Selector('[name="numUsages"]'),
   numberOfCodesLeft: Selector('[name="numUsagesLeft"]'),
   numberOfDiscountRows: Selector('tr.odd'),
   orderNumberInput: Selector('[name="anyRef"]'),
