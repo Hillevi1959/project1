@@ -118,7 +118,7 @@ test('SeatMap is visible before book, not selectable for infant and verified in 
     .expect(paymentModule.cartSeatMapProduct.innerText)
     .contains(`${numberOfSegments} Platsreservation`);
 
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
@@ -153,7 +153,7 @@ test('SeatMap book seating light and beside', async () => {
     .expect(paymentModule.cartSeatMapProduct.innerText)
     .contains(`${numberOfSegments} Platsreservation`);
 
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);

@@ -55,9 +55,9 @@ export async function checkForDiscountCodes(campaignId, discountName) {
     );
     await t.typeText(edvinModule.codeName, discountName);
     await t
-      .click(edvinModule.nuberOfCodes)
+      .click(edvinModule.numberOfCodes)
       .pressKey('ctrl+a delete')
-      .typeText(edvinModule.nuberOfCodes, '20');
+      .typeText(edvinModule.numberOfCodes, '20');
     await t.click(edvinModule.submitButton);
   }
 }

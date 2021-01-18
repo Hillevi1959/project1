@@ -193,7 +193,7 @@ test('Baggage not available for infants', async () => {
     .contains(`${numberOfBaggages} Incheckat bagage`)
     .expect(await getBaggagePricePayment())
     .eql(totalCalculatedBaggagePrice);
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await t
     .expect(orderModule.infoTextOrderPage.visible)
     .ok('', { timeout: 90000 })

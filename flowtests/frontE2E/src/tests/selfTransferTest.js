@@ -103,7 +103,7 @@ test('Self transfer information shown on all pages', async () => {
       .contains(selfTransferText[i - 3]);
   }
   await t.click(paymentModule.tripDetailsToggleButton);
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   // Verification on order page
   await waitForOrderPageToLoad();

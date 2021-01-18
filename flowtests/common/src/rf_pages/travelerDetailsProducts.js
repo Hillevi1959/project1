@@ -287,16 +287,6 @@ async function addBaggageComboGenius() {
   await t.click(travelerDetailsModule.baggageInsuranceComboGeniusYes);
 }
 
-export async function addComprehensiveInsuranceGenius() {
-  await scrollToElement('[data-testid="comprehensiveInsuranceCoverGenius--true"]');
-  await t.click(travelerDetailsModule.comprehensiveInsuranceGeniusButtonYes);
-}
-
-async function addNoComprehensiveInsuranceGenius() {
-  await scrollToElement('[data-testid="comprehensiveInsuranceCoverGenius--false"]');
-  await t.click(travelerDetailsModule.comprehensiveInsuranceGeniusButtonNo);
-}
-
 async function addNoManulifeAllInclusive() {
   await scrollToElement('[data-testid="allInclusiveProtection--false"]');
   await t.click(travelerDetailsModule.manulifeAllinclusiveNoButton);
@@ -313,7 +303,7 @@ export async function addManulifeAllInclusive(travelers) {
       dateOfBirth,
     );
   }
-  await t.click(travelerDetailsModule.manulifeAllinclisiveContainer);
+  await t.click(travelerDetailsModule.manulifeAllinclusiveContainer);
 }
 
 async function addNoManulifeCancellation() {
@@ -483,8 +473,8 @@ export async function addNoExtraProducts(numberOfTravelers) {
     await addNoComprehensiveInsuranceGenius();
   }
   if (
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.exists) &&
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.visible)
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.exists) &&
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.visible)
   ) {
     await addNoManulifeAllInclusive();
   }
@@ -622,12 +612,6 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addBankruptcyInsuranceGenius();
   }
   if (
-    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.exists) &&
-    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.visible)
-  ) {
-    await addComprehensiveInsuranceGenius();
-  }
-  if (
     (await travelerDetailsModule.seatMapContainer.exists) &&
     (await travelerDetailsModule.seatMapContainer.visible)
   ) {
@@ -646,8 +630,8 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addMobileTravelPlan();
   }
   if (
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.exists) &&
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.visible)
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.exists) &&
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.visible)
   ) {
     await addManulifeAllInclusive(travelers);
   }

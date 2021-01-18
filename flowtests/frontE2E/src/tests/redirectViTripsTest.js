@@ -12,7 +12,7 @@ import {
   getSecondAdult,
 } from '../../../common/src/util/travelerData';
 import { selectViTripDesktop } from '../../../common/src/pages/searchResults';
-import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
+import { isMobile, isTablet } from '../../../common/src/util/device';
 import travelerModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import config from '../../testdata.json';
 
@@ -38,10 +38,10 @@ test('Redirect VI trips from desktop result page to responsive flow', async () =
 
   if ((await isMobile()) || (await isTablet())) {
     console.warn('This test is not run on mobile or tablet device');
-  } else if (await isDesktop()) {
-    await selectTravelersDesktop(numberOfAdults, numberOfChildren, travelers[2].age);
-    await makeSearch('return trip', 'STO', 'NEW');
-    await selectViTripDesktop();
-    await t.expect(travelerModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
+    return;
   }
+  await selectTravelersDesktop(numberOfAdults, numberOfChildren, travelers[2].age);
+  await makeSearch('return trip', 'STO', 'NEW');
+  await selectViTripDesktop();
+  await t.expect(travelerModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
 });

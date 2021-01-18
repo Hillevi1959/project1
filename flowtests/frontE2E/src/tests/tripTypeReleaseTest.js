@@ -108,7 +108,7 @@ test('Return trip, 1 adult, direct flight', async () => {
     await t.expect(paymentModule.cartExtraProductsContent.exists).notOk();
   }
 
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
@@ -158,7 +158,7 @@ test('One way trip, 1 adult, 1 child, direct flight', async () => {
     await t.expect(paymentModule.cartTravelerinfo.visible).ok();
     await t.expect(paymentModule.cartExtraProductsContent.exists).notOk();
   }
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
@@ -218,7 +218,7 @@ test('One way combination return trip, 2 adults, 1 child, 1 infant', async () =>
     await t.expect(paymentModule.cartTravelerinfo.visible).ok();
     await t.expect(paymentModule.cartExtraProductsContent.exists).notOk();
   }
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
@@ -283,7 +283,7 @@ test('Multi destination, 4 adults', async () => {
     await t.expect(paymentModule.cartTrip.nth(2).innerText).contains('Berlin');
     await t.expect(paymentModule.cartTrip.nth(3).innerText).contains('Rom');
   }
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
 
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 30000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
