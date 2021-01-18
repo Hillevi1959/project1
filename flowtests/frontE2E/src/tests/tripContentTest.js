@@ -162,7 +162,7 @@ test('Verify trip details and price for one way combination with 2 adults, 1 chi
   await t.expect(paymentModule.bankLabel.exists).ok('', { timeout: 30000 });
 
   // Verify trip content in cart on payment page
-  await t.expect(paymentModule.cartDiscountInformation.visible).ok();
+  await t.expect(paymentModule.cartDiscountOrFeePrice.visible).ok();
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
 
