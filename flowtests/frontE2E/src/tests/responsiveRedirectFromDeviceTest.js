@@ -6,7 +6,7 @@ import { makeSearch, selectTravelersDesktop } from '../../../common/src/pages/st
 import { selectFirstTripDesktop } from '../../../common/src/pages/searchResults';
 import setProps from '../../../common/src/util/props';
 import { selectProvider } from '../../../common/src/util/debugOptions';
-import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
+import { isMobile, isTablet } from '../../../common/src/util/device';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import config from '../../testdata.json';
 
@@ -28,11 +28,11 @@ test('Search on desktop, redirect to travler details page', async () => {
 
   if ((await isMobile()) || (await isTablet())) {
     console.warn('This test is not run on mobile or tablet device');
-  } else if (await isDesktop()) {
-    await setProps(props);
-    await selectTravelersDesktop(nrOfAdults, 0, []);
-    await makeSearch('return trip', 'STO', 'LON');
-    await selectFirstTripDesktop();
-    await t.expect(travelerDetailsModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
+    return;
   }
+  await setProps(props);
+  await selectTravelersDesktop(nrOfAdults, 0, []);
+  await makeSearch('return trip', 'STO', 'LON');
+  await selectFirstTripDesktop();
+  await t.expect(travelerDetailsModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
 });

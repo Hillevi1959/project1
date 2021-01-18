@@ -27,7 +27,10 @@ import {
 } from '../../../common/src/rf_pages/payment';
 import config from '../../testdata.json';
 import orderModule from '../../../common/src/rf_modules/orderModule';
-import { getTripPricePound, removeUnicodeFromTextPrice } from '../../../common/src/util/price';
+import {
+  convertTextPricePoundToNumber,
+  removeUnicodeFromTextPrice,
+} from '../../../common/src/util/price';
 import {
   goToPostbookingFromOrderPage,
   waitForOrderPageToLoad,
@@ -59,7 +62,8 @@ fixture('Zero cart verification')
 
 test('Discount covers the whole trip cost', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
   await checkForDiscountCodes(campaignId, discountName);
   await t.navigateTo(url);
@@ -87,16 +91,17 @@ test('Discount covers the whole trip cost', async () => {
   await t.click(paymentModule.payButton);
   // Verify order page
   await waitForOrderPageToLoad();
-  const ticketPrice = getTripPricePound(await orderModule.ticketPrice.innerText);
-  const voucherSum = getTripPricePound(await orderModule.discountPrice.innerText);
-  const totalPrice = getTripPricePound(await orderModule.totalPrice.innerText);
+  const ticketPrice = convertTextPricePoundToNumber(await orderModule.ticketPrice.innerText);
+  const voucherSum = convertTextPricePoundToNumber(await orderModule.discountPrice.innerText);
+  const totalPrice = convertTextPricePoundToNumber(await orderModule.totalPrice.innerText);
 
   await t.expect(totalPrice).eql(ticketPrice + voucherSum);
 });
 
 test('Voucher does not cover price change', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
   await setChangeFlightPriceLargeIncrease();
   await checkForDiscountCodes(campaignId, discountName);
@@ -134,7 +139,7 @@ test('Voucher does not cover price change', async () => {
   await addCheckoutData();
   // Verify order page
   await waitForOrderPageToLoad();
-  const totalPrice = getTripPricePound(await orderModule.totalPrice.innerText);
+  const totalPrice = convertTextPricePoundToNumber(await orderModule.totalPrice.innerText);
 
   await t.expect(totalPrice > 0).ok();
 });
@@ -142,7 +147,8 @@ test('Voucher does not cover price change', async () => {
 test('Zero cart in postbooking flow', async () => {
   const zeroPrice = '£0.00';
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
   await logInToEdvin(`http://test-uk${config.host}/edvin/login.action`);
   await setPriceOnproduct('0', 'Order Information SMS');

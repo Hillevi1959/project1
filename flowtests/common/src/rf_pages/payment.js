@@ -20,17 +20,18 @@ export async function openCartIfClosed() {
   }
 }
 
-export async function payWithDummyBank(traveler) {
+export async function payWithDummyBank() {
+  const paymentData = getPaymentData();
   await t.expect(paymentModule.paymentContainer.exists).ok('', { timeout: 10000 });
   await scrollToElement('[for="BANK"]');
   await t.click(paymentModule.bankLabel);
   await scrollToElement('[data-testid="bank-payment-form"] [data-testid="firstName-input"]');
-  await t.typeText(paymentModule.bankFirstNameInput, traveler.firstName);
-  await t.typeText(paymentModule.bankLastNameInput, traveler.lastName);
+  await t.typeText(paymentModule.bankFirstNameInput, paymentData.firstName);
+  await t.typeText(paymentModule.bankLastNameInput, paymentData.lastName);
   await scrollToElement('[data-testid="bank-payment-form"] [data-testid="street-input"]');
-  await t.typeText(paymentModule.bankStreetInput, traveler.street);
-  await t.typeText(paymentModule.bankZipCodeInput, traveler.zipCode);
-  await t.typeText(paymentModule.bankCityInput, traveler.city);
+  await t.typeText(paymentModule.bankStreetInput, paymentData.street);
+  await t.typeText(paymentModule.bankZipCodeInput, paymentData.zipCode);
+  await t.typeText(paymentModule.bankCityInput, paymentData.city);
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
 }
