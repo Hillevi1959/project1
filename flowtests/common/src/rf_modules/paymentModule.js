@@ -57,7 +57,7 @@ export default {
   cartCheckInBaggageProductMobile: Selector('[data-testid="cart-product-checkInBaggage-drawer"]'),
   cartContentContent: Selector('[data-testid="cart-content-Content"]'),
   cartDiscountCode: Selector('[data-testid="cart-payment-discount-price"]'),
-  cartDiscountInformation: Selector('[data-testid="cart-payment-price"]'),
+  cartDiscountOrFeePrice: Selector('[data-testid="cart-payment-price"]'),
   cartExtraProductsContent: Selector('[data-testid="cart-content-products"]'),
   cartExtraProductsContentMobile: Selector('[data-testid="cart-content-products-drawer"]'),
   cartFlexTicketProduct: Selector('[data-testid="cart-product-flexibleTicket"]'),

@@ -19,7 +19,7 @@ export default {
     '[data-testid="cart-product-tripCancellationProtection-price"]',
   ),
   cc2cEntries: Selector('[data-testid="cc2carrier-transaction-entry"]'),
-  chooseFirstOrderButton: Selector('[data-testid="order-button-0"]'),
+  chooseFirstOrderButton: Selector('[data-testid$="-order-button"]'),
   companyInformationAddress: Selector('[data-testid="company.streetAddress-input"]'),
   companyInformationCompanyAddress: Selector('[data-testid="company.companyAddress-input"]'),
   companyInformationCity: Selector('[data-testid="company.city-input"]'),
