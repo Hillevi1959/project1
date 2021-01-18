@@ -16,13 +16,15 @@ import {
   bookFlight,
   toggleCart,
 } from '../../../common/src/rf_pages/travelerDetails';
-import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
+import {
+  addComprehensiveInsuranceGenius,
+  addNoExtraProducts,
+} from '../../../common/src/rf_pages/travelerDetailsProducts';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { openCartIfClosed, payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
-import { scrollToElement } from '../../../common/src/util/clientFunction';
 import config from './testdata.json';
 
 const url = getSiteUrl('supersaver-us', config.host);
@@ -60,10 +62,13 @@ test('Buy Cover Genius Comprehensive product', async () => {
     [11, 24],
   );
 
+  await t.expect(travelerDetailsModule.comprehensiveInsuranceGeniusContainer.visible).ok();
+
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults + numberOfChildren);
+
+  await addComprehensiveInsuranceGenius();
   if ((await isMobile()) || (await isTablet())) {
-    await t.expect(travelerDetailsModule.comprehensiveInsuranceGeniusContainer.visible).ok();
-    await scrollToElement('[data-testid="comprehensiveInsuranceCoverGenius--true"]');
-    await t.click(travelerDetailsModule.comprehensiveInsuranceGeniusButtonYes);
     await toggleCart();
     await t
       .expect(travelerDetailsModule.cartComprehensiveInsuranceCoverGeniusProductMobile.visible)
@@ -79,8 +84,7 @@ test('Buy Cover Genius Comprehensive product', async () => {
       .expect(travelerDetailsModule.cartComprehensiveInsuranceCoverGeniusProduct.visible)
       .ok();
   }
-  await addTravelerInformation(travelers);
-  await addNoExtraProducts(numberOfAdults + numberOfChildren);
+
   await bookFlight();
 
   if ((await isMobile()) || (await isTablet())) {
