@@ -303,7 +303,7 @@ export async function addManulifeAllInclusive(travelers) {
       dateOfBirth,
     );
   }
-  await t.click(travelerDetailsModule.manulifeAllinclisiveContainer);
+  await t.click(travelerDetailsModule.manulifeAllinclusiveContainer);
 }
 
 async function addNoManulifeCancellation() {
@@ -467,8 +467,8 @@ export async function addNoExtraProducts(numberOfTravelers) {
     await addNoBankruptcyInsuranceGenius();
   }
   if (
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.exists) &&
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.visible)
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.exists) &&
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.visible)
   ) {
     await addNoManulifeAllInclusive();
   }
@@ -624,8 +624,8 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addMobileTravelPlan();
   }
   if (
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.exists) &&
-    (await travelerDetailsModule.manulifeAllinclisiveContainer.visible)
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.exists) &&
+    (await travelerDetailsModule.manulifeAllinclusiveContainer.visible)
   ) {
     await addManulifeAllInclusive(travelers);
   }

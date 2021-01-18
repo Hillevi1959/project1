@@ -105,7 +105,7 @@ test('Flexible Ticket not available for infant', async () => {
     await t
       .expect(paymentModule.cartFlexTicketProduct.innerText)
       .contains(`${numberOfAdults} Ombokningsbar biljett`);
-    await payWithDummyBank(travelers[0]);
+    await payWithDummyBank();
     await t
       .expect(orderModule.infoTextOrderPage.visible)
       .ok('', { timeout: 50000 })

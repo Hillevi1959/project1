@@ -52,7 +52,8 @@ fixture('Postbooking verification')
   .page(url)
   .beforeEach(async () => {
     if ((await isMobile()) || (await isTablet())) {
-      return console.log('This test is not run on mobile or tablet device');
+      console.log('This test is not run on mobile or tablet device');
+      return;
     }
     await enableDebug();
     await acceptCookies();
@@ -63,7 +64,8 @@ fixture('Postbooking verification')
 
 test('Go to postbooking from orderModule page, add all products', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.log('This test is not run on mobile or tablet device');
+    console.log('This test is not run on mobile or tablet device');
+    return;
   }
   await createOrderWithNoProducts(
     numberOfAdults,
@@ -101,7 +103,8 @@ test('Go to postbooking from orderModule page, add all products', async () => {
 
 test('Log in to postbooking from login page, and add all products', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.log('This test is not run on mobile or tablet device');
+    console.log('This test is not run on mobile or tablet device');
+    return;
   }
   await createOrderWithNoProducts(
     numberOfAdults,
@@ -144,7 +147,8 @@ test('Log in to postbooking from login page, and add all products', async () => 
 
 test('Only not selected products are available in postbooking', async () => {
   if ((await isMobile()) || (await isTablet())) {
-    return console.warn('This test is not run on mobile or tablet device');
+    console.warn('This test is not run on mobile or tablet device');
+    return;
   }
   const numberOfAddedExtraProducts = 2;
   await createOrderFlowWithProducts(travelers);

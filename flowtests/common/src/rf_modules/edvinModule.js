@@ -1,7 +1,6 @@
 import { Selector } from 'testcafe';
 
 export default {
-  product: Selector('.resultSet:nth-child(2) tbody tr'),
   codeName: Selector('[name="code"]'),
   discountItemLink: Selector('[href*="DiscountItem"]'),
   discountCodeField: Selector('[name="code"]'),
@@ -11,17 +10,18 @@ export default {
     '.resultSet:nth-child(2) tbody tr:nth-child(1) td:nth-child(4) a',
   ),
   logInButton: Selector('.btn-success'),
-  nuberOfCodes: Selector('[name="numUsages"]'),
   mailShortConnectionInfo: Selector('.viTripWithShortConnectionTimeNotification'),
   mailSelfTransferInfo: Selector('.tripInformationItem.VirtualInterlining'),
   messageList: Selector('[name="msg"]'),
   messageListOption: Selector('[name="msg"]').find('option'),
+  numberOfCodes: Selector('[name="numUsages"]'),
   numberOfCodesLeft: Selector('[name="numUsagesLeft"]'),
   numberOfDiscountRows: Selector('tr.odd'),
   orderNumberInput: Selector('[name="anyRef"]'),
   orderSearchDatePicker: Selector('#datetime_icon_0'),
   orderSearchPreviousMonth: Selector('.ui-icon.ui-icon-circle-triangle-w'),
   orderSearchDoneDateButton: Selector('.ui-datepicker-close'),
+  product: Selector('.resultSet:nth-child(2) tbody tr'),
   productPrice: Selector('[name="fullPrice"]'),
   passwordInput: Selector('[name="passWord"]'),
   providerBookingIdLink: Selector(

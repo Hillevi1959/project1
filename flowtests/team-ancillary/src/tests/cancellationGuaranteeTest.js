@@ -99,7 +99,7 @@ test('Outside Europe - Price per bound and per traveler (except Infant)', async 
   );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
@@ -157,7 +157,7 @@ test('Outside Europe - Price per bound only', async () => {
   );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
@@ -217,7 +217,7 @@ test('Within Europe - Price per bound and per traveler (except Infant)', async (
   );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
@@ -275,6 +275,6 @@ test('Within Europe - Price per bound only', async () => {
   );
 
   await t.expect(paymentCartPrice).eql(cartPrice);
-  await payWithDummyBank(travelers[0]);
+  await payWithDummyBank();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });

@@ -12,9 +12,7 @@ const props = {
   'IbeClient.MetaEntry.WithResultsSupport.Enabled': false,
 };
 
-// This test is unstable. Reported in WEB-2942
-fixture
-  .skip('Meta trips in Responsive flow')
+fixture('Meta trips in Responsive flow')
   .page(url)
   .beforeEach(async () => {
     const tripUrl = await getTrip(url);

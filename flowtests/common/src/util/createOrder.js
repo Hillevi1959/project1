@@ -34,6 +34,6 @@ export async function createOrderWithNoProducts(
     await payWithCreditCard();
     await addCheckoutData();
   } else if (paymentMethod === 'BANK') {
-    await payWithDummyBank(travelers[0]);
+    await payWithDummyBank();
   }
 }

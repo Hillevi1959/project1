@@ -35,7 +35,10 @@ import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { getDiscountCode, getDiscountCodeUrl } from '../../../common/src/rf_pages/edvin';
 import { getWindowWidth } from '../../../common/src/util/device';
 import resultModule from '../../../common/src/rf_modules/resultModule';
-import { getTripPricePound, getVoucherPricePound } from '../../../common/src/util/price';
+import {
+  convertTextPricePoundToNumber,
+  getVoucherPricePound,
+} from '../../../common/src/util/price';
 import {
   createOrderAndDiscountCode,
   prepareSelfServiceRebookingFlow,
@@ -122,8 +125,10 @@ test.skip('Create order in self service rebooking flow', async () => {
 
     // Verify voucher price
     await t.click(resultModule.cheapestFilterButton);
-    const tripPriceStandard = getTripPricePound(await resultModule.tripPriceStandard.innerText);
-    const tripPriceFlex = getTripPricePound(await resultModule.tripPriceFlex.innerText);
+    const tripPriceStandard = convertTextPricePoundToNumber(
+      await resultModule.tripPriceStandard.innerText,
+    );
+    const tripPriceFlex = convertTextPricePoundToNumber(await resultModule.tripPriceFlex.innerText);
     const voucherPriceFlex = getVoucherPricePound(await resultModule.voucherFlexPrice.innerText);
     const voucherPriceStandard = getVoucherPricePound(
       await resultModule.voucherStandardPrice.innerText,
@@ -263,7 +268,7 @@ test.skip('Choose trip that does not match the voucher, verify message, add new 
     await t.expect(paymentModule.discountCodeError.visible).ok();
 
     await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
-    await payWithDummyBank(travelers[0]);
+    await payWithDummyBank();
     await acceptPriceChange();
     // Verify order page
     await waitForOrderPageToLoad();

@@ -65,7 +65,7 @@ export async function createOrderAndDiscountCode(site, siteEdvin, paymentService
   await bookFlight();
   await closeSeatMapModal();
   if (paymentServiceProvider) {
-    await payWithDummyBank(travelers[0]);
+    await payWithDummyBank();
   } else {
     await payWithCreditCard();
     await addCheckoutData();
