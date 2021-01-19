@@ -50,7 +50,7 @@ test('Syntactic and domain validaton of email', async () => {
 
   await t
     .expect(travelerDetailsModule.errorMessage.nth(0).innerText)
-    .contains('Please take an extra look at your email address. gmial.com');
+    .contains('Please take an extra look at your email address. gmial.com');
 
   await clearField(travelerDetailsModule.contactPersonMail);
   await t.typeText(travelerDetailsModule.contactPersonMail, travelers[0].email);
