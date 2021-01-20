@@ -622,6 +622,12 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     await addBankruptcyInsuranceGenius();
   }
   if (
+    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.exists) &&
+    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.visible)
+  ) {
+    await addComprehensiveInsuranceGenius();
+  }
+  if (
     (await travelerDetailsModule.seatMapContainer.exists) &&
     (await travelerDetailsModule.seatMapContainer.visible)
   ) {
