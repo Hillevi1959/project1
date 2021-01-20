@@ -287,6 +287,16 @@ async function addBaggageComboGenius() {
   await t.click(travelerDetailsModule.baggageInsuranceComboGeniusYes);
 }
 
+export async function addComprehensiveInsuranceGenius() {
+  await scrollToElement('[data-testid="comprehensiveInsuranceCoverGenius--true"]');
+  await t.click(travelerDetailsModule.comprehensiveInsuranceGeniusButtonYes);
+}
+
+async function addNoComprehensiveInsuranceGenius() {
+  await scrollToElement('[data-testid="comprehensiveInsuranceCoverGenius--false"]');
+  await t.click(travelerDetailsModule.comprehensiveInsuranceGeniusButtonNo);
+}
+
 async function addNoManulifeAllInclusive() {
   await scrollToElement('[data-testid="allInclusiveProtection--false"]');
   await t.click(travelerDetailsModule.manulifeAllinclusiveNoButton);

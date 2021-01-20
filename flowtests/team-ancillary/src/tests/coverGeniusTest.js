@@ -27,7 +27,7 @@ import { openCartIfClosed, payWithCreditCard } from '../../../common/src/rf_page
 import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import config from './testdata.json';
 
-const url = getSiteUrl('supersaver-us', config.host);
+const url = getSiteUrl('gotogate-us', config.host);
 
 const props = {
   'Feature.NewResponsive.Enabled': true,
