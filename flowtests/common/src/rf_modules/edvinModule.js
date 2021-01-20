@@ -47,8 +47,8 @@ export default {
   paymentLinkSendEmailCheckbox: Selector('div[role="dialog"] form [value="sendEmail"]'),
   paymentLinkCopyToClipboardCheckbox: Selector('div[role="dialog"] form [value="copyToClipboard"]'),
   addOnCartActionsDropdown: Selector('[class*="Droplist__Trigger"]').nth(1),
-  copyPaymentLinkSelection: Selector('#uid2 [role="menuitem"]').nth(5),
-  orderNotesSelection: Selector('#uid2 [role="menuitem"]').nth(4),
+  copyPaymentLinkSelection: Selector('#uid2 div > span').nth(5),
+  orderNotesSelection: Selector('#uid2 div > span').nth(4),
   orderNoteAddButton: Selector('[role="dialog"] button:nth-child(1)'),
   orderNoteTitleInput: Selector('[role="dialog"] [type="text"]'),
 };

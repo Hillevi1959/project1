@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
-import { ClientFunction, Selector, t } from 'testcafe';
+import { Selector, t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider } from '../../../common/src/util/debugOptions';
@@ -24,7 +24,7 @@ const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getFirstInfant()]);
 const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
+  'Payment.provider.creditcard': 'Checkout',
   'Invoice.Generation.Enabled': 'true',
 };
 const numberOfAdults = 1;
@@ -46,18 +46,20 @@ test('Create add on cart in Edvin and verify payment link', async () => {
     console.warn('This test is not run on mobile or tablet device');
     return;
   }
-  // await createOrderWithNoProducts(
-  //   numberOfAdults,
-  //   0,
-  //   numberOfInfants,
-  //   travelers,
-  //   'return trip',
-  //   'STO',
-  //   'Paris',
-  //   'CARD',
-  // );
-  const orderNumber = 'DTESTGAP8';
-  // const orderNumber = await orderModule.orderNumber.innerText;
+  await createOrderWithNoProducts(
+    numberOfAdults,
+    0,
+    numberOfInfants,
+    travelers,
+    'return trip',
+    'STO',
+    'Paris',
+    'CARD',
+    'ECONOMY',
+    [11, 24],
+  );
+  // const orderNumber = 'DTESTGCIV';
+  const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number: ', orderNumber);
   await logInToEdvin(getSiteUrl('gotogate-uk-edvin', config.host));
 
@@ -77,6 +79,7 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   const travelDocumentsByPost = 14;
   const mobileTravelPlan = 15;
   const checkIn = 16;
+
   await t.click(edvinModule.addOnPurchaseButton);
   await t.click(edvinModule.createAddOnCartButton);
   await t.expect(edvinModule.addOnProductsModal.visible).ok();
@@ -89,31 +92,9 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   await t.click(edvinModule.paymentLinkCopyToClipboardCheckbox);
 
   await t
-    .setNativeDialogHandler(() => {
-      document.getElementById('createCartSection').innerHTML = 'TEST';
-    })
-    .click(edvinModule.createPaymentLinkButton);
-
-  // const getClipboardText = ClientFunction(() => {
-  //   document
-  //     .querySelector('div[role="dialog"] > div > div:nth-child(3) button')
-  //     .addEventListener('click', () => {
-  //       navigator.clipboard
-  //         .readText()
-  //         .then(text => {
-  //           document.getElementById('createCartSection').innerText = text;
-  //         })
-  //         .catch(err => {
-  //           console.log('Something went wrong', err);
-  //         });
-  //     });
-  //   return document.getElementById('createCartSection').innerText;
-  // });
-
-  // await t
-  //   .setNativeDialogHandler(() => {
-  //     document.getElementById('createCartSection').innerHTML = 'TEST';
-  //   })
+    .setNativeDialogHandler(() => true)
+    .click(edvinModule.createPaymentLinkButton)
+    .wait(2000);
 
   const originUrl = await getCurrentUrl();
   console.log('Origin url: ', originUrl);
@@ -124,36 +105,11 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   await t.navigateTo(orderUrl);
 
   await openDropdown(edvinModule.addOnCartActionsDropdown);
-
-  await t.debug();
-
+  await t.click(edvinModule.copyPaymentLinkSelection);
+  await openDropdown(edvinModule.addOnCartActionsDropdown);
   await t.click(edvinModule.orderNotesSelection);
   await t.click(edvinModule.orderNoteAddButton);
   await t.click(edvinModule.orderNoteTitleInput);
-  await t.pressKey('ctrl+v');
 
-  const getClipboardText = ClientFunction(() => {
-    document.querySelector('[role="dialog"] [type="text"]').addEventListener('click', () => {
-      navigator.clipboard
-        .readText()
-        .then(text => {
-          document.querySelector('[role="dialog"] [type="text"]').innerText = text;
-        })
-        .catch(err => {
-          console.log('Something went wrong', err);
-        });
-      navigator.clipboard
-        .writeText()
-        .then(text => {
-          document.querySelector('[role="dialog"] [type="text"]').innerText = text;
-        })
-        .catch(err => {
-          console.log('Something went wrong', err);
-        });
-    });
-    return document.querySelector('[role="dialog"] [type="text"]').value;
-  });
-
-  const Ctext = await getClipboardText();
-  console.log(`Clipboard: ${Ctext}`);
+  await t.debug();
 });
