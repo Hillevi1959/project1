@@ -8,6 +8,9 @@ export default {
   cartAllInclusiveProduct: Selector('[data-testid="cart-product-allInclusiveProtection"]'),
   cartAllInclusivePrice: Selector('[data-testid="cart-product-allInclusiveProtection-price"]'),
   cartCheckinBaggageProduct: Selector('[data-testid="cart-product-checkInBaggage"]'),
+  cartComprehensiveInsuranceCoverGeniusProduct: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius"]',
+  ),
   cartItem: Selector('.etiCartItem'),
   cartTagIcon: Selector('[data-testId="cart-tag-icon"]'),
   cartFlexTicketProduct: Selector('[data-testid="cart-product-flexibleTicket"]'),

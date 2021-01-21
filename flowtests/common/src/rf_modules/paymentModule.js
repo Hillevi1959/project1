@@ -58,6 +58,12 @@ export default {
   cartContentContent: Selector('[data-testid="cart-content-Content"]'),
   cartDiscountCode: Selector('[data-testid="cart-payment-discount-price"]'),
   cartDiscountOrFeePrice: Selector('[data-testid="cart-payment-price"]'),
+  cartComprehensiveInsuranceCoverGeniusProduct: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius"]',
+  ),
+  cartComprehensiveInsuranceCoverGeniusProductMobile: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius-drawer"]',
+  ),
   cartExtraProductsContent: Selector('[data-testid="cart-content-products"]'),
   cartExtraProductsContentMobile: Selector('[data-testid="cart-content-products-drawer"]'),
   cartFlexTicketProduct: Selector('[data-testid="cart-product-flexibleTicket"]'),
