@@ -112,8 +112,8 @@ test('Return trip, 1 adult, direct flight', async () => {
   await waitForOrderPageToLoad();
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
-
-test('One way trip, 1 adult, 1 child, direct flight', async () => {
+// Waiting for bug WEB-4857 to be solved
+test.skip('One way trip, 1 adult, 1 child, direct flight', async () => {
   const travelers = addNumberToTraveler([getFirstAdult(), getFirstChild()]);
   const numberOfAdults = 1;
   const numberOfChildern = 1;
@@ -223,8 +223,8 @@ test('One way combination return trip, 2 adults, 1 child, 1 infant', async () =>
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
-
-test('Multi destination, 4 adults', async () => {
+// Waiting for bug WEB-4857 to be solved
+test.skip('Multi destination, 4 adults', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
