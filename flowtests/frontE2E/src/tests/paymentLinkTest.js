@@ -16,9 +16,12 @@ import { createOrderWithNoProducts } from '../../../common/src/util/createOrder'
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { logInToEdvin, searchOrder } from '../../../common/src/rf_pages/edvin';
 import { isMobile, isTablet } from '../../../common/src/util/device';
-import { getCurrentUrl, navigateToUrl } from '../../../common/src/util/clientFunction';
+import { navigateToUrl } from '../../../common/src/util/clientFunction';
 import edvinModule from '../../../common/src/rf_modules/edvinModule';
-import { openDropdown } from '../../../common/src/util/dropdownSelect';
+import paymentLinkModule from '../../../common/src/rf_modules/paymentLinkModule';
+import getPaymentData from '../../../common/src/util/paymentData';
+import { addCheckoutData } from '../../../common/src/rf_pages/payment';
+import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getFirstInfant()]);
@@ -30,6 +33,12 @@ const props = {
 const numberOfAdults = 1;
 const numberOfInfants = 1;
 
+async function convertLinkToResponsive(link) {
+  const splitLink = link.split('=');
+  const paymentLink = getSiteUrl('gotogate-uk-paymentLink', config.host);
+  return paymentLink.concat(splitLink[1]);
+}
+
 fixture('Verify payment link')
   .page(url)
   .beforeEach(async () => {
@@ -40,7 +49,8 @@ fixture('Verify payment link')
     await closeHeaderUrgencyBanner();
   });
 
-// eslint-disable-next-line consistent-return
+// This test will be updated when payment link for responsive is generated in Edvin.
+// There will be no need of function convertLinkToResponsive
 test('Create add on cart in Edvin and verify payment link', async () => {
   if ((await isMobile()) || (await isTablet())) {
     console.warn('This test is not run on mobile or tablet device');
@@ -58,7 +68,6 @@ test('Create add on cart in Edvin and verify payment link', async () => {
     'ECONOMY',
     [11, 24],
   );
-  // const orderNumber = 'DTESTGCIV';
   const orderNumber = await orderModule.orderNumber.innerText;
   console.log('Order number: ', orderNumber);
   await logInToEdvin(getSiteUrl('gotogate-uk-edvin', config.host));
@@ -74,7 +83,7 @@ test('Create add on cart in Edvin and verify payment link', async () => {
     await navigateToUrl(urlOrder);
     iteration += 1;
     console.log('Search for order: ', orderNumber);
-  } while (!(await edvinModule.providerBookingIdLink.visible) && iteration < 20);
+  } while (!(await edvinModule.providerBookingIdLink.visible) && iteration < 10);
 
   const travelDocumentsByPost = 14;
   const mobileTravelPlan = 15;
@@ -87,29 +96,34 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   await t.click(edvinModule.avaliableAddOnProducts(mobileTravelPlan));
   await t.click(edvinModule.avaliableAddOnProducts(checkIn));
   await t.click(edvinModule.activatePaymentLinkButton);
-  await t.typeText(edvinModule.activatePaymentLinkTextArea, 'TEST');
-  // await t.click(edvinModule.paymentLinkSendEmailCheckbox);
-  await t.click(edvinModule.paymentLinkCopyToClipboardCheckbox);
 
+  const link = await edvinModule.paymentLink.getAttribute('value');
+  await t.navigateTo(await convertLinkToResponsive(link));
+
+  // Verfy addon products on payment page
+  await t.expect(paymentLinkModule.paymentLinkPage.visible).ok();
+  await t.expect(paymentLinkModule.checkInProduct.visible).ok();
+  await t.expect(paymentLinkModule.flightUpdatesBySmsProduct.visible).ok();
+  await t.expect(paymentLinkModule.travelDocumentsByPostProduct.visible).ok();
+
+  const paymentData = getPaymentData();
+  await t.typeText(paymentLinkModule.cardNumberInput, paymentData.cardNumber);
+  await t.typeText(paymentLinkModule.cardExpInput, paymentData.exp);
+  await t.typeText(paymentLinkModule.cardCvcInput, paymentData.cvc);
+  await t.typeText(paymentLinkModule.cardFirstNameInput, paymentData.firstName);
+  await t.typeText(paymentLinkModule.cardLastNameInput(), paymentData.lastName);
+  await t.click(paymentLinkModule.checkPaymentConditions);
+  await t.click(paymentLinkModule.payButton);
+  await addCheckoutData();
+
+  // Verfy addon products on order page
+  await waitForOrderPageToLoad();
+  await t.expect(orderModule.postBookingProducts.count).eql(3);
   await t
-    .setNativeDialogHandler(() => true)
-    .click(edvinModule.createPaymentLinkButton)
-    .wait(2000);
-
-  const originUrl = await getCurrentUrl();
-  console.log('Origin url: ', originUrl);
-  const url0 = originUrl.split('3D')[1];
-  const orderId = url0.split('%')[0];
-  console.log('OrderId: ', orderId);
-  const orderUrl = `https://gotogate-uk${config.host}/edvin/core/order/OrderContainer.edit.action?_s=true&id=${orderId}`;
-  await t.navigateTo(orderUrl);
-
-  await openDropdown(edvinModule.addOnCartActionsDropdown);
-  await t.click(edvinModule.copyPaymentLinkSelection);
-  await openDropdown(edvinModule.addOnCartActionsDropdown);
-  await t.click(edvinModule.orderNotesSelection);
-  await t.click(edvinModule.orderNoteAddButton);
-  await t.click(edvinModule.orderNoteTitleInput);
-
-  await t.debug();
+    .expect(orderModule.postBookingProductsText.nth(0).innerText)
+    .contains('Travel documents by post');
+  await t
+    .expect(orderModule.postBookingProductsText.nth(2).innerText)
+    .contains('Flight updates by SMS');
+  await t.expect(orderModule.postBookingProductsText.nth(4).innerText).contains('Check-in');
 });

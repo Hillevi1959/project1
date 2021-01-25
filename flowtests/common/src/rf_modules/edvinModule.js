@@ -51,4 +51,5 @@ export default {
   orderNotesSelection: Selector('#uid2 div > span').nth(4),
   orderNoteAddButton: Selector('[role="dialog"] button:nth-child(1)'),
   orderNoteTitleInput: Selector('[role="dialog"] [type="text"]'),
+  paymentLink: Selector('[name="paymentLinkForTest"]'),
 };
