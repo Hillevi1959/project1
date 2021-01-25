@@ -63,8 +63,8 @@ test('Return trip, 1 adult, direct flight', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);
   const numberOfAdults = 1;
 
-  const expectedDateDeparture = getExpectedDate(2, 11);
-  const expectedDateReturn = getExpectedDate(2, 25);
+  const expectedDateDeparture = getExpectedDate(2, 11, 'return trip');
+  const expectedDateReturn = getExpectedDate(2, 25, 'return trip');
 
   await t.click(startModule.directFlightBox);
   await selectTravelers(numberOfAdults, 0, 0);
@@ -117,7 +117,7 @@ test('One way trip, 1 adult, 1 child, direct flight', async () => {
   const travelers = addNumberToTraveler([getFirstAdult(), getFirstChild()]);
   const numberOfAdults = 1;
   const numberOfChildern = 1;
-  const expectedDateDeparture = getExpectedDate(2, 11);
+  const expectedDateDeparture = getExpectedDate(2, 11, 'one way trip');
 
   await chooseTripType('one way trip');
   await t.click(startModule.directFlightBox);
@@ -174,8 +174,8 @@ test('One way combination return trip, 2 adults, 1 child, 1 infant', async () =>
   const numberOfAdults = 2;
   const numberOfChildren = 1;
   const numberOfInfants = 1;
-  const expectedDateDeparture = getExpectedDate(2, 11);
-  const expectedDateReturn = getExpectedDate(2, 25);
+  const expectedDateDeparture = getExpectedDate(2, 11, 'return trip');
+  const expectedDateReturn = getExpectedDate(2, 25, 'return trip');
 
   await selectTravelers(numberOfAdults, numberOfChildren, numberOfInfants);
   await chooseTripType('return trip');
@@ -235,8 +235,8 @@ test('Multi destination, 4 adults', async () => {
   const multiStopProps = {
     'IbeClient.MultiStop.Enabled': true,
   };
-  const expectedDateTrip1 = getExpectedDate(1, 1);
-  const expectedDateTrip2 = getExpectedDate(1, 10);
+  const expectedDateTrip1 = getExpectedDate(1, 1, 'multi trip');
+  const expectedDateTrip2 = getExpectedDate(1, 10, 'multi trip');
 
   await setProps(multiStopProps);
   await chooseTripType('multi trip');
