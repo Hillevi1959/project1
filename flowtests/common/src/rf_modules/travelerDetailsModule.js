@@ -92,6 +92,12 @@ export default {
   cartExtraProductsContent: Selector('[data-testid="cart-content-products-widget"]'),
   cartCheckInBaggageProductMobile: Selector('[data-testid="cart-product-checkInBaggage-drawer"]'),
   cartCloseButtonMobile: Selector('[data-testid="cart-closeButton-button-drawer"]'),
+  cartComprehensiveInsuranceCoverGeniusProduct: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius-widget"]',
+  ),
+  cartComprehensiveInsuranceCoverGeniusProductMobile: Selector(
+    '[data-testid="cart-product-comprehensiveInsuranceCoverGenius-drawer"]',
+  ),
   cartDiscountInformation: Selector('[data-testid="cart-payment-price"]'),
   cartExtraProductsContentMobile: Selector('[data-testid="cart-content-products-drawer"]'),
   cartFlexTicketProduct: Selector('[data-testid="cart-product-flexibleTicket-widget"]'),
@@ -132,6 +138,15 @@ export default {
   checkinBaggageYesAllPassengers: Selector('[data-testid="checkInBaggage-toggleTravelers-true"]'),
   checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-travelerModule-0-true"]'),
   climateCompensatedIcon: Selector('[data-testid="climateCompensation-ProductIcon"]'),
+  comprehensiveInsuranceGeniusContainer: Selector(
+    '[data-testid="coverGeniusInsurance-comprehensiveInsuranceCoverGenius-InsuranceProduct"]',
+  ),
+  comprehensiveInsuranceGeniusButtonYes: Selector(
+    '[data-testid="comprehensiveInsuranceCoverGenius--true"]',
+  ),
+  comprehensiveInsuranceGeniusButtonNo: Selector(
+    '[data-testid="comprehensiveInsuranceCoverGenius--false"]',
+  ),
   contactForm: Selector('[data-testid="travelerDetails-contactForm"]'),
   contactPersonMail: Selector('[for="traveler-mail"]'),
   contactPersonPhone: Selector('[for="traveler-phone"]'),

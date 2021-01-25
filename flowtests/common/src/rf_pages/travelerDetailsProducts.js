@@ -287,6 +287,16 @@ async function addBaggageComboGenius() {
   await t.click(travelerDetailsModule.baggageInsuranceComboGeniusYes);
 }
 
+export async function addComprehensiveInsuranceGenius() {
+  await scrollToElement('[data-testid="comprehensiveInsuranceCoverGenius--true"]');
+  await t.click(travelerDetailsModule.comprehensiveInsuranceGeniusButtonYes);
+}
+
+async function addNoComprehensiveInsuranceGenius() {
+  await scrollToElement('[data-testid="comprehensiveInsuranceCoverGenius--false"]');
+  await t.click(travelerDetailsModule.comprehensiveInsuranceGeniusButtonNo);
+}
+
 async function addNoManulifeAllInclusive() {
   await scrollToElement('[data-testid="allInclusiveProtection--false"]');
   await t.click(travelerDetailsModule.manulifeAllinclusiveNoButton);
@@ -467,6 +477,12 @@ export async function addNoExtraProducts(numberOfTravelers) {
     await addNoBankruptcyInsuranceGenius();
   }
   if (
+    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.exists) &&
+    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.visible)
+  ) {
+    await addNoComprehensiveInsuranceGenius();
+  }
+  if (
     (await travelerDetailsModule.manulifeAllinclusiveContainer.exists) &&
     (await travelerDetailsModule.manulifeAllinclusiveContainer.visible)
   ) {
@@ -604,6 +620,12 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
     (await travelerDetailsModule.bankruptcyInsuranceGeniusContainer.visible)
   ) {
     await addBankruptcyInsuranceGenius();
+  }
+  if (
+    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.exists) &&
+    (await travelerDetailsModule.comprehensiveInsuranceGeniusContainer.visible)
+  ) {
+    await addComprehensiveInsuranceGenius();
   }
   if (
     (await travelerDetailsModule.seatMapContainer.exists) &&
