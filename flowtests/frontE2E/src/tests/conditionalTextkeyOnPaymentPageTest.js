@@ -74,6 +74,7 @@ test('Verify fee and no fee text on payment page', async () => {
     await t.expect(paymentModule.bottomContentPriceSummaryFeeDiscountText.count).eql(2);
   }
 
+  await scrollToElement('[data-testid="paymentMethods-BANK-label"]');
   await t.click(paymentModule.bankLabel);
 
   await t.expect(paymentModule.cartDiscountOrFeePrice.innerText).contains('Payment fees: (Sofort)');
