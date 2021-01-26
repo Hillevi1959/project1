@@ -118,7 +118,7 @@ test('Edit traveler and extra products on review page and proceed to payment pag
   await t.expect(reviewModule.flexTicketNotChosen.visible).ok();
   await t.expect(reviewModule.seatMapNotChosen.visible).ok();
   await t.expect(reviewModule.supportPackageNotChosen.visible).ok();
-  await t.expect(reviewModule.cancellationProtectionNotChosen.visible).ok();
+  await t.expect(reviewModule.supportPackageNotChosen.visible).ok();
 
   await t.click(reviewModule.editExtraProductsButton);
   await addNoBaggageService();
