@@ -42,7 +42,7 @@ fixture('Cancellation Guarantee Product verification')
     await closeHeaderUrgencyBanner();
   });
 
-test('Outside Europe - Price per bound and per traveler (except Infant)', async () => {
+test.skip('Outside Europe - Price per bound and per traveler (except Infant)', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
@@ -103,7 +103,7 @@ test('Outside Europe - Price per bound and per traveler (except Infant)', async 
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
-test('Outside Europe - Price per bound only', async () => {
+test.skip('Outside Europe - Price per bound only', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
@@ -161,7 +161,7 @@ test('Outside Europe - Price per bound only', async () => {
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
-test('Within Europe - Price per bound and per traveler (except Infant)', async () => {
+test.skip('Within Europe - Price per bound and per traveler (except Infant)', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
@@ -221,7 +221,7 @@ test('Within Europe - Price per bound and per traveler (except Infant)', async (
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
-test('Within Europe - Price per bound only', async () => {
+test.skip('Within Europe - Price per bound only', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
