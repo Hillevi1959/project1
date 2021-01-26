@@ -25,6 +25,8 @@ export function getSiteUrl(site, host) {
       return `https://test-uk${host}/rf/start`;
     case 'gotogate-au-nustay':
       return `https://gotogate-au${host}/from/nustay/rf/start`;
+    case 'gotogate-uk-paymentLink':
+      return `https://gotogate-uk${host}/rf/payment-link?c=`;
     case 'postbooking-supersaver-se':
       return `https://supersaver-se${host}/rf/postbooking-login`;
     case 'postbooking-gotogate-uk':
