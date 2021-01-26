@@ -50,7 +50,7 @@ fixture('Ancillary Bundle Overlay Verification')
     await closeHeaderUrgencyBanner();
   });
 
-test('Book and pay for a trip with bundled products', async () => {
+test.skip('Book and pay for a trip with bundled products', async () => {
   const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
   const numberOfAdults = 2;
   await selectProvider('IbeGDSDummy');
