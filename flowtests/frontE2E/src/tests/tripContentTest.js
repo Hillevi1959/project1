@@ -58,6 +58,7 @@ const props = {
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   'Result.PaymentMethod.DiscountInformation.Enable': true,
   'IbeClient.Result.ShowPrice.Type': 'TOTAL',
+  'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.RemoveAdressForBank.Enable': false,
 };
 

@@ -29,6 +29,7 @@ const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
 const props = {
   'payment.provider.wallet': 'Checkout',
   'Payment.Wallets': 'PayPal',
+  'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.provider.wallet.PayPal': 'Checkout', // finns inte definierad
   'Payment.PayPal.NameFields.Enabled': true, // finns inte definierad ännu
 };

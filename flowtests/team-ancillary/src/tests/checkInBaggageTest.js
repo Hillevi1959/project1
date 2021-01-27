@@ -46,6 +46,7 @@ const props = {
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
+  'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.RemoveAdressForBank.Enable': false,
 };
 
