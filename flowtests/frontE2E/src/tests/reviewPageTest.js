@@ -41,6 +41,7 @@ const url = getSiteUrl('supersaver-se', config.host);
 const props = {
   'IbeClient.TravelerDetails.Modal': 'REVIEW',
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
+  'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.RemoveAdressForBank.Enable': false,
 };
 const numberOfAdults = 2;
