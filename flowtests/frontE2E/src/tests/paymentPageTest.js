@@ -25,6 +25,7 @@ const props = {
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   'Payment.FirstPaymentMethod.Open.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
+  'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.provider.creditcard': 'Checkout',
   'Payment.RemoveAdressForBank.Enable': false,
 };

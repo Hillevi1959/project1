@@ -23,6 +23,7 @@ const props = {
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
   'IbeClient.ShowNoSelfTransferGuaranteeInfo.MinLayoverMinutes': 181, // stopover < 3h
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
+  'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.RemoveAdressForBank.Enable': false,
 };
 const numberOfTravelers = 1;
