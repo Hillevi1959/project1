@@ -28,6 +28,7 @@ import config from './testdata.json';
 const url = getSiteUrl('supersaver-se', config.host);
 const globalProps = {
   'IbeClient.TravelerDetails.Modal': 'NONE',
+  'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.RemoveAdressForBank.Enable': false,
 };
 
