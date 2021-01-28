@@ -169,6 +169,7 @@ export default {
   flexibleTicketDropDown: Selector('.flexibleTicket .etiCheckboxDropdown'),
   flexibleTicketIcon: Selector('[data-testid="flexibleTicket-ProductIcon"]'),
   flexibleTicketModalNoButton: Selector('[data-testid="flexibleTicketModal-decline-button"]'),
+  freeCancellation: Selector('[data-testid="freeCancellationInformation-search-result"]'),
   freeCancellationDaysAheadText: Selector(
     '[data-testid="freeCancellationInformationDaysAhead-search-result"]',
   ),

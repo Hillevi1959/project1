@@ -107,6 +107,7 @@ export default {
   firstBoundPlaneIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
   ),
+  freeCancellation: Selector('[data-testid="freeCancellationInformation-search-result"]'),
   freeCancellationDaysAheadText: Selector(
     '[data-testid="freeCancellationInformationDaysAhead-search-result"]',
   ),
