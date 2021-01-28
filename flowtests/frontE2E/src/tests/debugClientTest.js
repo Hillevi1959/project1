@@ -24,13 +24,11 @@ test('Verify debug client can be used', async () => {
 
   await t.click(debugModule.toggleDevBarButton);
 
-  await t.expect(debugModule.debugBarClosed.count).eql(0);
   await t.expect(debugModule.debugBarOpen.count).eql(1);
 
   await t.click(debugModule.toggleDevBarButton);
 
   await t.expect(debugModule.debugBarClosed.count).eql(1);
-  await t.expect(debugModule.debugBarOpen.count).eql(0);
 
   await selectProvider('IbeGDSDummy');
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'AMS', 'ECONOMY', [11, 24]);
@@ -39,7 +37,12 @@ test('Verify debug client can be used', async () => {
   await t.expect(debugModule.debugFilterButton.visible).ok();
 
   await t.click(debugModule.debugFilterButton);
-  // Visiblity check of debug filter menu will be added when nwe data-testid are added
+
+  await t.expect(debugModule.resultPageDebugBarOpen.count).eql(1);
+
+  await t.click(debugModule.debugFilterButton);
+
+  await t.expect(debugModule.resultPageDebugBarClosed.count).eql(1);
 
   await t.click(debugModule.enableDebug);
 
