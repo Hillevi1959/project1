@@ -16,8 +16,9 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
-import { addCheckoutData, payWithCreditCard } from '../../../common/src/rf_pages/payment';
+import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+import paymentModule from '../../../common/src/rf_modules/paymentModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -25,7 +26,7 @@ const props = {
   'IbeClient.DisplayProgressSteps.Enabled': true,
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'Checkout',
+  'Payment.provider.creditcard': 'adyen',
 };
 
 fixture('Verify step indicator in booking flow')
@@ -48,12 +49,9 @@ test('Verify step indicator in booking flow', async () => {
   await selectTripButtonByIndex(0);
   // Traveler details page
   await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(1);
-  await t.expect(travelerDetailsModule.stepIndicator.count).eql(4);
+  await t.expect(travelerDetailsModule.stepIndicatorNotVisited.count).eql(3);
   await t
-    .expect(travelerDetailsModule.stepIndicator.nth(0).getStyleProperty('font-weight'))
-    .eql('700');
-  await t
-    .expect(travelerDetailsModule.stepIndicator.nth(0).innerText)
+    .expect(travelerDetailsModule.stepIndicatorCurrent.innerText)
     .contains('Traveler information');
 
   await addTravelerInformation(travelers);
@@ -62,21 +60,15 @@ test('Verify step indicator in booking flow', async () => {
   await closeSeatMapModal();
 
   // Payment page
-  await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(3);
-  await t.expect(travelerDetailsModule.stepIndicator.count).eql(2);
-  await t
-    .expect(travelerDetailsModule.stepIndicator.nth(0).getStyleProperty('font-weight'))
-    .eql('700');
-  await t.expect(travelerDetailsModule.stepIndicator.nth(0).innerText).contains('Payment');
+  await t.expect(paymentModule.stepIndicatorVisited.count).eql(3);
+  await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(1);
+  await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Payment');
 
   await payWithCreditCard();
-  await addCheckoutData();
   //  Order page
   await waitForOrderPageToLoad();
-  await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(4);
-  await t.expect(travelerDetailsModule.stepIndicator.count).eql(1);
-  await t
-    .expect(travelerDetailsModule.stepIndicator.nth(0).getStyleProperty('font-weight'))
-    .eql('700');
-  await t.expect(travelerDetailsModule.stepIndicator.nth(0).innerText).contains('Confirmation');
+
+  await t.expect(paymentModule.stepIndicatorVisited.count).eql(4);
+  await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(0);
+  await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Confirmation');
 });
