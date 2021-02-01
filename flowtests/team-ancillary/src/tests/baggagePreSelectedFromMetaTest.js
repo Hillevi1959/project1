@@ -19,7 +19,7 @@ fixture('Meta trips in Responsive flow included checked baggage')
     await setProps(props);
   });
 
-test('Traveler details page is displayed in Responsive flow included checked baggage', async () => {
+test.skip('Traveler details page is displayed in Responsive flow included checked baggage', async () => {
   const offerUrl = await getTrip(url);
   console.log(`offerUrl: ${offerUrl}`);
   await t.navigateTo(`${offerUrl}&baggageIncluded=1`);
@@ -27,7 +27,7 @@ test('Traveler details page is displayed in Responsive flow included checked bag
   await t.expect(travelerModule.checkInBaggageIcon.exists).ok();
 });
 
-test('Traveler details page is displayed in Responsive flow included checked baggage free of charge', async () => {
+test.skip('Traveler details page is displayed in Responsive flow included checked baggage free of charge', async () => {
   const offerUrl = await getTripBaggageIncluded(url);
   console.log(`offerUrl: ${offerUrl}`);
   await t.navigateTo(`${offerUrl}&baggageIncluded=1`);
