@@ -7,7 +7,7 @@ import {
   getSecondAdult,
 } from '../../../common/src/util/travelerData';
 import enableDebug from '../../../common/src/util/debug';
-import { selectProvider } from '../../../common/src/util/debugOptions';
+import { selectProvider, setIBEDummyPaymentBankOn } from '../../../common/src/util/debugOptions';
 import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchTrip } from '../../../common/src/rf_pages/start';
 import resultModule from '../../../common/src/rf_modules/resultModule';
@@ -28,6 +28,7 @@ const props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'adyen',
 };
+const numberOfAdults = 2;
 
 fixture('Verify step indicator in booking flow')
   .page(url)
@@ -40,7 +41,6 @@ fixture('Verify step indicator in booking flow')
   });
 
 test('Verify step indicator in booking flow', async () => {
-  const numberOfAdults = 2;
   // Result page
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens', 'ECONOMY', [11, 24]);
 
@@ -71,4 +71,33 @@ test('Verify step indicator in booking flow', async () => {
   await t.expect(paymentModule.stepIndicatorVisited.count).eql(4);
   await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(0);
   await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Confirmation');
+});
+
+test.before(async () => {
+  const urlDe = getSiteUrl('gotogate-de', config.host);
+  await t.navigateTo(urlDe);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setIBEDummyPaymentBankOn();
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+})('Step indicator not visible for seatmap when seatmap not available', async () => {
+  // Result page
+  await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London', 'ECONOMY', [11, 24]);
+
+  await t.expect(resultModule.headerNavigationMenu.visible).ok();
+
+  await selectTripButtonByIndex(0);
+  // Traveler details page
+  await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(1);
+  await t.expect(travelerDetailsModule.stepIndicatorNotVisited.count).eql(3);
+  await t
+    .expect(travelerDetailsModule.stepIndicatorCurrent.innerText)
+    .contains('Traveler information');
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults);
+  await bookFlight();
+
+  await t.debug();
 });
