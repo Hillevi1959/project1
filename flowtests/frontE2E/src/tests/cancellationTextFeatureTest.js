@@ -4,7 +4,6 @@ import config from '../../testdata.json';
 import { addNumberToTraveler, getFirstAdult } from '../../../common/src/util/travelerData';
 import enableDebug from '../../../common/src/util/debug';
 import { selectProvider } from '../../../common/src/util/debugOptions';
-import setProps from '../../../common/src/util/props';
 import {
   closeHeaderUrgencyBanner,
   enterFromCity,
@@ -19,6 +18,7 @@ import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import startModule from '../../../common/src/rf_modules/startModule';
+import setProps, { updatePropsInEdvin } from '../../../common/src/util/props';
 
 const travelers = addNumberToTraveler([getFirstAdult()]);
 const numberOfAdults = 1;
@@ -28,17 +28,21 @@ fixture('Conditional text key on payment page');
 test.before(async () => {
   const props = {
     'BookingFlow.FreeCancellation.Enable': false,
-    'BookingFlow.FreeCancellationDaysAhead.Enabled@kayak': true,
-    'BookingFlow.FreeCancellationDaysAhead@kayak': '8',
   };
   const url = getSiteUrl('gotogate-us-kayak', config.host);
+  await updatePropsInEdvin(
+    'gotogate-us',
+    'BookingFlow.FreeCancellationDaysAhead.Enabled@kayak',
+    'true',
+    'gotogate_us',
+  );
   await t.navigateTo(url);
   await enableDebug();
   await acceptCookies();
   await selectProvider('IbeGDSDummy');
   await setProps(props);
   await closeHeaderUrgencyBanner();
-})('Text verification for Kayak, departure day after limit of days ahead', async () => {
+})('Text verification for Kayak partner, departure day after limit of days ahead', async () => {
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'Paris', 'New York', 'ECONOMY', [11, 24]);
 
   await t.expect(resultModule.freeCancellationDaysAheadText.visible).ok();
@@ -57,17 +61,21 @@ test.before(async () => {
 test.before(async () => {
   const props = {
     'BookingFlow.FreeCancellation.Enable': false,
-    'BookingFlow.FreeCancellationDaysAhead.Enabled@kayak': true,
-    'BookingFlow.FreeCancellationDaysAhead@kayak': '8',
   };
   const url = getSiteUrl('gotogate-us-kayak', config.host);
+  await updatePropsInEdvin(
+    'gotogate-us',
+    'BookingFlow.FreeCancellationDaysAhead.Enabled@kayak',
+    'true',
+    'gotogate_us',
+  );
   await t.navigateTo(url);
   await enableDebug();
   await acceptCookies();
   await selectProvider('IbeGDSDummy');
   await setProps(props);
   await closeHeaderUrgencyBanner();
-})('Text verification for Kayak, departure day before limit of days ahead', async () => {
+})('Text verification for Kayak partner, departure day before limit of days ahead', async () => {
   await t.click(startModule.oneWayTrip);
   await enterFromCity('Paris');
   await enterToCity('New York');
@@ -94,18 +102,55 @@ test.before(async () => {
 
 test.before(async () => {
   const props = {
-    'BookingFlow.FreeCancellation.Enable': true,
-    'BookingFlow.FreeCancellationDaysAhead.Enabled@kayak': true,
-    'BookingFlow.FreeCancellationDaysAhead@kayak': '8',
+    'BookingFlow.FreeCancellation.Enable': false,
   };
-  const url = getSiteUrl('gotogate-us', config.host);
+  const url = getSiteUrl('gotogate-us-kayak', config.host);
+  await updatePropsInEdvin(
+    'gotogate-us',
+    'BookingFlow.FreeCancellationDaysAhead.Enabled@kayak',
+    'false',
+    'gotogate_us',
+  );
   await t.navigateTo(url);
   await enableDebug();
   await acceptCookies();
   await selectProvider('IbeGDSDummy');
   await setProps(props);
   await closeHeaderUrgencyBanner();
-})('Text verification on site without Kayak', async () => {
+})('No text visible for Kayak partner', async () => {
+  await searchTrip(numberOfAdults, 0, 0, 'return trip', 'Paris', 'New York', 'ECONOMY', [11, 24]);
+
+  await t.expect(resultModule.freeCancellationDaysAheadText.exists).notOk();
+
+  await selectTripButtonByIndex(0);
+
+  await t.expect(travelerDetailsModule.freeCancellationDaysAheadText.exista).notOk();
+
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults);
+  await bookFlight();
+
+  await t.expect(paymentModule.freeCancellationDaysAheadText.exists).notOk();
+});
+
+test.before(async () => {
+  const props = {
+    'BookingFlow.FreeCancellation.Enable': true,
+  };
+  const url = getSiteUrl('gotogate-us', config.host);
+  await updatePropsInEdvin(
+    'gotogate-us',
+    'BookingFlow.FreeCancellationDaysAhead.Enabled@kayak',
+    'true',
+    'gotogate_us',
+  );
+  await t.navigateTo(url);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+})('Text verification on US site without Kayak partner', async () => {
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'Paris', 'New York', 'ECONOMY', [11, 24]);
 
   await t.expect(resultModule.freeCancellation.visible).ok();
@@ -119,5 +164,4 @@ test.before(async () => {
   await bookFlight();
 
   await t.expect(paymentModule.freeCancellation.visible).ok();
-  await t.debug();
 });
