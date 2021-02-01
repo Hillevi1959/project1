@@ -24,7 +24,7 @@ fixture('Climate compensation preselected from meta')
     );
   });
 
-test('Climate compensation is preselected from meta and displayed on traveler details page in responsive flow', async () => {
+test.skip('Climate compensation is preselected from meta and displayed on traveler details page in responsive flow', async () => {
   await t.expect(travelerModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
   await t.expect(travelerModule.climateCompensatedIcon.exists).ok();
 });

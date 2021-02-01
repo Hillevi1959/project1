@@ -21,7 +21,7 @@ fixture('Flex ticket preselected from meta')
     await t.navigateTo(`${offerUrl}&flexticket=1`);
   });
 
-test('Traveler details page is displayed in Responsive flow included flexticket', async () => {
+test.skip('Traveler details page is displayed in Responsive flow included flexticket', async () => {
   await t.expect(travelerModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
   await t.expect(travelerModule.flexibleTicketIcon.exists).ok();
 });
