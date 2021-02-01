@@ -72,6 +72,10 @@ export default {
   firstBoundPlaneIcon: Selector(
     '.resultPage-flightResults-0 [data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
   ),
+  freeCancellation: Selector('[data-testid="freeCancellationInformation-search-result"]'),
+  freeCancellationDaysAheadText: Selector(
+    '[data-testid="freeCancellationInformationDaysAhead-search-result"]',
+  ),
   headerNavigationMenu: Selector('[data-testid="siteheader-button"]'),
   infantAgeCounterPlus: infantNr =>
     Selector(`[data-testid="infant-${infantNr}-age-option"] .etiCounter__button--plus`),

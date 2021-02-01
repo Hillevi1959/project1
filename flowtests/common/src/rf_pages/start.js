@@ -112,13 +112,13 @@ async function clickNextMonth() {
   await t.click(startModule.nextMonth);
 }
 
-async function enterFromCity(origin) {
+export async function enterFromCity(origin) {
   await t.click(startModule.origin);
   await t.typeText(startModule.origin, origin);
   await t.pressKey('enter');
 }
 
-async function enterToCity(destination) {
+export async function enterToCity(destination) {
   await t.typeText(startModule.destination, destination);
   await t.pressKey('enter');
 }
