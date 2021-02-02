@@ -44,7 +44,10 @@ test('Verify step indicator in booking flow', async () => {
   // Result page
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens', 'ECONOMY', [11, 24]);
 
-  await t.expect(resultModule.headerNavigationMenu.visible).ok();
+  await t.expect(resultModule.resultPage.visible).ok();
+  await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
+  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(4);
+  await t.expect(resultModule.stepIndicatorCurrent.innerText).contains('Flight Selection');
 
   await selectTripButtonByIndex(0);
   // Traveler details page
@@ -85,7 +88,12 @@ test.before(async () => {
   // Result page
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London', 'ECONOMY', [11, 24]);
 
-  await t.expect(resultModule.headerNavigationMenu.visible).ok();
+  await t.debug();
+
+  await t.expect(resultModule.resultPage.visible).ok();
+  await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
+  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(4);
+  await t.expect(resultModule.stepIndicatorCurrent.innerText).contains('Flight Selection');
 
   await selectTripButtonByIndex(0);
   // Traveler details page
