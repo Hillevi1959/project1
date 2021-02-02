@@ -102,7 +102,7 @@ export default {
   discountCodeError: Selector('[data-testid="discount-code-error"]'),
   discountCodeInput: Selector('[data-testid="discount-code-input"]'),
   discountCodeRemoveButton: Selector('[data-testid="discount-code-remove-button"]'),
-  discountCodeSuccess: Selector('[data-testid="discount-code-success"]'),
+  discountCodeText: Selector('[data-testid="payment-bottomContent-priceSummary-discount"]'),
   discountCodeToggleInput: Selector('[data-testid="discount-form-toggle"]'),
   firstBoundPlaneIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',

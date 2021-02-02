@@ -42,13 +42,14 @@ import {
 import {
   createOrderAndDiscountCode,
   prepareSelfServiceRebookingFlow,
+  updateDiscountCampaignForCovid19,
 } from '../../../common/src/util/selfServiceReboking';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
 let url = getSiteUrl('gotogate-uk', config.host);
 let props = {
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'Checkout',
+  'Payment.provider.creditcard': 'adyen',
   'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
   'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
 };
@@ -60,20 +61,20 @@ const travelers = addNumberToTraveler([
 ]);
 const numberOfAdults = 2;
 const numberOfChildren = 1;
-const origin = 'Mauritius';
-const destination = 'New Delhi';
+const origin = 'Stockholm';
+const destination = 'London';
 
-fixture('Verify self service rebooking flow')
-  .page(url)
-  .beforeEach(async () => {
-    await enableDebug();
-    await selectProvider('Sabre');
-    await setProps(props);
-    await acceptCookies();
-    await closeHeaderUrgencyBanner();
-  });
+fixture('Verify self service rebooking flow').beforeEach(async () => {
+  await updateDiscountCampaignForCovid19();
+  await t.navigateTo(url);
+  await enableDebug();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await acceptCookies();
+  await closeHeaderUrgencyBanner();
+});
 
-test.skip('Create order in self service rebooking flow', async () => {
+test('Create order in self service rebooking flow', async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
@@ -95,7 +96,7 @@ test.skip('Create order in self service rebooking flow', async () => {
     await t.expect(startModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
     await t.expect(startModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
 
-    await makeSearch('one way trip', origin, destination, 20);
+    await makeSearch('one way trip', origin, destination, [20]);
 
     // Verify result page
     await t.expect(resultModule.resultPage.visible).ok('', { timeout: 20000 });
@@ -175,18 +176,21 @@ test.skip('Create order in self service rebooking flow', async () => {
     await t.click(paymentModule.cardLabel);
     await addPaymentData();
 
-    await t.expect(paymentModule.discountCodeSuccess.visible).ok();
+    await t.expect(paymentModule.discountCodeText.innerText).contains('Your discount voucher');
+    await t.expect(paymentModule.discountCodeText.innerText).contains('£-10.00');
     await t.expect(paymentModule.cartDiscountCode.innerText).contains('Your discount voucher');
+    await t.expect(paymentModule.cartDiscountCode.innerText).contains('£-10.00');
 
     await checkPaymentConditions();
     await t.click(paymentModule.payButton);
-    await acceptPriceChange();
 
     await t.expect(orderModule.selfServiceRebookingImage.visible).ok('', { timeout: 20000 });
+    await t
+      .expect(orderModule.selfServiceRebookingTitle.innerText)
+      .contains(travelers[0].firstName);
     const infoText =
       'Your rebooking request is being processed. Please note that this may take up to 24 hours.';
     await t.expect(orderModule.selfServiceRebookingInfoText.innerText).contains(infoText);
-    console.log('Create order in self service rebooking flow PASSED!');
   }
 });
 
