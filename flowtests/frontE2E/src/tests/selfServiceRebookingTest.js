@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getNumberOfElements, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider, setIBEDummyPaymentBankOn } from '../../../common/src/util/debugOptions';
@@ -26,7 +26,6 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import {
-  acceptPriceChange,
   addPaymentData,
   checkPaymentConditions,
   payWithDummyBank,
@@ -65,7 +64,7 @@ const origin = 'Stockholm';
 const destination = 'London';
 
 fixture('Verify self service rebooking flow').beforeEach(async () => {
-  await updateDiscountCampaignForCovid19();
+  await updateDiscountCampaignForCovid19('');
   await t.navigateTo(url);
   await enableDebug();
   await selectProvider('IbeGDSDummy');
@@ -194,65 +193,54 @@ test('Create order in self service rebooking flow', async () => {
   }
 });
 
-test.skip('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
+test.before(async () => {
   url = getSiteUrl('supersaver-se', config.host);
-  const newTravelers = addNumberToTraveler([
-    getThirdAdult(),
-    getFourthAdult(),
-    getSecondChild(),
-    getSecondInfant(),
-  ]);
   const dummyPaymentTrue = true;
   props = {
     'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
+    'Payment.ForceShowAddressFields.Carriers': '',
     'Payment.RemoveAdressForBank.Enable': false,
   };
+  await updateDiscountCampaignForCovid19('TK');
+  await t.navigateTo(url);
+  await enableDebug();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await setIBEDummyPaymentBankOn();
+  await acceptCookies();
+  await closeHeaderUrgencyBanner();
+  await createOrderAndDiscountCode(
+    'https://supersaver-se',
+    'supersaver-se-edvin',
+    dummyPaymentTrue,
+  );
+})('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
-    await t.navigateTo(url);
-    await enableDebug();
-    await selectProvider('Sabre');
-    await setProps(props);
-    await setIBEDummyPaymentBankOn();
-    await acceptCookies();
-    await closeHeaderUrgencyBanner();
-    await createOrderAndDiscountCode(
-      'https://supersaver-se',
-      'supersaver-se-edvin',
-      dummyPaymentTrue,
-    );
+    const newTravelers = addNumberToTraveler([
+      getThirdAdult(),
+      getFourthAdult(),
+      getSecondChild(),
+      getSecondInfant(),
+    ]);
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
     await prepareSelfServiceRebookingFlow(url);
-    await makeSearch('one way trip', origin, destination, 20);
+    await makeSearch('one way trip', origin, destination, [20]);
 
-    let tripNumber = 0;
-    await t.expect(resultModule.resultPage.visible).ok('', { timeout: 5000 });
-    // Select trip without voucher tag
-    while (
-      (await getNumberOfElements(
-        `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="valid-with-voucher-tag"]`,
-      )) === 1
-    ) {
-      tripNumber += 1;
-      if (tripNumber === 10) {
-        await t.click(resultModule.searchFormButton);
-        await t.click(resultModule.departureDate);
-        await t.click(Selector('.DayPicker-Day').nth(27));
-        await t.click(resultModule.searchFlight);
-        tripNumber = 0;
-      }
-    }
-    const tripWithoutVoucher = Selector(
-      `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="resultPage-book-button"]`,
-    ).nth(0);
-    await t.click(tripWithoutVoucher);
-    // Verify TD-page
+    await t
+      .click(resultModule.toggleFilterButton)
+      .click(resultModule.clearAirlines)
+      .click(resultModule.filterAirlineSasCheckbox)
+      .click(resultModule.toggleFilterButton);
+    await selectTripButtonByIndex(0);
+    await t.debug();
+
     await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
 
-    await addContact(travelers[0], true);
+    await addContact(travelers[0]);
     for (const traveler of newTravelers) {
       await addTraveler(traveler);
     }
@@ -273,7 +261,6 @@ test.skip('Choose trip that does not match the voucher, verify message, add new 
 
     await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
     await payWithDummyBank();
-    await acceptPriceChange();
     // Verify order page
     await waitForOrderPageToLoad();
 
@@ -287,5 +274,4 @@ test.skip('Choose trip that does not match the voucher, verify message, add new 
         .contains(`${newTravelers[i].firstName} ${newTravelers[i].lastName}`);
     }
   }
-  console.log('Choose trip that does not match the voucher flow PASSED!');
 });

@@ -108,7 +108,7 @@ export async function createVoucherInEdvin(site, orderNumber) {
     }
     await navigateToUrl(orderUrlWithId);
     iteration += 1;
-  } while (!(await edvinModule.providerBookingIdLink.visible) && iteration < 20);
+  } while (!(await edvinModule.providerBookingIdLink.visible) && iteration < 10);
 
   await t.click(edvinModule.providerBookingIdLink);
   const providerBookingUrlWithId = await convertUrl(

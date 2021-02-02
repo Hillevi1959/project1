@@ -23,7 +23,7 @@ import {
 import { clearField, getSiteUrl } from './common';
 import enableDebug from './debug';
 
-export async function updateDiscountCampaignForCovid19() {
+export async function updateDiscountCampaignForCovid19(carrierCode) {
   const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
   const propInList = Selector('.resultSet:nth-child(2) td a').withText('MK issued before 31mar20');
   const tabUsageCriteria = Selector('[title="Usage criteria"]');
@@ -40,6 +40,9 @@ export async function updateDiscountCampaignForCovid19() {
   await t.navigateTo(`${urlEdvin}/discount/DiscountCampaignCovid19.edit.action?_s=true&id=3386`);
   await t.click(tabUsageCriteria);
   await clearField(validatingCarriersInput);
+  if (carrierCode !== '') {
+    await t.typeText(validatingCarriersInput, carrierCode);
+  }
   await t.click(saveButton);
 }
 
@@ -72,7 +75,7 @@ export async function createOrderAndDiscountCode(site, siteEdvin, paymentService
   await t
     .click(resultModule.toggleFilterButton)
     .click(resultModule.clearAirlines)
-    .click(resultModule.filterAirlineSasCheckbox)
+    .click(resultModule.filterAirlineTurkishCheckbox)
     .click(resultModule.toggleFilterButton);
   await selectTripButtonByIndex(0);
   await addTravelerInformation(travelers);
