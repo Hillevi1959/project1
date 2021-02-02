@@ -7,7 +7,7 @@ import {
   getSecondAdult,
 } from '../../../common/src/util/travelerData';
 import enableDebug from '../../../common/src/util/debug';
-import { selectProvider, setIBEDummyPaymentBankOn } from '../../../common/src/util/debugOptions';
+import { selectProvider } from '../../../common/src/util/debugOptions';
 import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchTrip } from '../../../common/src/rf_pages/start';
 import resultModule from '../../../common/src/rf_modules/resultModule';
@@ -79,7 +79,6 @@ test.before(async () => {
   await enableDebug();
   await acceptCookies();
   await selectProvider('IbeGDSDummy');
-  await setIBEDummyPaymentBankOn();
   await setProps(props);
   await closeHeaderUrgencyBanner();
 })('Step indicator not visible for seatmap when seatmap not available', async () => {
@@ -91,13 +90,25 @@ test.before(async () => {
   await selectTripButtonByIndex(0);
   // Traveler details page
   await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(1);
-  await t.expect(travelerDetailsModule.stepIndicatorNotVisited.count).eql(3);
+  await t.expect(travelerDetailsModule.stepIndicatorNotVisited.count).eql(2);
   await t
     .expect(travelerDetailsModule.stepIndicatorCurrent.innerText)
     .contains('Traveler information');
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
+  // Payment page
+  await t.expect(paymentModule.paymentContainer.visible).ok();
 
-  await t.debug();
+  await t.expect(paymentModule.stepIndicatorVisited.count).eql(2);
+  await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(1);
+  await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Payment');
+
+  await payWithCreditCard();
+  //  Order page
+  await waitForOrderPageToLoad();
+
+  await t.expect(paymentModule.stepIndicatorVisited.count).eql(3);
+  await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(0);
+  await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Confirmation');
 });
