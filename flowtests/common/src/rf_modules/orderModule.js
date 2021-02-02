@@ -78,6 +78,9 @@ export default {
   secondBoundTrainIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-bound-train-icon"]',
   ),
+  stepIndicatorCurrent: Selector('[data-testid="current-step"]'),
+  stepIndicatorNotVisited: Selector('[data-testid="not-visited-step"]'),
+  stepIndicatorVisited: Selector('[data-testid="visited-step"]'),
   ticketPrice: Selector('[class="cart-cartItem-price"]').nth(0),
   totalPrice: Selector('[data-testid="orderPage-totalPrice"]'),
   trainTripSecondBoundTrainSegmentIcon: Selector(

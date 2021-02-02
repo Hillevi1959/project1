@@ -160,6 +160,9 @@ export default {
   seatMapIcon: Selector('[data-testid="seatMap-ProductIcon"]'),
   shortConnectionNotification: Selector('[data-testid="short-connection-time-notification"]'),
   smallIcons: Selector('[data-testid="expansion-panel-flight"] svg'),
+  stepIndicatorCurrent: Selector('[data-testid="current-step"]'),
+  stepIndicatorNotVisited: Selector('[data-testid="not-visited-step"]'),
+  stepIndicatorVisited: Selector('[data-testid="visited-step"]'),
   supportPremiumIcon: Selector('[data-testid="servicePackage-ProductIcon"]'),
   toggleCartButton: Selector('[data-testid="cart-toggleButton-button"]'),
   trainSegmentIcon: Selector(
