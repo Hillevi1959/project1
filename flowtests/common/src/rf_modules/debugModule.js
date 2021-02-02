@@ -7,5 +7,7 @@ export default {
   debugFilterButton: Selector('[data-testid="resultPage-debugTools-toggleButton-button"]'),
   debugFilterContent: Selector('[data-testid="resultPage-debugFilters-content"]'),
   enableDebug: Selector('#debug-link'),
+  resultPageDebugBarClosed: Selector('.closed'),
+  resultPageDebugBarOpen: Selector('.open'),
   toggleDevBarButton: Selector('[data-testid="toggleDevBar"]'),
 };

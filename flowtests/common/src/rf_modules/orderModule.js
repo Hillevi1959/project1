@@ -79,6 +79,9 @@ export default {
   selfTransferText: Selector('[data-testid="self-transfer-content"]'),
   shortConnectionNotification: Selector('[data-testid="short-connection-time-notification"]'),
   showBaggageButton: Selector('[data-testid="order-show-baggage-info-button"]'),
+  stepIndicatorCurrent: Selector('[data-testid="current-step"]'),
+  stepIndicatorNotVisited: Selector('[data-testid="not-visited-step"]'),
+  stepIndicatorVisited: Selector('[data-testid="visited-step"]'),
   ticketPrice: Selector('[class="cart-cartItem-price"]').nth(0),
   totalPrice: Selector('[data-testid="orderPage-totalPrice"]'),
   trainTripSecondBoundTrainSegmentIcon: Selector(
