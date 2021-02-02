@@ -45,13 +45,6 @@ import {
 } from '../../../common/src/util/selfServiceReboking';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
-let url = getSiteUrl('gotogate-uk', config.host);
-let props = {
-  'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'adyen',
-  'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
-  'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
-};
 const travelers = addNumberToTraveler([
   getFirstAdult(),
   getSecondAdult(),
@@ -63,7 +56,16 @@ const numberOfChildren = 1;
 const origin = 'Stockholm';
 const destination = 'London';
 
-fixture('Verify self service rebooking flow').beforeEach(async () => {
+fixture('Verify self service rebooking flow');
+
+test.before(async () => {
+  const url = getSiteUrl('gotogate-uk', config.host);
+  const props = {
+    'Payment.FraudAssessment.Accertify.ShadowMode': true,
+    'Payment.provider.creditcard': 'adyen',
+    'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
+    'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
+  };
   await updateDiscountCampaignForCovid19('');
   await t.navigateTo(url);
   await enableDebug();
@@ -71,12 +73,11 @@ fixture('Verify self service rebooking flow').beforeEach(async () => {
   await setProps(props);
   await acceptCookies();
   await closeHeaderUrgencyBanner();
-});
-
-test('Create order in self service rebooking flow', async () => {
+})('Create order in self service rebooking flow', async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
+    const url = getSiteUrl('gotogate-uk', config.host);
     const dummyPaymentFalse = false;
     await createOrderAndDiscountCode('https://gotogate-uk', 'gotogate-uk-edvin', dummyPaymentFalse);
     console.log('Voucher code: ', getDiscountCode());
@@ -194,9 +195,9 @@ test('Create order in self service rebooking flow', async () => {
 });
 
 test.before(async () => {
-  url = getSiteUrl('supersaver-se', config.host);
+  const url = getSiteUrl('supersaver-se', config.host);
   const dummyPaymentTrue = true;
-  props = {
+  const props = {
     'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
     'Payment.ForceShowAddressFields.Carriers': '',
@@ -219,6 +220,7 @@ test.before(async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
+    const url = getSiteUrl('supersaver-se', config.host);
     const newTravelers = addNumberToTraveler([
       getThirdAdult(),
       getFourthAdult(),
