@@ -15,12 +15,12 @@ import {
   getFirstAdult,
   getSecondAdult,
 } from '../../../common/src/util/travelerData';
-import { checkPaymentConditions } from '../../../common/src/rf_pages/payment';
-import paymentModule from '../../../common/src/rf_modules/paymentModule';
-import getPaymentData from '../../../common/src/util/paymentData';
-import { scrollToElement } from '../../../common/src/util/clientFunction';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
+import {
+  enterPayPalCustomerInfo,
+  logInPayPalUser,
+} from '../../../common/src/rf_pages/payPalPayment';
 
 const url = getSiteUrl('supersaver-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -52,29 +52,8 @@ test('Search trip, book all products, pay with PayPal', async () => {
   await bookFlight();
   await closeSeatMapModal();
 
-  const user = 'sb-9pdvk3524496@personal.example.com';
-  const pwd = 'g!558@WI';
-  await t
-    .expect(paymentModule.payPalLabel.visible)
-    .ok()
-    .click(paymentModule.payPalLabel);
-  const paymentData = getPaymentData();
-  await scrollToElement('[data-testid="paypal-payment-form"] [data-testid="firstName-input"]');
-  await t.typeText(paymentModule.payPalFirstName, paymentData.firstName);
-  await t.typeText(paymentModule.payPalLastName, paymentData.lastName);
-  await scrollToElement('[data-testid="paypal-payment-form"] [data-testid="street-input"]');
-  await t.typeText(paymentModule.payPalStreet, paymentData.street);
-  await t.typeText(paymentModule.payPalZipcode, paymentData.zipCode);
-  await scrollToElement('[data-testid="paypal-payment-form"] [data-testid="city-input"]');
-  await t.typeText(paymentModule.payPalCity, paymentData.city);
-  await checkPaymentConditions();
-  await t.click(paymentModule.payButton);
-  await t.expect(paymentModule.payPalEmailLogin.visible).ok();
-  await t.typeText(paymentModule.payPalEmailLogin, user).click(paymentModule.payPalNextButton);
-  await t.expect(paymentModule.payPalPassword.visible).ok();
-  await t.typeText(paymentModule.payPalPassword, pwd).click(paymentModule.payPalLoginButton);
-  await t.expect(paymentModule.payPalPaymentOptions.visible).ok();
-  await t.click(paymentModule.payPalPayButton);
+  await enterPayPalCustomerInfo();
+  await logInPayPalUser();
 
   await waitForOrderPageToLoad();
   // Text will be changed later and applicable to PayPal
