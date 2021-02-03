@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider } from '../../../common/src/util/debugOptions';
@@ -19,8 +19,6 @@ import { checkPaymentConditions } from '../../../common/src/rf_pages/payment';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import getPaymentData from '../../../common/src/util/paymentData';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
-import edvinModule from '../../../common/src/rf_modules/edvinModule';
-import { getWindowWidth } from '../../../common/src/util/device';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 
@@ -30,53 +28,10 @@ const props = {
   'payment.provider.wallet': 'Checkout',
   'Payment.Wallets': 'PayPal',
   'Payment.ForceShowAddressFields.Carriers': '',
-  'Payment.provider.wallet.PayPal': 'Checkout', // finns inte definierad
-  'Payment.PayPal.NameFields.Enabled': true, // finns inte definierad ännu
+  'Payment.provider.wallet.PayPal': 'Checkout',
+  'Payment.PayPal.NameFields.Enabled': true,
 };
 
-/* This is a temporary solution to creat props in Edvin until they are
-created in production and can be set in test as session properties */
-async function createPaypalPropsInEdvin() {
-  const keyName = Selector('[name="keyName"]');
-  const keyValue = Selector('[name="value"]');
-  const addPropCheckbox = Selector('[name="save"]');
-  const searchButton = Selector('[name="__submit"]');
-  const groupNameInput = Selector('[name="groupName"]');
-  const selectAllCheckboxes = Selector(
-    '[title="Click to Select/Deselect all Checkboxes. Mouse over the Checkboxes with SHIFT to select, Mouse over and ALT to deselect."]',
-  );
-  const reloadImmediatelyButton = Selector('[name="formButton"]');
-  const cacheTriggerAlert = Selector('[role="alert"]');
-  await t
-    .navigateTo(`http://supersaver-uk${config.host}/edvin`)
-    .typeText(edvinModule.userNameInput, 'autotest')
-    .typeText(edvinModule.passwordInput, 'gurkburk')
-    .click(edvinModule.logInButton)
-    .navigateTo(
-      `http://supersaver-uk${config.host}/edvin/dbproperty/DBPropertyValue.list.action?_s=true&search=false`,
-    );
-  await t
-    .typeText(keyName, 'Payment.provider.wallet.PayPal')
-    .typeText(keyValue, 'Checkout')
-    .typeText(groupNameInput, 'ibe')
-    .click(addPropCheckbox)
-    .click(searchButton);
-  await t
-    .click(keyName)
-    .pressKey('ctrl+a delete')
-    .typeText(keyName, 'Payment.PayPal.NameFields.Enabled')
-    .click(keyValue())
-    .pressKey('ctrl+a delete')
-    .typeText(keyValue, 'true')
-    .click(addPropCheckbox)
-    .click(searchButton);
-  await t.navigateTo(
-    `http://supersaver-uk${config.host}/edvin/cache/PendingCacheTriggers.list.action?_s=true`,
-  );
-  if (!(await cacheTriggerAlert.visible)) {
-    await t.click(selectAllCheckboxes).click(reloadImmediatelyButton);
-  }
-}
 // The payment service provider is set up for Paypal on supersaver-uk
 fixture('Pay order with PayPal')
   .page(url)
@@ -85,15 +40,11 @@ fixture('Pay order with PayPal')
     await acceptCookies();
     await selectProvider('IbeGDSDummy');
     await closeHeaderUrgencyBanner();
-    await createPaypalPropsInEdvin();
     await setProps(props);
   });
 
 test('Search trip, book all products, pay with PayPal', async () => {
   const numberOfAdults = 2;
-  if ((await getWindowWidth()) < 970) {
-    return console.warn('This test is not run on mobile or tablet device');
-  }
   await t.navigateTo(url);
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
