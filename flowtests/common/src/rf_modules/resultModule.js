@@ -16,8 +16,8 @@ export default {
   departureDate: Selector('[data-testid="singleBound.departureDate-input"]'),
   discountInformation: Selector('[data-testid="payment-method-discount-info"]'),
   filterAirlineLufthansaCheckbox: Selector('[for="airlines-LH"]'),
-  filterAirlineMauritiusCheckbox: Selector('[for="airlines-MK"]'),
   filterAirlineSasCheckbox: Selector('[for="airlines-SK"]'),
+  filterAirlineTurkishCheckbox: Selector('[for="airlines-TK"]'),
   filterAirlineToggleButton: Selector(
     '[data-testid="resultPage-filterHeader-AIRLINESToggleButton-button"]',
   ),

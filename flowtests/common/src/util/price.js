@@ -6,7 +6,7 @@ export const getPriceFromText = (priceText, currencyText = ' SEK') => {
 };
 
 export const getVoucherPricePound = priceText => {
-  const stringPrice = priceText.substring(priceText.indexOf('£') + 1, priceText.indexOf(')'));
+  const stringPrice = priceText.substring(priceText.indexOf('£') + 1);
   return parseFloat(stringPrice.replace(',', ''), 10);
 };
 
