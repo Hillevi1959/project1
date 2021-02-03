@@ -22,7 +22,7 @@ export async function enterPayPalCustomerInfo() {
   await t.click(paymentModule.payButton);
 }
 
-export async function logInPayPalUser() {
+export async function logInAndPayWithPayPal() {
   const user = 'sb-9pdvk3524496@personal.example.com';
   const pwd = 'g!558@WI';
 

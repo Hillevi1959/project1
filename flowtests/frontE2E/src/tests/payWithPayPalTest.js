@@ -19,7 +19,7 @@ import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import {
   enterPayPalCustomerInfo,
-  logInPayPalUser,
+  logInAndPayWithPayPal,
 } from '../../../common/src/rf_pages/payPalPayment';
 
 const url = getSiteUrl('supersaver-uk', config.host);
@@ -53,7 +53,7 @@ test('Search trip, book all products, pay with PayPal', async () => {
   await closeSeatMapModal();
 
   await enterPayPalCustomerInfo();
-  await logInPayPalUser();
+  await logInAndPayWithPayPal();
 
   await waitForOrderPageToLoad();
   // Text will be changed later and applicable to PayPal
