@@ -63,11 +63,15 @@ export default {
   ),
   receiptInformation: Selector('[data-testid="orderPage-ReceiptInformation-section"]'),
   seatMapProduct: Selector('[data-testid="cart-product-seatMap"]'),
+  secondBoundTrainIcon: Selector(
+    '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-bound-train-icon"]',
+  ),
   seeAllProductsButton: Selector('[data-testid="order-postBooking-link"]'),
   selfServiceRebookingImage: Selector('[data-testid="image-panel"]'),
   selfServiceRebookingInfoText: Selector(
     '[data-testid="processingOrderPage-description"] p:nth-child(1)',
   ),
+  selfServiceRebookingTitle: Selector('[data-testid="processingOrderPage-title"]'),
   selfTransferInformationText: Selector(
     '[data-testid="orderPage-self-guarantee-info-TripNotification"]',
   ),
@@ -75,9 +79,6 @@ export default {
   selfTransferText: Selector('[data-testid="self-transfer-content"]'),
   shortConnectionNotification: Selector('[data-testid="short-connection-time-notification"]'),
   showBaggageButton: Selector('[data-testid="order-show-baggage-info-button"]'),
-  secondBoundTrainIcon: Selector(
-    '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-bound-train-icon"]',
-  ),
   stepIndicatorCurrent: Selector('[data-testid="current-step"]'),
   stepIndicatorNotVisited: Selector('[data-testid="not-visited-step"]'),
   stepIndicatorVisited: Selector('[data-testid="visited-step"]'),

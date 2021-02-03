@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getNumberOfElements, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider, setIBEDummyPaymentBankOn } from '../../../common/src/util/debugOptions';
@@ -26,7 +26,6 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import {
-  acceptPriceChange,
   addPaymentData,
   checkPaymentConditions,
   payWithDummyBank,
@@ -42,16 +41,10 @@ import {
 import {
   createOrderAndDiscountCode,
   prepareSelfServiceRebookingFlow,
+  updateDiscountCampaignForCovid19,
 } from '../../../common/src/util/selfServiceReboking';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 
-let url = getSiteUrl('gotogate-uk', config.host);
-let props = {
-  'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'Checkout',
-  'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
-  'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
-};
 const travelers = addNumberToTraveler([
   getFirstAdult(),
   getSecondAdult(),
@@ -60,23 +53,31 @@ const travelers = addNumberToTraveler([
 ]);
 const numberOfAdults = 2;
 const numberOfChildren = 1;
-const origin = 'Mauritius';
-const destination = 'New Delhi';
+const origin = 'Stockholm';
+const destination = 'London';
 
-fixture('Verify self service rebooking flow')
-  .page(url)
-  .beforeEach(async () => {
-    await enableDebug();
-    await selectProvider('Sabre');
-    await setProps(props);
-    await acceptCookies();
-    await closeHeaderUrgencyBanner();
-  });
+fixture('Verify self service rebooking flow');
 
-test.skip('Create order in self service rebooking flow', async () => {
+test.before(async () => {
+  const url = getSiteUrl('gotogate-uk', config.host);
+  const props = {
+    'Payment.FraudAssessment.Accertify.ShadowMode': true,
+    'Payment.provider.creditcard': 'adyen',
+    'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
+    'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
+  };
+  await updateDiscountCampaignForCovid19('');
+  await t.navigateTo(url);
+  await enableDebug();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await acceptCookies();
+  await closeHeaderUrgencyBanner();
+})('Create order in self service rebooking flow', async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
+    const url = getSiteUrl('gotogate-uk', config.host);
     const dummyPaymentFalse = false;
     await createOrderAndDiscountCode('https://gotogate-uk', 'gotogate-uk-edvin', dummyPaymentFalse);
     console.log('Voucher code: ', getDiscountCode());
@@ -95,7 +96,7 @@ test.skip('Create order in self service rebooking flow', async () => {
     await t.expect(startModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
     await t.expect(startModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
 
-    await makeSearch('one way trip', origin, destination, 20);
+    await makeSearch('one way trip', origin, destination, [20]);
 
     // Verify result page
     await t.expect(resultModule.resultPage.visible).ok('', { timeout: 20000 });
@@ -175,80 +176,73 @@ test.skip('Create order in self service rebooking flow', async () => {
     await t.click(paymentModule.cardLabel);
     await addPaymentData();
 
-    await t.expect(paymentModule.discountCodeSuccess.visible).ok();
+    await t.expect(paymentModule.discountCodeText.innerText).contains('Your discount voucher');
+    await t.expect(paymentModule.discountCodeText.innerText).contains('£-10.00');
     await t.expect(paymentModule.cartDiscountCode.innerText).contains('Your discount voucher');
+    await t.expect(paymentModule.cartDiscountCode.innerText).contains('£-10.00');
 
     await checkPaymentConditions();
     await t.click(paymentModule.payButton);
-    await acceptPriceChange();
 
     await t.expect(orderModule.selfServiceRebookingImage.visible).ok('', { timeout: 20000 });
+    await t
+      .expect(orderModule.selfServiceRebookingTitle.innerText)
+      .contains(travelers[0].firstName);
     const infoText =
       'Your rebooking request is being processed. Please note that this may take up to 24 hours.';
     await t.expect(orderModule.selfServiceRebookingInfoText.innerText).contains(infoText);
-    console.log('Create order in self service rebooking flow PASSED!');
   }
 });
 
-test.skip('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
-  url = getSiteUrl('supersaver-se', config.host);
-  const newTravelers = addNumberToTraveler([
-    getThirdAdult(),
-    getFourthAdult(),
-    getSecondChild(),
-    getSecondInfant(),
-  ]);
+test.before(async () => {
+  const url = getSiteUrl('supersaver-se', config.host);
   const dummyPaymentTrue = true;
-  props = {
+  const props = {
     'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
+    'Payment.ForceShowAddressFields.Carriers': '',
     'Payment.RemoveAdressForBank.Enable': false,
   };
+  await updateDiscountCampaignForCovid19('TK');
+  await t.navigateTo(url);
+  await enableDebug();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await setIBEDummyPaymentBankOn();
+  await acceptCookies();
+  await closeHeaderUrgencyBanner();
+  await createOrderAndDiscountCode(
+    'https://supersaver-se',
+    'supersaver-se-edvin',
+    dummyPaymentTrue,
+  );
+})('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
   if ((await getWindowWidth()) < 970) {
     console.warn('This test is not run on mobile or tablet device');
   } else {
-    await t.navigateTo(url);
-    await enableDebug();
-    await selectProvider('Sabre');
-    await setProps(props);
-    await setIBEDummyPaymentBankOn();
-    await acceptCookies();
-    await closeHeaderUrgencyBanner();
-    await createOrderAndDiscountCode(
-      'https://supersaver-se',
-      'supersaver-se-edvin',
-      dummyPaymentTrue,
-    );
+    const url = getSiteUrl('supersaver-se', config.host);
+    const newTravelers = addNumberToTraveler([
+      getThirdAdult(),
+      getFourthAdult(),
+      getSecondChild(),
+      getSecondInfant(),
+    ]);
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
     await prepareSelfServiceRebookingFlow(url);
-    await makeSearch('one way trip', origin, destination, 20);
+    await makeSearch('one way trip', origin, destination, [20]);
 
-    let tripNumber = 0;
-    await t.expect(resultModule.resultPage.visible).ok('', { timeout: 5000 });
-    // Select trip without voucher tag
-    while (
-      (await getNumberOfElements(
-        `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="valid-with-voucher-tag"]`,
-      )) === 1
-    ) {
-      tripNumber += 1;
-      if (tripNumber === 10) {
-        await t.click(resultModule.searchFormButton);
-        await t.click(resultModule.departureDate);
-        await t.click(Selector('.DayPicker-Day').nth(27));
-        await t.click(resultModule.searchFlight);
-        tripNumber = 0;
-      }
-    }
-    const tripWithoutVoucher = Selector(
-      `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="resultPage-book-button"]`,
-    ).nth(0);
-    await t.click(tripWithoutVoucher);
-    // Verify TD-page
+    await t
+      .click(resultModule.toggleFilterButton)
+      .click(resultModule.clearAirlines)
+      .click(resultModule.filterAirlineSasCheckbox)
+      .click(resultModule.toggleFilterButton);
+    await selectTripButtonByIndex(0);
+    await t.debug();
+
     await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
 
-    await addContact(travelers[0], true);
+    await addContact(travelers[0]);
     for (const traveler of newTravelers) {
       await addTraveler(traveler);
     }
@@ -269,7 +263,6 @@ test.skip('Choose trip that does not match the voucher, verify message, add new 
 
     await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
     await payWithDummyBank();
-    await acceptPriceChange();
     // Verify order page
     await waitForOrderPageToLoad();
 
@@ -283,5 +276,4 @@ test.skip('Choose trip that does not match the voucher, verify message, add new 
         .contains(`${newTravelers[i].firstName} ${newTravelers[i].lastName}`);
     }
   }
-  console.log('Choose trip that does not match the voucher flow PASSED!');
 });
