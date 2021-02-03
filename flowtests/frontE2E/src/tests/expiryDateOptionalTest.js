@@ -26,7 +26,6 @@ import orderModule from '../../../common/src/rf_modules/orderModule';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 
-const url = getSiteUrl('gotogate-ru', config.host);
 const travelers = addNumberToTraveler([
   getFirstAdult(),
   getSecondAdult(),
@@ -36,27 +35,27 @@ const travelers = addNumberToTraveler([
 const numberOfAdults = 2;
 const numberOfChildren = 1;
 const numberOfInfants = 1;
-const props = {
-  'IbeClient.TravelerDetails.Modal': 'SEATMAP',
-  'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
-  'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
-  'Payment.FraudAssessment.Accertify.ShadowMode': true,
-  'Payment.provider.creditcard': 'Checkout',
-  'GDSSecureFlightConfig.TravelDocumentExpiryDateOptional.OriginDestinations':
-    'RU-RU, RU-BY, RU-KZ',
-};
 
-fixture('Optional expirydate for russian market')
-  .page(url)
-  .beforeEach(async () => {
-    await enableDebug();
-    await acceptCookies();
-    await selectProvider('IbeGDSDummy');
-    await setProps(props);
-    await closeHeaderUrgencyBanner();
-  });
+fixture('Verify expirydate for passport for different markets');
 
-test('Expiry date for passport is optional', async () => {
+test.before(async () => {
+  const url = getSiteUrl('gotogate-ru', config.host);
+  const props = {
+    'IbeClient.TravelerDetails.Modal': 'SEATMAP',
+    'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
+    'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
+    'Payment.FraudAssessment.Accertify.ShadowMode': true,
+    'Payment.provider.creditcard': 'Checkout',
+    'GDSSecureFlightConfig.TravelDocumentExpiryDateOptional.OriginDestinations':
+      'RU-RU, RU-BY, RU-KZ',
+  };
+  await t.navigateTo(url);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+})('Expiry date for passport is optional', async () => {
   await t.click(startModule.directFlightBox);
   await searchAndSelectTrip(
     numberOfAdults,
@@ -83,7 +82,24 @@ test('Expiry date for passport is optional', async () => {
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
 });
 
-test('Expiry date for passport is required', async () => {
+test.before(async () => {
+  const url = getSiteUrl('gotogate-ru', config.host);
+  const props = {
+    'IbeClient.TravelerDetails.Modal': 'SEATMAP',
+    'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
+    'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
+    'Payment.FraudAssessment.Accertify.ShadowMode': true,
+    'Payment.provider.creditcard': 'Checkout',
+    'GDSSecureFlightConfig.TravelDocumentExpiryDateOptional.OriginDestinations':
+      'RU-RU, RU-BY, RU-KZ',
+  };
+  await t.navigateTo(url);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+})('Expiry date for passport is required', async () => {
   await t.click(startModule.directFlightBox);
   await searchAndSelectTrip(
     numberOfAdults,
@@ -115,7 +131,7 @@ test('Expiry date for passport is required', async () => {
 });
 
 test.before(async () => {
-  const propsUk = {
+  const props = {
     'IbeClient.TravelerDetails.Modal': 'SEATMAP',
     'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
     'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
@@ -123,12 +139,12 @@ test.before(async () => {
     'Payment.provider.creditcard': 'Checkout',
     'GDSSecureFlightConfig.PassportRequiredWhenEnteringDOB': true,
   };
-  const urlUk = getSiteUrl('gotogate-uk', config.host);
-  await t.navigateTo(urlUk);
+  const url = getSiteUrl('gotogate-uk', config.host);
+  await t.navigateTo(url);
   await enableDebug();
   await acceptCookies();
   await selectProvider('IbeGDSDummy');
-  await setProps(propsUk);
+  await setProps(props);
   await closeHeaderUrgencyBanner();
 })('Expiry date for passport is required on other market', async () => {
   await searchAndSelectTrip(
@@ -161,7 +177,7 @@ test.before(async () => {
 });
 
 test.before(async () => {
-  const propsUk = {
+  const props = {
     'IbeClient.TravelerDetails.Modal': 'SEATMAP',
     'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
     'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
@@ -169,12 +185,12 @@ test.before(async () => {
     'Payment.provider.creditcard': 'Checkout',
     'GDSSecureFlightConfig.PassportRequiredWhenEnteringDOB': true,
   };
-  const urlUk = getSiteUrl('gotogate-uk', config.host);
-  await t.navigateTo(urlUk);
+  const url = getSiteUrl('gotogate-uk', config.host);
+  await t.navigateTo(url);
   await enableDebug();
   await acceptCookies();
   await selectProvider('IbeGDSDummy');
-  await setProps(propsUk);
+  await setProps(props);
   await closeHeaderUrgencyBanner();
 })('Passport fields not visible on trip within Europe', async () => {
   await searchAndSelectTrip(
