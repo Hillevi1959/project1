@@ -88,8 +88,6 @@ test.before(async () => {
   // Result page
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London', 'ECONOMY', [11, 24]);
 
-  await t.debug();
-
   await t.expect(resultModule.resultPage.visible).ok();
   await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
   await t.expect(resultModule.stepIndicatorNotVisited.count).eql(4);
