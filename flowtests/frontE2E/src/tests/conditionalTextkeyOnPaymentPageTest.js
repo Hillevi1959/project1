@@ -13,7 +13,6 @@ import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
 import { isMobile, isTablet } from '../../../common/src/util/device';
 
-const url = getSiteUrl('gotogate-de', config.host);
 const travelers = addNumberToTraveler([getFirstAdult()]);
 const props = {
   'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
@@ -22,31 +21,24 @@ const props = {
   'Payment.RemoveAdressForBank.Enable': false,
 };
 const numberOfAdults = 1;
-const numberOfInfants = 0;
-const masterCardNumber = '5555 4444 3333 1111';
-const visaCardNumber = '4111 1111 1111 1111';
 
-fixture('Conditional textkey on payment page')
-  .page(url)
-  .beforeEach(async () => {
-    await enableDebug();
-    await acceptCookies();
-    await selectProvider('IbeGDSDummy');
-    await setProps(props);
-    await closeHeaderUrgencyBanner();
-  });
+fixture('Conditional textkey on payment page');
 
-test('Verify fee and no fee text on payment page', async () => {
-  await searchAndSelectTrip(
-    numberOfAdults,
-    0,
-    numberOfInfants,
-    'return trip',
-    'Stockholm',
-    'London',
-    'ECONOMY',
-    [11, 24],
-  );
+test.before(async () => {
+  const url = getSiteUrl('gotogate-de', config.host);
+  await t.navigateTo(url);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+})('Verify fee and no fee text on payment page', async () => {
+  const masterCardNumber = '5555 4444 3333 1111';
+  const visaCardNumber = '4111 1111 1111 1111';
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
@@ -90,16 +82,10 @@ test.before(async () => {
   await setProps(props);
   await closeHeaderUrgencyBanner();
 })('Verify discount text for bank option', async () => {
-  await searchAndSelectTrip(
-    numberOfAdults,
-    0,
-    numberOfInfants,
-    'return trip',
-    'Stockholm',
-    'London',
-    'ECONOMY',
-    [11, 24],
-  );
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'Stockholm', 'London', 'ECONOMY', [
+    11,
+    24,
+  ]);
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
