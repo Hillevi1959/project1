@@ -240,7 +240,6 @@ test.before(async () => {
       .click(resultModule.filterAirlineSasCheckbox)
       .click(resultModule.toggleFilterButton);
     await selectTripButtonByIndex(0);
-    await t.debug();
 
     await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
 
