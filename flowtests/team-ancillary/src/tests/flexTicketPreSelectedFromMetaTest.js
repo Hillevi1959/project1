@@ -4,6 +4,8 @@ import enableDebug from '../../../common/src/util/debug';
 import setProps from '../../../common/src/util/props';
 import { getTripFlexTicket } from '../util/metaTrips';
 import travelerModule from '../../../common/src/rf_modules/travelerDetailsModule';
+import resultModule from '../../../common/src/rf_modules/resultModule';
+import { selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import config from './testdata.json';
 
 const url = getSiteUrl('SE-meta', config.host);
@@ -21,7 +23,10 @@ fixture('Flex ticket preselected from meta')
     await t.navigateTo(`${offerUrl}&flexticket=1`);
   });
 
-test.skip('Traveler details page is displayed in Responsive flow included flexticket', async () => {
+test('Flex ticket preselected from meta added to cart on traveler details', async () => {
+  await t.expect(resultModule.searchForm.exists).ok('', { timeout: 50000 });
+  await selectTripButtonByIndex(0);
+
   await t.expect(travelerModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
   await t.expect(travelerModule.flexibleTicketIcon.exists).ok();
 });
