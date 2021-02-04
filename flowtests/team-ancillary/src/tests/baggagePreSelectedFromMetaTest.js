@@ -6,6 +6,7 @@ import { getTrip, getTripBaggageIncluded } from '../util/metaTrips';
 
 import travelerModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import resultModule from '../../../common/src/rf_modules/resultModule';
+import { selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import config from './testdata.json';
 
 const url = getSiteUrl('SE-meta', config.host);
@@ -26,7 +27,7 @@ test('Checked baggage preselected from meta, added to cart on traveler details',
   await t.navigateTo(`${offerUrl}&baggageIncluded=1`);
 
   await t.expect(resultModule.searchForm.exists).ok('', { timeout: 50000 });
-  await t.click(resultModule.bookFlightButton);
+  await selectTripButtonByIndex(0);
 
   await t.expect(travelerModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
   await t.expect(travelerModule.checkInBaggageIcon.exists).ok();
