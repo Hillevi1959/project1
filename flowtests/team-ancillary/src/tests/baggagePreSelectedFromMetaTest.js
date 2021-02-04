@@ -39,7 +39,7 @@ test('Baggage preselected from meta, included checked baggage free of charge dis
   await t.navigateTo(`${offerUrl}&baggageIncluded=1`);
 
   await t.expect(resultModule.searchForm.exists).ok('', { timeout: 50000 });
-  await t.click(resultModule.bookFlightButton);
+  await selectTripButtonByIndex(0);
 
   await t.expect(travelerModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
   await t.expect(travelerModule.checkInBaggageContainer.exists).ok();
