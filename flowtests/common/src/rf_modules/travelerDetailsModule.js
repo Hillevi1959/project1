@@ -150,6 +150,8 @@ export default {
   contactForm: Selector('[data-testid="travelerDetails-contactForm"]'),
   contactPersonMail: Selector('[for="traveler-mail"]'),
   contactPersonPhone: Selector('[for="traveler-phone"]'),
+  documentTypeDropdown: travelerNr =>
+    Selector(`[data-testid="document-types-dropdown-${travelerNr}"]`),
   errorMessage: Selector('[data-testid="components-textInput"] > .message > [type="error"]'),
   expiryDateError: travelerNr =>
     Selector(
@@ -198,6 +200,8 @@ export default {
   mobileTravelPlanContainer: Selector('[data-testid="mobileTravelPlan-container"]'),
   mobileTravelPlanNoButton: Selector('[data-testid="mobileTravelPlan--false"]'),
   mobileTravelPlanYesButton: Selector('[data-testid="mobileTravelPlan--true"]'),
+  nationalityDropdown: travelerNr =>
+    Selector(`[data-testid="travelerDetails-TravelDocumentIssueCountry-${travelerNr}-dropdown"]`),
   onlineCheckinBaggageContainer: Selector('[data-testid="onlineCheckIn-container"]'),
   onlineCheckinNoButton: Selector('[data-testid="onlineCheckIn--false"]'),
   onlineCheckinYesButton: Selector('[data-testid="onlineCheckIn--true"]'),
