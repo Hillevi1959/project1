@@ -20,7 +20,6 @@ import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 
-const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
 const props = {
   'IbeClient.DisplayProgressSteps.Enabled': true,
@@ -30,21 +29,24 @@ const props = {
 };
 const numberOfAdults = 2;
 
-fixture('Verify step indicator in booking flow')
-  .page(url)
-  .beforeEach(async () => {
-    await enableDebug();
-    await acceptCookies();
-    await selectProvider('IbeGDSDummy');
-    await setProps(props);
-    await closeHeaderUrgencyBanner();
-  });
+fixture('Verify step indicator in booking flow');
 
-test('Verify step indicator in booking flow', async () => {
+test.before(async () => {
+  const url = getSiteUrl('gotogate-uk', config.host);
+  await t.navigateTo(url);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+})('Verify step indicator in booking flow', async () => {
   // Result page
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens', 'ECONOMY', [11, 24]);
 
-  await t.expect(resultModule.headerNavigationMenu.visible).ok();
+  await t.expect(resultModule.resultPage.visible).ok();
+  await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
+  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(4);
+  await t.expect(resultModule.stepIndicatorCurrent.innerText).contains('Flight Selection');
 
   await selectTripButtonByIndex(0);
   // Traveler details page
@@ -85,7 +87,10 @@ test.before(async () => {
   // Result page
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'London', 'ECONOMY', [11, 24]);
 
-  await t.expect(resultModule.headerNavigationMenu.visible).ok();
+  await t.expect(resultModule.resultPage.visible).ok();
+  await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
+  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(4);
+  await t.expect(resultModule.stepIndicatorCurrent.innerText).contains('Flight Selection');
 
   await selectTripButtonByIndex(0);
   // Traveler details page

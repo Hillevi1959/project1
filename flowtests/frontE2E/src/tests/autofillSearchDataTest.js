@@ -8,7 +8,6 @@ import { closeHeaderUrgencyBanner, searchTrip } from '../../../common/src/rf_pag
 import headerModule from '../../../common/src/rf_modules/headerModule';
 import startModule from '../../../common/src/rf_modules/startModule';
 import { addSearchDataResultPage } from '../../../common/src/rf_pages/result';
-import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
@@ -16,6 +15,7 @@ const props = {
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
+  'IbeClient.DisplayProgressSteps.Enabled': false,
 };
 
 fixture('Autofill search data on start page')
@@ -32,12 +32,7 @@ fixture('Autofill search data on start page')
 test('Autofill search data on start page', async () => {
   await searchTrip(1, 0, 0, 'return trip', 'STO', 'BER', 'ECONOMY', [11, 24]);
   await t.expect(resultModule.resultPage.visible).ok();
-  if ((await isMobile()) || (await isTablet())) {
-    await t.click(headerModule.flightMenuMobile);
-    await t.click(headerModule.flightSelectionMobile);
-  } else if (await isDesktop()) {
-    await t.click(headerModule.flightMenu);
-  }
+  await t.click(headerModule.logoHeader);
 
   await t
     .expect(startModule.startPageSearchForm.visible)
@@ -55,12 +50,7 @@ test('Autofill search data on start page', async () => {
   await t.click(startModule.searchFlight);
   await addSearchDataResultPage(numberOfAdults, 'GOT', 'PAR', 1, 1);
   await t.click(resultModule.searchFlight);
-  if ((await isMobile()) || (await isTablet())) {
-    await t.click(headerModule.flightMenuMobile);
-    await t.click(headerModule.flightSelectionMobile);
-  } else if (await isDesktop()) {
-    await t.click(headerModule.flightMenu);
-  }
+  await t.click(headerModule.logoHeader);
 
   await t
     .expect(startModule.startPageSearchForm.visible)

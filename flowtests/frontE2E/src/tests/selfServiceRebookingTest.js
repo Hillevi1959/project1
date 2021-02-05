@@ -87,6 +87,7 @@ test.before(async () => {
     const voucherMessageRow1 = 'Welcome! You are a few steps away from using your voucher.';
     const voucherMessageRow2 =
       'Some of your information is prefilled and cannot be changed. Please make sure to apply the voucher on the payment step.';
+    await t.expect(startModule.startPageSearchForm.visible).ok();
     await t.expect(startModule.voucherMessage1.innerText).contains(voucherMessageRow1);
     await t.expect(startModule.voucherMessage2.innerText).contains(voucherMessageRow2);
 
@@ -230,6 +231,7 @@ test.before(async () => {
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
     await prepareSelfServiceRebookingFlow(url);
+    await t.expect(startModule.startPageSearchForm.visible).ok();
     await makeSearch('one way trip', origin, destination, [20]);
 
     await t
@@ -238,7 +240,6 @@ test.before(async () => {
       .click(resultModule.filterAirlineSasCheckbox)
       .click(resultModule.toggleFilterButton);
     await selectTripButtonByIndex(0);
-    await t.debug();
 
     await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
 
