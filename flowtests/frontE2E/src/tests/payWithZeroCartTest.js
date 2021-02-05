@@ -115,6 +115,7 @@ test('Voucher does not cover price change', async () => {
   await bookFlight();
   await closeSeatMapModal();
   // Verify payment page
+  await t.expect(paymentModule.paymentContainer.visible).ok();
   await t.click(paymentModule.discountCodeToggleInput);
   await t.typeText(paymentModule.discountCodeInput, discountName);
   await t.click(paymentModule.discountCodeButton);
