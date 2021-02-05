@@ -19,8 +19,6 @@ export function getSiteUrl(site, host) {
       return `https://gotogate-us${host}/rf/start`;
     case 'gotogate-uk':
       return `https://gotogate-uk${host}/rf/start`;
-    case 'gotogate-ru':
-      return `https://gotogate-ru${host}/rf/start`;
     case 'gotogate-de':
       return `https://gotogate-de${host}/rf/start`;
     case 'test-uk':

@@ -39,7 +39,7 @@ const numberOfInfants = 1;
 fixture('Verify expirydate for passport for different markets');
 
 test.before(async () => {
-  const url = getSiteUrl('gotogate-ru', config.host);
+  const url = getSiteUrl('supersaver-ru', config.host);
   const props = {
     'IbeClient.TravelerDetails.Modal': 'SEATMAP',
     'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
@@ -71,19 +71,19 @@ test.before(async () => {
     await t.click(travelerDetailsModule.expiryDateInput(traveler.nr));
     await t.expect(travelerDetailsModule.expiryDateMessage(traveler.nr).innerText).eql('');
   }
-
-  await addTravelerInformation(travelers, 'DDMMYYYY');
-  await addPassportInformation(travelers, false, 'DDMMYYYY');
+  await addTravelerInformation(travelers, 'YYYYMMDD');
+  await addPassportInformation(travelers, false, 'YYYYMMDD');
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await bookFlight();
   await payWithCreditCard();
   await addCheckoutData();
   await waitForOrderPageToLoad();
+
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageUk);
 });
 
 test.before(async () => {
-  const url = getSiteUrl('gotogate-ru', config.host);
+  const url = getSiteUrl('supersaver-ru', config.host);
   const props = {
     'IbeClient.TravelerDetails.Modal': 'SEATMAP',
     'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
@@ -111,8 +111,8 @@ test.before(async () => {
     'ECONOMY',
     [11, 24],
   );
-  await addTravelerInformation(travelers, 'DDMMYYYY');
-  await addPassportInformation(travelers, false, 'DDMMYYYY');
+  await addTravelerInformation(travelers, 'YYYYMMDD');
+  await addPassportInformation(travelers, false, 'YYYYMMDD');
   await addNoExtraProducts(numberOfAdults + numberOfChildren);
   await bookFlight();
 
@@ -122,7 +122,7 @@ test.before(async () => {
       .contains('Your passport expiry date is required');
   }
 
-  await addPassportInformation(travelers, true, 'DDMMYYYY');
+  await addPassportInformation(travelers, true, 'YYYYMMDD');
   await bookFlight();
   await payWithCreditCard();
   await addCheckoutData();
