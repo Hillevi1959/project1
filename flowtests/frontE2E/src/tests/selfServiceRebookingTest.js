@@ -109,7 +109,7 @@ test.before(async () => {
       .contains(`Return Until ${validDate}`);
     await t.expect(startModule.ssrVoucherCriteria.nth(4).innerText).contains('Travel With SAS');
 
-    // Cannot be properly verified until WEB-4921 is solved
+    // This will cause the test to be unstable until bug WEB-4921 is solved
     await t.expect(startModule.ssrTravelers.nth(0).innerText).contains('Kalle Kula');
     await t.expect(startModule.ssrTravelers.nth(1).innerText).contains('Lotta Kula');
     await t.expect(startModule.ssrTravelers.nth(2).innerText).contains('Agnes Kula');
@@ -166,6 +166,7 @@ test.before(async () => {
     await t.expect(tripPriceFlex).gt(voucherPriceFlex);
 
     await selectTripButtonByIndex(0);
+
     // verify TD-page
     await addContact(travelers[0]);
 
@@ -198,6 +199,7 @@ test.before(async () => {
     await bookFlight();
     await closeSeatMapModal();
     // Verify payment page
+    await t.expect(paymentModule.paymentContainer.visible).ok();
     await t.click(paymentModule.cardLabel);
     await addPaymentData();
 
@@ -228,7 +230,7 @@ test.before(async () => {
     'Payment.ForceShowAddressFields.Carriers': '',
     'Payment.RemoveAdressForBank.Enable': false,
   };
-  await updateDiscountCampaignForCovid19('SK');
+  await updateDiscountCampaignForCovid19('SK', validDate);
   await t.navigateTo(url);
   await enableDebug();
   await selectProvider('IbeGDSDummy');
