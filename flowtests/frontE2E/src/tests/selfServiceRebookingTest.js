@@ -44,6 +44,7 @@ import {
   updateDiscountCampaignForCovid19,
 } from '../../../common/src/util/selfServiceReboking';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+import { getMonthInFuture } from '../../../common/src/util/dateFunction';
 
 const travelers = addNumberToTraveler([
   getFirstAdult(),
@@ -55,6 +56,7 @@ const numberOfAdults = 2;
 const numberOfChildren = 1;
 const origin = 'Stockholm';
 const destination = 'London';
+const validDate = getMonthInFuture(6);
 
 fixture('Verify self service rebooking flow');
 
@@ -66,7 +68,8 @@ test.before(async () => {
     'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
   };
-  await updateDiscountCampaignForCovid19('');
+
+  await updateDiscountCampaignForCovid19('SK', validDate);
   await t.navigateTo(url);
   await enableDebug();
   await selectProvider('IbeGDSDummy');
@@ -83,6 +86,7 @@ test.before(async () => {
     console.log('Voucher code: ', getDiscountCode());
     console.log('Voucher url: ', getDiscountCodeUrl());
     await prepareSelfServiceRebookingFlow(url);
+
     // Verify start page
     const voucherMessageRow1 = 'Welcome! You are a few steps away from using your voucher.';
     const voucherMessageRow2 =
@@ -90,6 +94,26 @@ test.before(async () => {
     await t.expect(startModule.startPageSearchForm.visible).ok();
     await t.expect(startModule.voucherMessage1.innerText).contains(voucherMessageRow1);
     await t.expect(startModule.voucherMessage2.innerText).contains(voucherMessageRow2);
+
+    await t.click(startModule.ssrReadMoreButton);
+
+    await t.expect(startModule.ssrVoucherCriteria.nth(0).innerText).contains('Flight');
+    await t
+      .expect(startModule.ssrVoucherCriteria.nth(1).innerText)
+      .contains(`Valid Until ${validDate}`);
+    await t
+      .expect(startModule.ssrVoucherCriteria.nth(2).innerText)
+      .contains(`Departure Until ${validDate}`);
+    await t
+      .expect(startModule.ssrVoucherCriteria.nth(3).innerText)
+      .contains(`Return Until ${validDate}`);
+    await t.expect(startModule.ssrVoucherCriteria.nth(4).innerText).contains('Travel With SAS');
+
+    // Cannot be properly verified until WEB-4921 is solved
+    await t.expect(startModule.ssrTravelers.nth(0).innerText).contains('Kalle Kula');
+    await t.expect(startModule.ssrTravelers.nth(1).innerText).contains('Lotta Kula');
+    await t.expect(startModule.ssrTravelers.nth(2).innerText).contains('Agnes Kula');
+    await t.expect(startModule.ssrTravelers.nth(3).innerText).contains('Lovisa Kula');
 
     await t.click(startModule.travelerDropDown);
 
@@ -204,7 +228,7 @@ test.before(async () => {
     'Payment.ForceShowAddressFields.Carriers': '',
     'Payment.RemoveAdressForBank.Enable': false,
   };
-  await updateDiscountCampaignForCovid19('TK');
+  await updateDiscountCampaignForCovid19('SK');
   await t.navigateTo(url);
   await enableDebug();
   await selectProvider('IbeGDSDummy');
@@ -237,7 +261,7 @@ test.before(async () => {
     await t
       .click(resultModule.toggleFilterButton)
       .click(resultModule.clearAirlines)
-      .click(resultModule.filterAirlineSasCheckbox)
+      .click(resultModule.filterAirlineTurkishCheckbox)
       .click(resultModule.toggleFilterButton);
     await selectTripButtonByIndex(0);
 

@@ -32,3 +32,12 @@ export function getExpectedDate(addedMonths, day, tripType) {
 
   return `${String(y)}-${m <= 9 ? `0${m}` : m}-${d <= 9 ? `0${d}` : d}`;
 }
+
+export function getMonthInFuture(addedMonths) {
+  const now = new Date();
+  const d = now.getDate();
+  const m = now.getMonth() + 1 + addedMonths;
+  const y = now.getFullYear();
+
+  return `${String(y)}-${m <= 9 ? `0${m}` : m}-${d <= 9 ? `0${d}` : d}`;
+}
