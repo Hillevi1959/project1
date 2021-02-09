@@ -17,9 +17,8 @@ import {
 } from '../../../common/src/rf_pages/travelerDetails';
 import {
   addBaggage,
-  addBaggageService,
-  addNoBaggageService,
   addNoExtraProducts,
+  addSupportPackagePremium,
 } from '../../../common/src/rf_pages/travelerDetailsProducts';
 import {
   addNumberToTraveler,
@@ -104,33 +103,37 @@ test('Edit traveler and extra products on review page and proceed to payment pag
   // Select trip
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
   await addTravelerInformation(travelers);
+
   await addNoExtraProducts(numberOfAdults);
   await addBaggage(numberOfAdults);
-  await addBaggageService();
   await clickProceedToReviewButton();
+
   // Edit travelers
   await t.click(reviewModule.editTravelersButton);
   await clearField(travelerDetailsModule.setLastName(travelers[1].nr));
   await t.typeText(travelerDetailsModule.setLastName(travelers[1].nr), newLastName);
   await clickProceedToReviewButton();
+
   // Edit extra products
-  await t.expect(reviewModule.baggageServiceChosen.visible).ok();
   await t.expect(reviewModule.checkinBaggageChosen.visible).ok();
   await t.expect(reviewModule.flexTicketNotChosen.visible).ok();
   await t.expect(reviewModule.seatMapNotChosen.visible).ok();
   await t.expect(reviewModule.supportPackageNotChosen.visible).ok();
+  await t.expect(reviewModule.cancellationProtectionNotChosen.visible).ok();
 
   await t.click(reviewModule.editExtraProductsButton);
-  await addNoBaggageService();
+  await addSupportPackagePremium();
   await clickProceedToReviewButton();
   await scrollToElement(
     '[data-testid="travelerDetails-reviewModal-extraProducts-flexibleTicket"] button',
   );
   await t.click(reviewModule.addFlexTicketButton);
 
-  await t.expect(reviewModule.baggageServiceProduct.visible).notOk();
   await t.expect(reviewModule.checkinBaggageChosen.visible).ok();
+  await t.expect(reviewModule.supportPackageChosen.visible).ok();
   await t.expect(reviewModule.flexTicketChosen.visible).ok();
+  await t.expect(reviewModule.seatMapNotChosen.visible).ok();
+  await t.expect(reviewModule.cancellationProtectionNotChosen.visible).ok();
 
   await scrollToElement('[data-testid="bookNowModal-button"]');
   await t.click(reviewModule.bookNowModalButton);
@@ -186,7 +189,8 @@ test('Edit traveler and extra products on review page and proceed to payment pag
   await t.expect(orderModule.orderInfoTrip.innerText).contains(airport1);
   await t.expect(orderModule.orderInfoTrip.innerText).contains(airport2);
   await t.expect(orderModule.travelerPriceInfo.innerText).contains(travelerVerificationString);
-  await t.expect(orderModule.allProductsInOrder.count).eql(2);
+  await t.expect(orderModule.allProductsInOrder.count).eql(3);
   await t.expect(orderModule.cartCheckinBaggageProduct.visible).ok();
   await t.expect(orderModule.cartFlexTicketProduct().visible).ok();
+  await t.expect(orderModule.cartSupportPackageProduct.visible).ok();
 });

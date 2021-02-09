@@ -4,12 +4,6 @@ export default {
   addFlexTicketButton: Selector(
     '[data-testid="travelerDetails-reviewModal-extraProducts-flexibleTicket"] button',
   ),
-  baggageServiceChosen: Selector(
-    '[data-testid="travelerDetails-reviewModal-selectedExtraProducts-section"] [data-testid="travelerDetails-reviewModal-extraProducts-baggageService"]',
-  ),
-  baggageServiceProduct: Selector(
-    '[data-testid="travelerDetails-reviewModal-extraProducts-baggageService"]',
-  ),
   bookNowModalButton: Selector('[data-testid="bookNowModal-button"]'),
   cancellationProtectionNotChosen: Selector(
     '[data-testid="travelerDetails-reviewModal-extraProducts-section"] [data-testid="travelerDetails-reviewModal-extraProducts-cancellationInsideEu"]',
@@ -23,7 +17,6 @@ export default {
   editTravelersButton: Selector(
     '[data-testid="travelerDetails-reviewModal-travelerInformation-editTravelers"]',
   ),
-  editTripButton: Selector('[data-testid="travelerDetails-reviewModal-flightInformation"]'),
   firstBoundPlaneIcon: Selector(
     '[data-testid="travelerDetails-reviewModal-flightInformation-bound-1"] [data-testid="tripDetails-bound-plane-icon"]',
   ),
@@ -36,6 +29,9 @@ export default {
   seatMapNotChosen: Selector(
     '[data-testid="travelerDetails-reviewModal-extraProducts-section"] [data-testid="travelerDetails-reviewModal-extraProducts-seatMap"]',
   ),
+  supportPackageChosen: Selector(
+    '[data-testid="travelerDetails-reviewModal-selectedExtraProducts-section"] [data-testid="travelerDetails-reviewModal-extraProducts-servicePackage"]',
+  ),
   supportPackageNotChosen: Selector(
     '[data-testid="travelerDetails-reviewModal-extraProducts-section"] [data-testid="travelerDetails-reviewModal-extraProducts-servicePackage"]',
   ),
@@ -46,9 +42,4 @@ export default {
     Selector(
       `[data-testid="travelerDetails-reviewModal-travelerInformation-traveler-${passengerNr}"]`,
     ),
-  travelers: Selector('[data-testid*="tdReviewInfo-traveler"]'),
-  tripInfoText: Selector(
-    '[data-testid="travelerDetails-reviewModal-flightInformation-bound-1-eventSegment-1"]',
-  ),
-  tripSegments: Selector('[data-testid*="-bound-"] [data-testid*="-segment-"]'),
 };
