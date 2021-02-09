@@ -51,7 +51,7 @@ fixture('Ancillary Bundle Overlay Verification')
     await closeHeaderUrgencyBanner();
   });
 
-test.skip('Book and pay for a trip with bundled products', async () => {
+test('Book and pay for a trip with bundled products', async () => {
   const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
   const numberOfAdults = 2;
   await selectProvider('IbeGDSDummy');
@@ -66,20 +66,25 @@ test.skip('Book and pay for a trip with bundled products', async () => {
 
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
+    await t.expect(travelerDetailsModule.cartAncillaryBundleMobile.visible).ok();
     await t
-      .expect(travelerDetailsModule.cartFlexTicketProductMobile.visible)
-      .ok()
-      .expect(travelerDetailsModule.cartCancellationInsideEuProductMobile.visible)
-      .ok();
+      .expect(travelerDetailsModule.cartAncillaryBundleMobile.innerText)
+      .contains('Ombokningsbar biljett')
+      .expect(travelerDetailsModule.cartAncillaryBundleMobile.innerText)
+      .contains('Avbokningsgaranti');
     await toggleCart();
   }
 
   if (await isDesktop()) {
+    await t.expect(travelerDetailsModule.travelerDetailsForm.exists).ok('', { timeout: 50000 });
+    await t.expect(travelerDetailsModule.cartAncillaryBundle.visible).ok();
     await t
-      .expect(travelerDetailsModule.cartFlexTicketProduct.visible)
-      .ok()
-      .expect(travelerDetailsModule.cartCancellationInsideEuProduct.visible)
-      .ok();
+      .expect(travelerDetailsModule.cartAncillaryBundle.innerText)
+      .contains('Flex Ticket Bundle:Flex +')
+      .expect(travelerDetailsModule.cartAncillaryBundle.innerText)
+      .contains('Ombokningsbar biljett')
+      .expect(travelerDetailsModule.cartAncillaryBundle.innerText)
+      .contains('Avbokningsgaranti');
   }
   await addTravelerInformation(travelers);
   await addNoExtraProducts(numberOfAdults);
@@ -88,24 +93,22 @@ test.skip('Book and pay for a trip with bundled products', async () => {
 
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
-    await t.expect(paymentModule.cartFlexTicketProductMobile.visible).ok();
-    await t.expect(paymentModule.cartCancellationInsideEuProductMobile.visible).ok();
+    await t.expect(paymentModule.cartAncillaryBundleMobile.visible).ok();
     await t
-      .expect(paymentModule.cartFlexTicketProductMobile.innerText)
-      .contains(`${numberOfAdults} Ombokningsbar biljett`)
-      .expect(paymentModule.cartCancellationInsideEuProductMobile.innerText)
-      .contains(`${numberOfAdults} Avbokningsgaranti`);
+      .expect(paymentModule.cartAncillaryBundleMobile.innerText)
+      .contains('Ombokningsbar biljett')
+      .expect(paymentModule.cartAncillaryBundleMobile.innerText)
+      .contains('Avbokningsgaranti');
     await toggleCart();
   }
   if (await isDesktop()) {
     await openCartIfClosed();
-    await t.expect(paymentModule.cartFlexTicketProduct.visible).ok();
-    await t.expect(paymentModule.cartCancellationInsideEuProduct.visible).ok();
+    await t.expect(paymentModule.cartAncillaryBundle.visible).ok();
     await t
-      .expect(paymentModule.cartFlexTicketProduct.innerText)
-      .contains(`${numberOfAdults} Ombokningsbar biljett`)
-      .expect(paymentModule.cartCancellationInsideEuProduct.innerText)
-      .contains(`${numberOfAdults} Avbokningsgaranti`);
+      .expect(paymentModule.cartAncillaryBundle.innerText)
+      .contains('Ombokningsbar biljett')
+      .expect(paymentModule.cartAncillaryBundle.innerText)
+      .contains('Avbokningsgaranti');
   }
 
   await payWithDummyBank();

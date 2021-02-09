@@ -41,6 +41,8 @@ export default {
   cardVisaElectron: Selector('[data-testid="payment-credit-cards"]').nth(2),
   cartAllInclusivePrice: Selector('[data-testid="cart-product-allInclusiveProtection-price"]'),
   cartAllInclusiveProduct: Selector('[data-testid="cart-product-allInclusiveProtection"]'),
+  cartAncillaryBundle: Selector('[data-testid="cart-bundle-1"]'),
+  cartAncillaryBundleMobile: Selector('[data-testid="cart-bundle-1-drawer"]'),
   cartCancellationInsideEuProduct: Selector('[data-testid="cart-product-cancellationInsideEu"]'),
   cartCancellationInsideEuProductMobile: Selector(
     '[data-testid="cart-product-cancellationInsideEu-drawer"]',
