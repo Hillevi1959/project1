@@ -68,6 +68,8 @@ export default {
   cartAllInclusivePrice: Selector(
     '[data-testid="cart-product-allInclusiveProtection-price-widget"]',
   ),
+  cartAncillaryBundle: Selector('[data-testid="cart-bundle-1-widget"]'),
+  cartAncillaryBundleMobile: Selector('[data-testid="cart-bundle-1-drawer"]'),
   cartBaggagePrice: Selector('[data-testid="cart-product-checkInBaggage-price-widget"]'),
   cartBaggagePriceMobile: Selector('[data-testid="cart-product-checkInBaggage-price-drawer"]'),
   cartBannerMobile: Selector('[data-testid="notification-bar-wrapper"]'),
