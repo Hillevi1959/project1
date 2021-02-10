@@ -1,27 +1,27 @@
 /* eslint-disable no-console */
 import { Selector, t } from 'testcafe';
-import { createVoucherInEdvin, getDiscountCodeUrl, logInToEdvin } from '../rf_pages/edvin';
 import config from '../../../frontE2E/testdata.json';
-import { makeSearch, selectTravelers } from '../rf_pages/start';
 import resultModule from '../rf_modules/resultModule';
-import { selectTripButtonByIndex } from '../rf_pages/result';
-import { addTravelerInformation, bookFlight } from '../rf_pages/travelerDetails';
-import { addNoExtraProducts } from '../rf_pages/travelerDetailsProducts';
-import { closeSeatMapModal } from '../rf_pages/seatMap';
-import { payWithCreditCard, payWithDummyBank } from '../rf_pages/payment';
-import { waitForOrderPageToLoad } from '../rf_pages/order';
 import orderModule from '../rf_modules/orderModule';
 import edvinModule from '../rf_modules/edvinModule';
-import { scrollToElement } from './clientFunction';
+import { scrollToElement } from '../util/clientFunction';
 import {
   addNumberToTraveler,
   getFirstAdult,
   getFirstChild,
   getFirstInfant,
   getSecondAdult,
-} from './travelerData';
-import { clearField, getSiteUrl } from './common';
-import enableDebug from './debug';
+} from '../util/travelerData';
+import { clearField, getSiteUrl } from '../util/common';
+import enableDebug from '../util/debug';
+import { createVoucherInEdvin, getDiscountCodeUrl, logInToEdvin } from './edvin';
+import { makeSearch, selectTravelers } from './start';
+import { selectTripButtonByIndex } from './result';
+import { addTravelerInformation, bookFlight } from './travelerDetails';
+import { addNoExtraProducts } from './travelerDetailsProducts';
+import { closeSeatMapModal } from './seatMap';
+import { payWithCreditCard, payWithDummyBank } from './payment';
+import { waitForOrderPageToLoad } from './order';
 
 export async function updateDiscountCampaignForCovid19(carrierCode, date) {
   // Selectors in Edvin for discount rules

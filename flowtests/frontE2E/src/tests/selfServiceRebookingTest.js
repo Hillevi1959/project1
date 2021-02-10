@@ -42,7 +42,7 @@ import {
   createOrderAndDiscountCode,
   prepareSelfServiceRebookingFlow,
   updateDiscountCampaignForCovid19,
-} from '../../../common/src/util/selfServiceReboking';
+} from '../../../common/src/rf_pages/selfServiceReboking';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import { getMonthInFuture } from '../../../common/src/util/dateFunction';
 
