@@ -21,7 +21,7 @@ import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
-const props = {
+let props = {
   'IbeClient.DisplayProgressSteps.Enabled': true,
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
@@ -105,6 +105,54 @@ test.before(async () => {
   // Payment page
   await t.expect(paymentModule.paymentContainer.visible).ok();
 
+  await t.expect(paymentModule.stepIndicatorVisited.count).eql(2);
+  await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(1);
+  await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Payment');
+
+  await payWithCreditCard();
+  //  Order page
+  await waitForOrderPageToLoad();
+
+  await t.expect(paymentModule.stepIndicatorVisited.count).eql(3);
+  await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(0);
+  await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Confirmation');
+});
+
+test.before(async () => {
+  props = {
+    'IbeClient.DisplayProgressSteps.Enabled': true,
+    'IbeClient.TravelerDetails.Modal': 'NONE',
+    'Payment.FraudAssessment.Accertify.ShadowMode': true,
+    'Payment.provider.creditcard': 'adyen',
+  };
+  const url = getSiteUrl('gotogate-uk', config.host);
+  await t.navigateTo(url);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+})('Step indicator for seat map not visible when seatMap is a product', async () => {
+  await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens', 'ECONOMY', [11, 24]);
+
+  await t.expect(resultModule.resultPage.visible).ok();
+  await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
+  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(3);
+  await t.expect(resultModule.stepIndicatorCurrent.innerText).contains('Flight Selection');
+
+  await selectTripButtonByIndex(0);
+  // Traveler details page
+  await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(1);
+  await t.expect(travelerDetailsModule.stepIndicatorNotVisited.count).eql(2);
+  await t
+    .expect(travelerDetailsModule.stepIndicatorCurrent.innerText)
+    .contains('Traveler information');
+
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults);
+  await bookFlight();
+
+  // Payment page
   await t.expect(paymentModule.stepIndicatorVisited.count).eql(2);
   await t.expect(paymentModule.stepIndicatorNotVisited.count).eql(1);
   await t.expect(paymentModule.stepIndicatorCurrent.innerText).contains('Payment');
