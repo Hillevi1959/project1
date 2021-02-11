@@ -159,10 +159,6 @@ export default {
     ),
   expiryDateInput: travelerNr =>
     Selector(`[data-testid="traveler-travel-document-expiry-date-${travelerNr}-input"]`),
-  expiryDateMessage: travelerNr =>
-    Selector(
-      `[data-testid="travelerDetails-traveler-${travelerNr}-section"] [data-testid="components-textInput"]:nth-child(3)`,
-    ),
   extraProductsContainer: Selector('[data-testid="travelerDetails-products"]'),
   firstBoundPlaneIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
