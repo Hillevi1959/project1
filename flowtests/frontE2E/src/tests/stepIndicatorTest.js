@@ -39,9 +39,9 @@ test.before(async () => {
   await selectProvider('IbeGDSDummy');
   await setProps(props);
   await closeHeaderUrgencyBanner();
-})('Verify step indicator in booking flow', async () => {
+})('Step indicator showing all steps', async () => {
   // Result page
-  await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens', 'ECONOMY', [11, 24]);
+  await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
 
   await t.expect(resultModule.resultPage.visible).ok();
   await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
@@ -89,7 +89,7 @@ test.before(async () => {
 
   await t.expect(resultModule.resultPage.visible).ok();
   await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
-  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(4);
+  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(3);
   await t.expect(resultModule.stepIndicatorCurrent.innerText).contains('Flight Selection');
 
   await selectTripButtonByIndex(0);
