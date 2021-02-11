@@ -67,6 +67,7 @@ test.before(async () => {
     'Payment.provider.creditcard': 'adyen',
     'Result.SelfServiceRebooking.ValidWithVoucherTag.Enable': true,
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
+    'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   };
 
   await updateDiscountCampaignForCovid19('SK', validDate);
@@ -230,6 +231,7 @@ test.before(async () => {
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
     'Payment.ForceShowAddressFields.Carriers': '',
     'Payment.RemoveAdressForBank.Enable': false,
+    'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   };
   await updateDiscountCampaignForCovid19('SK', validDate);
   await t.navigateTo(url);
