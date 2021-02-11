@@ -11,6 +11,7 @@ import config from './testdata.json';
 const url = getSiteUrl('SE-meta', config.host);
 const props = {
   'Feature.NewResponsive.Enabled': true,
+  'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
 };
 
 fixture('Flex ticket preselected from meta')
