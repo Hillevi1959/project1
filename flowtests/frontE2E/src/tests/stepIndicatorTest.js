@@ -89,7 +89,7 @@ test.before(async () => {
 
   await t.expect(resultModule.resultPage.visible).ok();
   await t.expect(resultModule.stepIndicatorVisited.count).eql(0);
-  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(3);
+  await t.expect(resultModule.stepIndicatorNotVisited.count).eql(4);
   await t.expect(resultModule.stepIndicatorCurrent.innerText).contains('Flight Selection');
 
   await selectTripButtonByIndex(0);
