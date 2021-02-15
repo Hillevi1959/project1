@@ -13,7 +13,7 @@ export function getFirstAdult() {
     city: 'Testcity',
     company: 'Test Company',
     vatNumber: '1234566788',
-    passPortNr: 'A12345678',
+    passPortNr: '44423409871',
   };
 }
 
@@ -25,7 +25,7 @@ export function getSecondAdult() {
     age: '44',
     baggage: false,
     ageType: 'vuxen',
-    passPortNr: 'B47328914',
+    passPortNr: '12347328914',
   };
 }
 
@@ -36,7 +36,7 @@ export function getThirdAdult() {
     gender: 'male',
     age: '60',
     baggage: true,
-    passPortNr: 'C30092775',
+    passPortNr: '4530092775',
   };
 }
 
@@ -58,7 +58,7 @@ export function getFirstChild() {
     age: '17',
     baggage: true,
     ageType: 'barn',
-    passPortNr: 'E56565699',
+    passPortNr: '9456565699',
   };
 }
 
@@ -80,7 +80,7 @@ export function getFirstInfant() {
     gender: 'female',
     age: '1',
     ageType: 'spädbarn',
-    passPortNr: 'F79001542',
+    passPortNr: '5579001542',
   };
 }
 
