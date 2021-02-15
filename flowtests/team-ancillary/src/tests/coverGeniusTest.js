@@ -33,6 +33,8 @@ const props = {
   'Feature.NewResponsive.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'Adyen',
+  'Payment.RemoveAdressForBank.Enable': true,
+  'Payment.ForceShowAddressFields.Carriers': '',
 };
 
 fixture('Cover Genius products verification')
