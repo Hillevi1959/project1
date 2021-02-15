@@ -21,7 +21,7 @@ import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
-let props = {
+const props = {
   'IbeClient.DisplayProgressSteps.Enabled': true,
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
@@ -119,7 +119,7 @@ test.before(async () => {
 });
 
 test.before(async () => {
-  props = {
+  const seatMapProps = {
     'IbeClient.DisplayProgressSteps.Enabled': true,
     'IbeClient.TravelerDetails.Modal': 'NONE',
     'Payment.FraudAssessment.Accertify.ShadowMode': true,
@@ -130,7 +130,7 @@ test.before(async () => {
   await enableDebug();
   await acceptCookies();
   await selectProvider('IbeGDSDummy');
-  await setProps(props);
+  await setProps(seatMapProps);
   await closeHeaderUrgencyBanner();
 })('Step indicator for seat map not visible when seatMap is a product', async () => {
   await searchTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'Athens', 'ECONOMY', [11, 24]);
