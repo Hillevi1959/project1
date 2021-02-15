@@ -76,7 +76,7 @@ test('Different choice of baggage for travellers', async () => {
     'ECONOMY',
     [11, 24],
   );
-  await addTravelerInformation(travelers);
+
   await addBaggage(numberOfTravelers);
 
   // Same choice for all travellers
@@ -132,6 +132,7 @@ test('Different choice of baggage for travellers', async () => {
       .expect(await getBaggageCartPrice())
       .eql(totalCalculatedBaggagePrice);
   }
+  await addTravelerInformation(travelers);
 });
 
 test('Baggage not available for infants', async () => {
