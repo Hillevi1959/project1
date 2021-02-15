@@ -12,6 +12,7 @@ import config from './testdata.json';
 const url = getSiteUrl('SE-meta', config.host);
 const props = {
   'Feature.NewResponsive.Enabled': true,
+  'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
 };
 
 fixture('Climate compensation preselected from meta')
