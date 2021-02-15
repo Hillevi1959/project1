@@ -67,10 +67,6 @@ test.before(async () => {
     'ECONOMY',
     [11, 24],
   );
-  for (const traveler of travelers) {
-    await t.click(travelerDetailsModule.expiryDateInput(traveler.nr));
-    await t.expect(travelerDetailsModule.expiryDateMessage(traveler.nr).innerText).eql('');
-  }
 
   await addTravelerInformation(travelers, 'DDMMYYYY');
   await addPassportInformation(travelers, false, 'DDMMYYYY');
