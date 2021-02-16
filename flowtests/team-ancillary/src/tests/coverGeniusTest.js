@@ -33,7 +33,7 @@ const props = {
   'Feature.NewResponsive.Enabled': true,
   'Payment.FraudAssessment.Accertify.ShadowMode': true,
   'Payment.provider.creditcard': 'Adyen',
-  'Payment.RemoveAdressForBank.Enable': true,
+  'IbeClient.DisplayAddressFormOnPayment.Enabled': false,
   'Payment.ForceShowAddressFields.Carriers': '',
 };
 
@@ -89,6 +89,8 @@ test('Buy Cover Genius Comprehensive product', async () => {
 
   await bookFlight();
 
+  await t.expect(paymentModule.paymentContainer.visible).ok();
+
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
     await t.expect(paymentModule.cartComprehensiveInsuranceCoverGeniusProductMobile.visible).ok();
@@ -96,8 +98,6 @@ test('Buy Cover Genius Comprehensive product', async () => {
   }
   if (await isDesktop()) {
     await openCartIfClosed();
-    await t.click(paymentModule.cardLabel);
-    await t.expect(paymentModule.cardPaymentForm.exists).ok('', { timeout: 90000 });
     await t.expect(paymentModule.cartComprehensiveInsuranceCoverGeniusProduct.visible).ok();
   }
 
