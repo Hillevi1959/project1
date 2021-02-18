@@ -1,8 +1,8 @@
 {
-  "name": "ibe",
+  "name": "end-to-end-flow-tests",
   "version": "1.0.0",
   "repository": {
-    "url": "https://git.etraveli.net/projects/ITDEV/repos/ibe"
+    "url": "https://git.etraveli.net/projects/TT/repos/end-to-end-flow-tests"
   },
   "bugs": {
     "url": "https://jira.etraveli.net"
