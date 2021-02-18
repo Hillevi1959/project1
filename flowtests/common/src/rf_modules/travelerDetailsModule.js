@@ -159,6 +159,10 @@ export default {
     ),
   expiryDateInput: travelerNr =>
     Selector(`[data-testid="traveler-travel-document-expiry-date-${travelerNr}-input"]`),
+  expiryDateMessage: travelerNr =>
+    Selector(
+      `[data-testid="travelerDetails-traveler-${travelerNr}-section"] [data-testid="components-textInput"]:nth-child(3)`,
+    ),
   extraProductsContainer: Selector('[data-testid="travelerDetails-products"]'),
   firstBoundPlaneIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
@@ -188,11 +192,9 @@ export default {
     Selector(`[data-testid="tripCancellationProtection-traveler-${travelerNr}"]`),
   manulifeCancellationYesButton: Selector('[data-testid="tripCancellationProtection--true"]'),
   mealContainer: Selector('[data-testid="meal-container"]'),
-  mealDropDownOneTraveler: Selector(
-    '[data-testid="meal-container"] [class*="container etiDropdown"]',
-  ),
-  mealDropDownMultipleTravelers: Selector('[data-testid="meal-container"] .etiButton'),
-  mealDropDownTraveler: Selector('.meal__traveler [class*="container etiDropdown"]'),
+  mealDropDownOneTraveler: Selector('[data-testid*="meal-dropdown"]'),
+  mealDropDownMultipleTravelers: Selector('[data-testid="meal-toggle-button-wrapper"]'),
+  mealDropDownTraveler: Selector('[data-testid*="meal-dropdown"] [class*="etiDropdown"]'),
   mobileTravelPlanContainer: Selector('[data-testid="mobileTravelPlan-container"]'),
   mobileTravelPlanNoButton: Selector('[data-testid="mobileTravelPlan--false"]'),
   mobileTravelPlanYesButton: Selector('[data-testid="mobileTravelPlan--true"]'),

@@ -96,11 +96,11 @@ export async function addFlexibleTicketAllTravelers() {
 
 export async function addMeal(numberOfTravelers) {
   if (numberOfTravelers === 1) {
-    await scrollToElement('[data-testid="meal-container"] [class*="container etiDropdown"]');
+    await scrollToElement('[data-testid="meal-container"]');
     await dropdownSelect(travelerDetailsModule.mealDropDownOneTraveler, 1);
   }
   if (numberOfTravelers > 1) {
-    await scrollToElement('[data-testid="meal-container"] .etiButton');
+    await scrollToElement('[data-testid="meal-container"]');
     await t.click(travelerDetailsModule.mealDropDownMultipleTravelers);
     for (let i = 0; i < numberOfTravelers; i += 1) {
       await dropdownSelect(travelerDetailsModule.mealDropDownTraveler.nth(i), 2);

@@ -73,6 +73,8 @@ export default {
   cartFlightContent: Selector('[data-testid="cart-content-Content"] div.etiCartItem'),
   cartFlightContentMobile: Selector('[data-testid="cart-content-Trip-drawer"] div'),
   cartMobileTravelPlanProduct: Selector('[data-testid="cart-product-mobileTravelPlan"]'),
+  cartMealProduct: Selector('[data-testid="meal-ProductIcon"]'),
+  cartMealProductMobile: Selector('[data-testid="cart-product-meal-drawer"]'),
   cartOnlineCheckinProduct: Selector('[data-testid="cart-product-onlineCheckIn"]'),
   cartPrice: Selector('[data-testid="cart-totalPrice-span"]'),
   cartPriceMobile: Selector('[data-testid="cart-totalPrice-span-drawer"]'),

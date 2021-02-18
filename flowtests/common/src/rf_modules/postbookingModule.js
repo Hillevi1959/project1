@@ -24,12 +24,17 @@ export default {
   cartBankruptcyInsuranceCoverGeniusIcon: Selector(
     '[data-testid="bankruptcyInsuranceCoverGenius-ProductIcon"]',
   ),
+  cartClosePostBooking: Selector('[data-testid="backDrop"]'),
   cartContentExistingExtraProducts: Selector(
     '#etiAccordionPanel-contentextraProducts [data-testid="sideBarWidget-list"] li',
   ),
+  cartMealProduct: Selector('[data-testid="orderPage-postBooking-product"]'),
+  cartMealProductPostBooking: Selector('[data-testid="meal-ProductIcon"]'),
+  cartMealProductPostBookingMobile: Selector('[data-testid="meal-ProductIcon"]'),
   cartOpenProductsButton: Selector('#etiAccordionPanel-headerextraProducts > div > h3'),
   cartSeatMapIcon: Selector('[data-testid="seatMap-ProductIcon"]'),
   cartSmsProductPrice: Selector('[data-testid="cart-product-sms-price"]'),
+  cartToggleButtonMobilePostBooking: Selector('[data-testid="cart-button"]'),
   cartTotalPrice: Selector('[data-testid="cart-totalPrice-span"]'),
   checkinBaggageYesAllPassengers: Selector('[data-testid="checkInBaggage-toggleTravelers-true"]'),
   checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-travelerModule-0-true"]'),
