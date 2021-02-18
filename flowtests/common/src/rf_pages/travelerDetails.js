@@ -53,12 +53,6 @@ function getExpiryDate(dateFormat) {
 }
 
 export async function addTraveler(traveler, dateFormat) {
-  await scrollToElement(`[data-testid="traveler-firstName-${traveler.nr}-input"]`);
-  await t.click(travelerDetailsModule.setFirstName(traveler.nr)).pressKey('ctrl+a delete');
-  await t.typeText(travelerDetailsModule.setFirstName(traveler.nr), traveler.firstName);
-  await t.click(travelerDetailsModule.setLastName(traveler.nr)).pressKey('ctrl+a delete');
-  await t.typeText(travelerDetailsModule.setLastName(traveler.nr), traveler.lastName);
-  await t.click(travelerDetailsModule.setGender(traveler.gender, traveler.nr));
   if (
     (await travelerDetailsModule.setDateOfBirth(traveler.nr).exists) &&
     (await travelerDetailsModule.setDateOfBirth(traveler.nr).visible)
@@ -68,6 +62,12 @@ export async function addTraveler(traveler, dateFormat) {
     await t.click(travelerDetailsModule.setDateOfBirth(traveler.nr)).pressKey('ctrl+a delete');
     await t.typeText(travelerDetailsModule.setDateOfBirth(traveler.nr), dateOfBirth);
   }
+  await scrollToElement(`[data-testid="traveler-firstName-${traveler.nr}-input"]`);
+  await t.click(travelerDetailsModule.setFirstName(traveler.nr)).pressKey('ctrl+a delete');
+  await t.typeText(travelerDetailsModule.setFirstName(traveler.nr), traveler.firstName);
+  await t.click(travelerDetailsModule.setLastName(traveler.nr)).pressKey('ctrl+a delete');
+  await t.typeText(travelerDetailsModule.setLastName(traveler.nr), traveler.lastName);
+  await t.click(travelerDetailsModule.setGender(traveler.gender, traveler.nr));
 }
 
 export async function addTravelerInformation(travelers, dateFormat) {
