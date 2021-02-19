@@ -29,7 +29,3 @@ export async function payPostbooking() {
   await t.click(postbookingModule.conditions);
   await t.click(postbookingModule.payPostBookingButton);
 }
-
-export async function toggleCartPostBooking() {
-  await t.click(postbookingModule.cartToggleButtonMobilePostBooking);
-}

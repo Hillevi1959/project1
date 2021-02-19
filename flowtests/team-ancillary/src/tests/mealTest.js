@@ -40,7 +40,7 @@ const propsOverlay = {
   'Payment.RemoveAdressForBank.Enable': false,
 };
 
-fixture('Ancillary Meal Test')
+fixture('Meal Test')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
@@ -48,12 +48,12 @@ fixture('Ancillary Meal Test')
     await setIBEDummyPaymentBankOn();
     await setProps(propsOverlay);
     await closeHeaderUrgencyBanner();
+    await selectProvider('IbeGDSDummy');
   });
 
 test('Book and pay for a trip with added meals', async () => {
   const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
   const numberOfAdults = 2;
-  await selectProvider('IbeGDSDummy');
   await selectTravelers(numberOfAdults, 0, 0);
 
   await makeSearch('return trip', 'STO', 'LON', [12, 25]);

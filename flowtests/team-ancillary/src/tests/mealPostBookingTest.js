@@ -19,14 +19,10 @@ import {
   getOrderNumber,
   loadPostBookingLogIn,
 } from '../../../common/src/rf_pages/postBookingProduct';
-import {
-  logInToPostBooking,
-  toggleCartPostBooking,
-} from '../../../common/src/rf_pages/postBooking';
+import { logInToPostBooking } from '../../../common/src/rf_pages/postBooking';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import postbookingModule from '../../../common/src/rf_modules/postbookingModule';
-import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import config from './testdata.json';
 
 const url = getSiteUrl('supersaver-se', config.host);
@@ -40,7 +36,7 @@ const propsOverlay = {
   'Payment.RemoveAdressForBank.Enable': false,
 };
 
-fixture('Ancillary Meal Post Booking Test')
+fixture('Meal Post Booking Test')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
@@ -48,12 +44,12 @@ fixture('Ancillary Meal Post Booking Test')
     await setIBEDummyPaymentBankOn();
     await setProps(propsOverlay);
     await closeHeaderUrgencyBanner();
+    await selectProvider('IbeGDSDummy');
   });
 
-test('Book and pay for a trip - add meal in Post', async () => {
+test('Book and pay for a trip - add meal in post booking', async () => {
   const travelers = addNumberToTraveler([getFirstAdult()]);
   const numberOfAdults = 1;
-  await selectProvider('IbeGDSDummy');
   await selectTravelers(numberOfAdults, 0, 0);
   await makeSearch('return trip', 'STO', 'LON', [11, 24]);
   await selectTripButtonByIndex(0);
@@ -69,16 +65,8 @@ test('Book and pay for a trip - add meal in Post', async () => {
   await logInToPostBooking(travelers[0].email, orderModuleNumber);
   await addMeal(numberOfAdults);
 
-  if ((await isMobile()) || (await isTablet())) {
-    await toggleCartPostBooking();
-    await t.expect(postbookingModule.cartMealProductPostBookingMobile.visible).ok();
-    await t.click('div', { offsetX: 370 });
-  }
-  if (await isDesktop()) {
-    await t.expect(postbookingModule.cartMealProductPostBooking.visible).ok();
-  }
-
   await clickGoToPayment();
+  await t.expect(postbookingModule.cartMealProductIcon.visible).ok();
   await payWithDummyBank();
   await waitForOrderPageToLoad();
 
