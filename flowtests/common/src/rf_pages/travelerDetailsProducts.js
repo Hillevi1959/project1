@@ -63,7 +63,7 @@ export async function addNoBaggage(numberOfTravelers) {
 
 export async function addBaggage(numberOfTravelers) {
   if (numberOfTravelers === 1) {
-    await scrollToElement('[data-testid="checkInBaggage-toggleTravelers-true"]');
+    await scrollToElement('[data-testid="checkInBaggage-traveler-0-true"]');
     await t.click(travelerDetailsModule.checkInBaggageYesOnePassenger);
   }
   if (numberOfTravelers > 1) {
@@ -360,13 +360,20 @@ export async function addNoExtraProducts(numberOfTravelers) {
   ) {
     await addNoBaggageService();
   }
-  if (
-    ((await travelerDetailsModule.supportPackageBasic.exists) ||
-      (await travelerDetailsModule.supportPackageBasicMobile.exists)) &&
-    ((await travelerDetailsModule.supportPackageBasic.visible) ||
-      (await travelerDetailsModule.supportPackageBasicMobile.visible))
-  ) {
-    await addSupportPackageBasic();
+  if (await isMobile()) {
+    if (
+      (await travelerDetailsModule.supportPackageBasicMobile.exists) &&
+      (await travelerDetailsModule.supportPackageBasicMobile.visible)
+    ) {
+      await addSupportPackageBasic();
+    }
+  } else if ((await isTablet()) || (await isDesktop())) {
+    if (
+      (await travelerDetailsModule.supportPackageBasic.exists) &&
+      (await travelerDetailsModule.supportPackageBasic.visible)
+    ) {
+      await addSupportPackageBasic();
+    }
   }
   if (
     (await travelerDetailsModule.supportPackageBasicNew.exists) &&
@@ -529,13 +536,20 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
   ) {
     await addFlexibleTicketAllTravelers();
   }
-  if (
-    ((await travelerDetailsModule.supportPackagePremium.exists) ||
-      (await travelerDetailsModule.supportPackagePremiumMobile.exist)) &&
-    ((await travelerDetailsModule.supportPackagePremium.visible) ||
-      (await travelerDetailsModule.supportPackagePremiumMobile.visible))
-  ) {
-    await addSupportPackagePremium();
+  if (await isMobile()) {
+    if (
+      (await travelerDetailsModule.supportPackagePremiumMobile.exists) &&
+      (await travelerDetailsModule.supportPackagePremiumMobile.visible)
+    ) {
+      await addSupportPackagePremium();
+    }
+  } else if ((await isTablet()) || (await isDesktop())) {
+    if (
+      (await travelerDetailsModule.supportPackagePremium.exists) &&
+      (await travelerDetailsModule.supportPackagePremium.visible)
+    ) {
+      await addSupportPackagePremium();
+    }
   }
   if (
     (await travelerDetailsModule.supportPackagePremiumNew.exists) &&

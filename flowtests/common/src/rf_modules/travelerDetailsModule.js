@@ -138,7 +138,7 @@ export default {
   checkInBaggageNoOnePassenger: Selector('[data-testid="checkInBaggage-traveler-0-false"]'),
   checkInBaggagePrice: Selector('[data-testid="checkInBaggage-price"]'),
   checkinBaggageYesAllPassengers: Selector('[data-testid="checkInBaggage-toggleTravelers-true"]'),
-  checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-travelerModule-0-true"]'),
+  checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-traveler-0-true"]'),
   climateCompensatedIcon: Selector('[data-testid="climateCompensation-ProductIcon"]'),
   comprehensiveInsuranceGeniusContainer: Selector(
     '[data-testid="coverGeniusInsurance-comprehensiveInsuranceCoverGenius-InsuranceProduct"]',
