@@ -18,10 +18,10 @@ export async function logInToEdvin(url) {
 
 export async function addTextKey(url, textKey) {
   // Selectors in Edvin for creating a text key
-  const noFoundTextAlert = Selector('.alert.alert-info');
+  const noFoundTextAlert = Selector('.alert.alert-info', { timeout: 3000 });
   const createTextLink = Selector('.edvin-menu-text').withText('Create text');
   const inputCode = Selector('[name="code"]');
-  const createCodeButton = Selector('#text_editor_TextCode_save_createCode');
+  const createCodeButton = Selector('#text_editor_TextCode_save_createCode', { timeout: 3000 });
   const translationInput = Selector('[name="newText"]');
   const saveTextButton = Selector('[value="Submit"]').nth(1);
 

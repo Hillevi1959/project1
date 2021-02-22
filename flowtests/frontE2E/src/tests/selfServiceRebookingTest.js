@@ -36,7 +36,7 @@ import {
   getDiscountCode,
   getDiscountCodeUrl,
 } from '../../../common/src/rf_pages/edvin';
-import { getWindowWidth } from '../../../common/src/util/device';
+import { isMobile, isTablet } from '../../../common/src/util/device';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 import {
   convertTextPricePoundToNumber,
@@ -83,149 +83,146 @@ test.before(async () => {
   await acceptCookies();
   await closeHeaderUrgencyBanner();
 })('Create order in self service rebooking flow', async () => {
-  if ((await getWindowWidth()) < 970) {
-    console.warn('This test is not run on mobile or tablet device');
-  } else {
-    const url = getSiteUrl('gotogate-uk', config.host);
-    const dummyPaymentFalse = false;
-    await createOrderAndDiscountCode('https://gotogate-uk', 'gotogate-uk-edvin', dummyPaymentFalse);
-    console.log('Voucher code: ', getDiscountCode());
-    console.log('Voucher url: ', getDiscountCodeUrl());
-    await prepareSelfServiceRebookingFlow(url);
+  const url = getSiteUrl('gotogate-uk', config.host);
+  const dummyPaymentFalse = false;
 
-    // Verify start page
-    const voucherMessageRow1 = 'Welcome! You are a few steps away from using your voucher.';
-    const voucherMessageRow2 =
-      'Some of your information is prefilled and cannot be changed. Please make sure to apply the voucher on the payment step.';
-    await t.expect(startModule.startPageSearchForm.visible).ok();
-    await t.expect(startModule.voucherMessage1.innerText).contains(voucherMessageRow1);
-    await t.expect(startModule.voucherMessage2.innerText).contains(voucherMessageRow2);
+  await createOrderAndDiscountCode('https://gotogate-uk', 'gotogate-uk-edvin', dummyPaymentFalse);
+  console.log('Voucher code: ', getDiscountCode());
+  console.log('Voucher url: ', getDiscountCodeUrl());
+  await prepareSelfServiceRebookingFlow(url);
 
-    await t.click(startModule.ssrReadMoreButton);
+  // Verify start page
+  const voucherMessageRow1 = 'Welcome! You are a few steps away from using your voucher.';
+  const voucherMessageRow2 =
+    'Some of your information is prefilled and cannot be changed. Please make sure to apply the voucher on the payment step.';
+  await t.expect(startModule.startPageSearchForm.visible).ok();
+  await t.expect(startModule.voucherMessage1.innerText).contains(voucherMessageRow1);
+  await t.expect(startModule.voucherMessage2.innerText).contains(voucherMessageRow2);
 
-    await t.expect(startModule.ssrVoucherCriteria.nth(0).innerText).contains('Flight');
-    await t
-      .expect(startModule.ssrVoucherCriteria.nth(1).innerText)
-      .contains(`Valid Until ${validDate}`);
-    await t
-      .expect(startModule.ssrVoucherCriteria.nth(2).innerText)
-      .contains(`Departure Until ${validDate}`);
-    await t
-      .expect(startModule.ssrVoucherCriteria.nth(3).innerText)
-      .contains(`Return Until ${validDate}`);
-    await t.expect(startModule.ssrVoucherCriteria.nth(4).innerText).contains('Travel With SAS');
+  await t.click(startModule.ssrReadMoreButton);
 
-    // This will cause the test to be unstable until bug WEB-4921 is solved
-    await t.expect(startModule.ssrTravelers.nth(0).innerText).contains('Kalle Kula');
-    await t.expect(startModule.ssrTravelers.nth(1).innerText).contains('Lotta Kula');
-    await t.expect(startModule.ssrTravelers.nth(2).innerText).contains('Agnes Kula');
-    await t.expect(startModule.ssrTravelers.nth(3).innerText).contains('Lovisa Kula');
+  await t.expect(startModule.ssrVoucherCriteria.nth(0).innerText).contains('Flight');
+  await t
+    .expect(startModule.ssrVoucherCriteria.nth(1).innerText)
+    .contains(`Valid Until ${validDate}`);
+  await t
+    .expect(startModule.ssrVoucherCriteria.nth(2).innerText)
+    .contains(`Departure Until ${validDate}`);
+  await t
+    .expect(startModule.ssrVoucherCriteria.nth(3).innerText)
+    .contains(`Return Until ${validDate}`);
+  await t.expect(startModule.ssrVoucherCriteria.nth(4).innerText).contains('Travel With SAS');
 
-    await t.click(startModule.travelerDropDown);
+  // This will cause the test to be unstable until bug WEB-4921 is solved
+  await t.expect(startModule.ssrTravelers.nth(0).innerText).contains('Kalle Kula');
+  await t.expect(startModule.ssrTravelers.nth(1).innerText).contains('Lotta Kula');
+  await t.expect(startModule.ssrTravelers.nth(2).innerText).contains('Agnes Kula');
+  await t.expect(startModule.ssrTravelers.nth(3).innerText).contains('Lovisa Kula');
 
-    await t.expect(startModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
-    await t.expect(startModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
-    await t.expect(startModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
+  await t.click(startModule.travelerDropDown);
 
-    await makeSearch('one way trip', origin, destination, [20]);
+  await t.expect(startModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
+  await t.expect(startModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
+  await t.expect(startModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
 
-    // Verify result page
-    await t.expect(resultModule.resultPage.visible).ok('', { timeout: 20000 });
+  await makeSearch('one way trip', origin, destination, [20]);
 
-    await t.click(resultModule.searchFormButton).click(resultModule.travelerDropDown);
+  // Verify result page
+  await t.expect(resultModule.resultPage.visible).ok('', { timeout: 20000 });
 
-    await t.expect(resultModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
-    await t.expect(resultModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
-    await t.expect(resultModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
+  await t.click(resultModule.searchFormButton).click(resultModule.travelerDropDown);
 
-    await t.click(resultModule.searchFormButton);
-    // Verify voucher tags
-    let numberOfVoucherTrips = await getNumberOfElements(
-      '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
-    );
-    let numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+  await t.expect(resultModule.travelerAdultsCounterPlus.hasAttribute('disabled')).ok();
+  await t.expect(resultModule.travelerChildrenCounterPlus.hasAttribute('disabled')).ok();
+  await t.expect(resultModule.travelerInfantsCounterPlus().hasAttribute('disabled')).ok();
 
-    await t.expect(await numberOfAllTrips).gte(await numberOfVoucherTrips);
+  await t.click(resultModule.searchFormButton);
+  // Verify voucher tags
+  let numberOfVoucherTrips = await getNumberOfElements(
+    '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
+  );
+  let numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
 
-    await t.click(resultModule.voucherSwitch);
-    numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
-    numberOfVoucherTrips = await getNumberOfElements(
-      '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
-    );
+  await t.expect(await numberOfAllTrips).gte(await numberOfVoucherTrips);
 
-    await t.expect(await numberOfVoucherTrips).eql(await numberOfAllTrips);
+  await t.click(resultModule.voucherSwitch);
+  numberOfAllTrips = await getNumberOfElements('[data-testid*="resultPage-resultTrip-"]');
+  numberOfVoucherTrips = await getNumberOfElements(
+    '[data-testid*="resultPage-resultTrip-"] [data-testid="valid-with-voucher-tag"]',
+  );
 
-    // Verify voucher price
-    await t.click(resultModule.cheapestFilterButton);
-    const tripPriceStandard = convertTextPricePoundToNumber(
-      await resultModule.tripPriceStandard.innerText,
-    );
-    const tripPriceFlex = convertTextPricePoundToNumber(await resultModule.tripPriceFlex.innerText);
-    const voucherPriceFlex = getVoucherPricePound(await resultModule.voucherFlexPrice.innerText);
-    const voucherPriceStandard = getVoucherPricePound(
-      await resultModule.voucherStandardPrice.innerText,
-    );
+  await t.expect(await numberOfVoucherTrips).eql(await numberOfAllTrips);
 
-    await t.expect(resultModule.voucherStandardPrice.visible).ok();
-    await t.expect(resultModule.voucherFlexPrice().visible).ok();
-    await t.expect(tripPriceStandard).gt(voucherPriceStandard);
-    await t.expect(tripPriceFlex).gt(voucherPriceFlex);
+  // Verify voucher price
+  await t.click(resultModule.cheapestFilterButton);
+  const tripPriceStandard = convertTextPricePoundToNumber(
+    await resultModule.tripPriceStandard.innerText,
+  );
+  const tripPriceFlex = convertTextPricePoundToNumber(await resultModule.tripPriceFlex.innerText);
+  const voucherPriceFlex = getVoucherPricePound(await resultModule.voucherFlexPrice.innerText);
+  const voucherPriceStandard = getVoucherPricePound(
+    await resultModule.voucherStandardPrice.innerText,
+  );
 
-    await selectTripButtonByIndex(0);
+  await t.expect(resultModule.voucherStandardPrice.visible).ok();
+  await t.expect(resultModule.voucherFlexPrice().visible).ok();
+  await t.expect(tripPriceStandard).gt(voucherPriceStandard);
+  await t.expect(tripPriceFlex).gt(voucherPriceFlex);
 
-    // verify TD-page
-    await addContact(travelers[0]);
+  await selectTripButtonByIndex(0);
 
-    for (const traveler of travelers) {
-      // Check for each traveler the radio buttons are disabled
-      for (let i = 0; i < 2; i += 1) {
-        await t
-          .expect(
-            travelerDetailsModule
-              .travelerInput(traveler.nr)
-              .nth(i)
-              .hasAttribute('disabled'),
-          )
-          .eql(true);
-      }
-      // Check for each traveler the input fields are readonly
-      for (let i = 2; i < 4; i += 1) {
-        await t
-          .expect(
-            travelerDetailsModule
-              .travelerInput(traveler.nr)
-              .nth(i)
-              .hasAttribute('readonly'),
-          )
-          .eql(true);
-      }
+  // verify TD-page
+  await addContact(travelers[0]);
+
+  for (const traveler of travelers) {
+    // Check for each traveler the radio buttons are disabled
+    for (let i = 0; i < 2; i += 1) {
+      await t
+        .expect(
+          travelerDetailsModule
+            .travelerInput(traveler.nr)
+            .nth(i)
+            .hasAttribute('disabled'),
+        )
+        .eql(true);
     }
-
-    await addNoExtraProducts(numberOfAdults + numberOfChildren);
-    await bookFlight();
-    await closeSeatMapModal();
-    // Verify payment page
-    await t.expect(paymentModule.paymentContainer.visible).ok();
-    await t.click(paymentModule.cardLabel);
-    await addPaymentData();
-
-    await t.expect(paymentModule.discountCodeText.innerText).contains('Your discount voucher');
-    await t.expect(paymentModule.discountCodeText.innerText).contains('£-10.00');
-    await t.expect(paymentModule.cartDiscountCode.innerText).contains('Your discount voucher');
-    await t.expect(paymentModule.cartDiscountCode.innerText).contains('£-10.00');
-
-    await checkPaymentConditions();
-    await t.click(paymentModule.payButton);
-
-    await t.expect(orderModule.selfServiceRebookingImage.visible).ok('', { timeout: 20000 });
-    // This cannot be verified until bug WEB-4921 is solved
-    // await t
-    //   .expect(orderModule.selfServiceRebookingTitle.innerText)
-    //   .contains(travelers[0].firstName);
-    const infoText =
-      'Your rebooking request is being processed. Please note that this may take up to 24 hours.';
-    await t.expect(orderModule.selfServiceRebookingInfoText.innerText).contains(infoText);
+    // Check for each traveler the input fields are readonly
+    for (let i = 2; i < 4; i += 1) {
+      await t
+        .expect(
+          travelerDetailsModule
+            .travelerInput(traveler.nr)
+            .nth(i)
+            .hasAttribute('readonly'),
+        )
+        .eql(true);
+    }
   }
+
+  await addNoExtraProducts(numberOfAdults + numberOfChildren);
+  await bookFlight();
+  await closeSeatMapModal();
+  // Verify payment page
+  await t.expect(paymentModule.paymentContainer.visible).ok();
+  await t.click(paymentModule.cardLabel);
+  await addPaymentData();
+
+  await t.expect(paymentModule.discountCodeText.innerText).contains('Your discount voucher');
+  await t.expect(paymentModule.discountCodeText.innerText).contains('£-10.00');
+  await t.expect(paymentModule.cartDiscountCode.innerText).contains('Your discount voucher');
+  await t.expect(paymentModule.cartDiscountCode.innerText).contains('£-10.00');
+
+  await checkPaymentConditions();
+  await t.click(paymentModule.payButton);
+
+  await t.expect(orderModule.selfServiceRebookingImage.visible).ok('', { timeout: 20000 });
+  // This cannot be verified until bug WEB-4921 is solved
+  // await t
+  //   .expect(orderModule.selfServiceRebookingTitle.innerText)
+  //   .contains(travelers[0].firstName);
+  const infoText =
+    'Your rebooking request is being processed. Please note that this may take up to 24 hours.';
+  await t.expect(orderModule.selfServiceRebookingInfoText.innerText).contains(infoText);
 });
 
 test.before(async () => {
@@ -252,63 +249,62 @@ test.before(async () => {
     dummyPaymentTrue,
   );
 })('Choose trip that does not match the voucher, verify message, add new travelers', async () => {
-  if ((await getWindowWidth()) < 970) {
-    console.warn('This test is not run on mobile or tablet device');
-  } else {
-    const url = getSiteUrl('supersaver-se', config.host);
-    const newTravelers = addNumberToTraveler([
-      getThirdAdult(),
-      getFourthAdult(),
-      getSecondChild(),
-      getSecondInfant(),
-    ]);
-    console.log('Voucher code: ', getDiscountCode());
-    console.log('Voucher url: ', getDiscountCodeUrl());
-    await prepareSelfServiceRebookingFlow(url);
-    await t.expect(startModule.startPageSearchForm.visible).ok();
-    await makeSearch('one way trip', origin, destination, [20]);
+  const url = getSiteUrl('supersaver-se', config.host);
+  const newTravelers = addNumberToTraveler([
+    getThirdAdult(),
+    getFourthAdult(),
+    getSecondChild(),
+    getSecondInfant(),
+  ]);
+  console.log('Voucher code: ', getDiscountCode());
+  console.log('Voucher url: ', getDiscountCodeUrl());
+  await prepareSelfServiceRebookingFlow(url);
+  await t.expect(startModule.startPageSearchForm.visible).ok();
+  await makeSearch('one way trip', origin, destination, [20]);
 
+  await t.click(resultModule.toggleFilterButton);
+  if ((await isMobile()) || (await isTablet())) {
+    await t.click(resultModule.filterAirlineToggleButton);
+  }
+  await t
+    .click(resultModule.clearAirlines)
+    .click(resultModule.filterAirlineTurkishCheckbox)
+    .click(resultModule.toggleFilterButton);
+  await selectTripButtonByIndex(0);
+
+  await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
+
+  await addContact(travelers[0]);
+  for (const traveler of newTravelers) {
+    await addTraveler(traveler);
+  }
+  await addNoExtraProducts(numberOfAdults + numberOfChildren);
+  await bookFlight();
+  await closeSeatMapModal();
+
+  // Verify payment page
+  await t.expect(paymentModule.paymentContainer.visible).ok();
+  await t.expect(paymentModule.voucherNotValidInfo.visible).ok();
+
+  await t
+    .click(paymentModule.discountCodeToggleInput)
+    .typeText(paymentModule.discountCodeInput, getDiscountCode())
+    .click(paymentModule.discountCodeButton);
+
+  await t.expect(paymentModule.discountCodeError.visible).ok();
+
+  await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
+  await payWithDummyBank();
+  // Verify order page
+  await waitForOrderPageToLoad();
+
+  await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
+
+  await t.click(orderModule.showBaggageButton);
+
+  for (let i = 0; i < newTravelers.length; i += 1) {
     await t
-      .click(resultModule.toggleFilterButton)
-      .click(resultModule.clearAirlines)
-      .click(resultModule.filterAirlineTurkishCheckbox)
-      .click(resultModule.toggleFilterButton);
-    await selectTripButtonByIndex(0);
-
-    await t.expect(travelerDetailsModule.voucherNotValidInfo.visible).ok();
-
-    await addContact(travelers[0]);
-    for (const traveler of newTravelers) {
-      await addTraveler(traveler);
-    }
-    await addNoExtraProducts(numberOfAdults + numberOfChildren);
-    await bookFlight();
-    await closeSeatMapModal();
-
-    // Verify payment page
-    await t.expect(paymentModule.paymentContainer.visible).ok();
-    await t.expect(paymentModule.voucherNotValidInfo.visible).ok();
-
-    await t
-      .click(paymentModule.discountCodeToggleInput)
-      .typeText(paymentModule.discountCodeInput, getDiscountCode())
-      .click(paymentModule.discountCodeButton);
-
-    await t.expect(paymentModule.discountCodeError.visible).ok();
-
-    await t.click(paymentModule.discountCodeInput).pressKey('ctrl+a delete');
-    await payWithDummyBank();
-    // Verify order page
-    await waitForOrderPageToLoad();
-
-    await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
-
-    await t.click(orderModule.showBaggageButton);
-
-    for (let i = 0; i < newTravelers.length; i += 1) {
-      await t
-        .expect(orderModule.travelerName.nth(i).innerText)
-        .contains(`${newTravelers[i].firstName} ${newTravelers[i].lastName}`);
-    }
+      .expect(orderModule.travelerName.nth(i).innerText)
+      .contains(`${newTravelers[i].firstName} ${newTravelers[i].lastName}`);
   }
 });

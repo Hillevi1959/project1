@@ -14,6 +14,7 @@ import {
 } from '../util/travelerData';
 import { clearField, getSiteUrl } from '../util/common';
 import enableDebug from '../util/debug';
+import { isMobile, isTablet } from '../util/device';
 import { createVoucherInEdvin, getDiscountCodeUrl, logInToEdvin } from './edvin';
 import { makeSearch, selectTravelers } from './start';
 import { selectTripButtonByIndex } from './result';
@@ -82,8 +83,11 @@ export async function createOrderAndDiscountCode(site, siteEdvin, paymentService
   await makeSearch('one way trip', origin, destination, [11]);
   await t.expect(resultModule.toggleFilterButton.visible).ok('', { timeout: 20000 });
   await scrollToElement('[data-testid="resultPage-toggleFiltersButton-button"]');
+  await t.click(resultModule.toggleFilterButton);
+  if ((await isMobile()) || (await isTablet())) {
+    await t.click(resultModule.filterAirlineToggleButton);
+  }
   await t
-    .click(resultModule.toggleFilterButton)
     .click(resultModule.clearAirlines)
     .click(resultModule.filterAirlineSasCheckbox)
     .click(resultModule.toggleFilterButton);
