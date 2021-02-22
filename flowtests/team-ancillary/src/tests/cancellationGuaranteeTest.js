@@ -30,6 +30,7 @@ const globalProps = {
   'IbeClient.TravelerDetails.Modal': 'NONE',
   'Payment.ForceShowAddressFields.Carriers': '',
   'Payment.RemoveAdressForBank.Enable': false,
+  'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
 };
 
 fixture('Cancellation Guarantee Product verification')
@@ -43,7 +44,7 @@ fixture('Cancellation Guarantee Product verification')
     await closeHeaderUrgencyBanner();
   });
 
-test.skip('Outside Europe - Price per bound and per traveler (except Infant)', async () => {
+test('Outside Europe - Price per bound and per traveler (except Infant)', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
@@ -104,7 +105,7 @@ test.skip('Outside Europe - Price per bound and per traveler (except Infant)', a
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
-test.skip('Outside Europe - Price per bound only', async () => {
+test('Outside Europe - Price per bound only', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
@@ -162,7 +163,7 @@ test.skip('Outside Europe - Price per bound only', async () => {
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
-test.skip('Within Europe - Price per bound and per traveler (except Infant)', async () => {
+test('Within Europe - Price per bound and per traveler (except Infant)', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),
@@ -222,7 +223,7 @@ test.skip('Within Europe - Price per bound and per traveler (except Infant)', as
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
 
-test.skip('Within Europe - Price per bound only', async () => {
+test('Within Europe - Price per bound only', async () => {
   const travelers = addNumberToTraveler([
     getFirstAdult(),
     getSecondAdult(),

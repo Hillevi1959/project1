@@ -138,7 +138,7 @@ export default {
   checkInBaggageNoOnePassenger: Selector('[data-testid="checkInBaggage-traveler-0-false"]'),
   checkInBaggagePrice: Selector('[data-testid="checkInBaggage-price"]'),
   checkinBaggageYesAllPassengers: Selector('[data-testid="checkInBaggage-toggleTravelers-true"]'),
-  checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-travelerModule-0-true"]'),
+  checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-traveler-0-true"]'),
   climateCompensatedIcon: Selector('[data-testid="climateCompensation-ProductIcon"]'),
   comprehensiveInsuranceGeniusContainer: Selector(
     '[data-testid="coverGeniusInsurance-comprehensiveInsuranceCoverGenius-InsuranceProduct"]',
@@ -194,11 +194,9 @@ export default {
     Selector(`[data-testid="tripCancellationProtection-traveler-${travelerNr}"]`),
   manulifeCancellationYesButton: Selector('[data-testid="tripCancellationProtection--true"]'),
   mealContainer: Selector('[data-testid="meal-container"]'),
-  mealDropDownOneTraveler: Selector(
-    '[data-testid="meal-container"] [class*="container etiDropdown"]',
-  ),
-  mealDropDownMultipleTravelers: Selector('[data-testid="meal-container"] .etiButton'),
-  mealDropDownTraveler: Selector('.meal__traveler [class*="container etiDropdown"]'),
+  mealDropDownOneTraveler: Selector('[data-testid*="meal-dropdown"]'),
+  mealDropDownMultipleTravelers: Selector('[data-testid="meal-toggle-button-wrapper"]'),
+  mealDropDownTraveler: Selector('[data-testid*="meal-dropdown"] [class*="etiDropdown"]'),
   mobileTravelPlanContainer: Selector('[data-testid="mobileTravelPlan-container"]'),
   mobileTravelPlanNoButton: Selector('[data-testid="mobileTravelPlan--false"]'),
   mobileTravelPlanYesButton: Selector('[data-testid="mobileTravelPlan--true"]'),

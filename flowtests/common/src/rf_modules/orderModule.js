@@ -14,6 +14,7 @@ export default {
   cartItem: Selector('.etiCartItem'),
   cartTagIcon: Selector('[data-testId="cart-tag-icon"]'),
   cartFlexTicketProduct: Selector('[data-testid="cart-product-flexibleTicket"]'),
+  cartMealProduct: Selector('[data-testid="meal-ProductIcon"]'),
   cartMobileTravelPlanProduct: Selector('[data-testid="cart-product-mobileTravelPlan"]'),
   cartSmsProduct: Selector('[data-testid="cart-product-sms"]'),
   cartSupportPackageProduct: Selector('[data-testid="cart-product-servicePackage"]'),
