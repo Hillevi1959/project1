@@ -16,6 +16,41 @@ export async function logInToEdvin(url) {
     .click(edvinModule.logInButton);
 }
 
+export async function addTextKey(url, textKey) {
+  // Selectors in Edvin for creating a text key
+  const noFoundTextAlert = Selector('.alert.alert-info');
+  const createTextLink = Selector('.edvin-menu-text').withText('Create text');
+  const inputCode = Selector('[name="code"]');
+  const createCodeButton = Selector('#text_editor_TextCode_save_createCode');
+  const translationInput = Selector('[name="newText"]');
+  const saveTextButton = Selector('[value="Submit"]').nth(1);
+
+  await logInToEdvin(url);
+  await t.navigateTo(
+    `${url}/text_editor/Text.search.action?_s=true&code=${textKey}&searching=true`,
+  );
+  if (await noFoundTextAlert.visible) {
+    await t.click(createTextLink);
+    await t.typeText(inputCode, textKey).pressKey('enter');
+    await t.navigateTo(`${url}/text_editor/TextCode.edit.action?_s=true&code=${textKey}`);
+    if (await createCodeButton.visible) {
+      await t.click(createCodeButton);
+      const originUrl = await getCurrentUrl();
+      const urlParts = originUrl.split('3Fid%3D');
+      const id = urlParts[1].substring(0, urlParts[1].indexOf('%'));
+      const newUrl = `${url}/text_editor/TextCode.edit.action?_s=true&code=${textKey}&id=${id}&languageId=1`;
+      await t.navigateTo(newUrl);
+      await t.click(translationInput);
+      await t.typeText(translationInput, 'Read more');
+      await t.click(saveTextButton);
+    } else {
+      await t.click(translationInput);
+      await t.typeText(translationInput, 'Read more');
+      await t.click(saveTextButton);
+    }
+  }
+}
+
 export async function setPriceOnproduct(price, productText) {
   await t.navigateTo(`https://test-uk${config.host}/edvin/product/Product.list.action?_s=true`);
   await t
