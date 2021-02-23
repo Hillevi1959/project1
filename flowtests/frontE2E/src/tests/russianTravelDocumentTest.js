@@ -2,7 +2,6 @@ import { t } from 'testcafe';
 import enableDebug from '../../../common/src/util/debug';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import { selectProvider } from '../../../common/src/util/debugOptions';
-import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchAndSelectTrip } from '../../../common/src/rf_pages/start';
 import config from '../../testdata.json';
 import {
@@ -21,6 +20,7 @@ import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetails
 import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
+import setProps, { addNewPropInEdvin } from '../../../common/src/util/props';
 
 const url = getSiteUrl('supersaver-ru', config.host);
 const props = {
@@ -39,15 +39,15 @@ const numberOfChildren = 1;
 const numberOfInfants = 1;
 const numberOfTravelers = numberOfAdults + numberOfChildren;
 
-fixture('Travel document for domestic Russian trips')
-  .page(url)
-  .beforeEach(async () => {
-    await enableDebug();
-    await acceptCookies();
-    await selectProvider('IbeGDSDummy');
-    await setProps(props);
-    await closeHeaderUrgencyBanner();
-  });
+fixture('Travel document for domestic Russian trips').beforeEach(async () => {
+  await addNewPropInEdvin('gotogate-ru', 'TD.Passport.DocumentType.Enabled', 'true', 'ibe');
+  await t.navigateTo(url);
+  await enableDebug();
+  await acceptCookies();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await closeHeaderUrgencyBanner();
+});
 
 test('Domestic trip with russian passport', async () => {
   await searchAndSelectTrip(
