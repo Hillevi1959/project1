@@ -49,6 +49,9 @@ export default {
   keyValue: Selector('[name="keyvalue"]'),
   saveProp: Selector('[value="Save"]').nth(1),
   // Reload props and textkeys
+  cacheTriggerAlert: Selector('[role="alert"]', { timeout: 3000 }),
   reloadImmediatelyButton: Selector('[name="formButton"]'),
-  cacheTriggerAlert: Selector('[role="alert"]'),
+  selectAllCheckboxes: Selector(
+    '[title="Click to Select/Deselect all Checkboxes. Mouse over the Checkboxes with SHIFT to select, Mouse over and ALT to deselect."]',
+  ),
 };
