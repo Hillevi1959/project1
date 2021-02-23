@@ -36,7 +36,7 @@ import {
   getDiscountCode,
   getDiscountCodeUrl,
 } from '../../../common/src/rf_pages/edvin';
-import { isMobile, isTablet } from '../../../common/src/util/device';
+import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 import {
   convertTextPricePoundToNumber,
@@ -49,6 +49,7 @@ import {
 } from '../../../common/src/rf_pages/selfServiceReboking';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import { getMonthInFuture } from '../../../common/src/util/dateFunction';
+import { scrollToElement } from '../../../common/src/util/clientFunction';
 
 const travelers = addNumberToTraveler([
   getFirstAdult(),
@@ -113,11 +114,18 @@ test.before(async () => {
     .contains(`Return Until ${validDate}`);
   await t.expect(startModule.ssrVoucherCriteria.nth(4).innerText).contains('Travel With SAS');
 
-  // This will cause the test to be unstable until bug WEB-4921 is solved
-  await t.expect(startModule.ssrTravelers.nth(0).innerText).contains('Kalle Kula');
-  await t.expect(startModule.ssrTravelers.nth(1).innerText).contains('Lotta Kula');
-  await t.expect(startModule.ssrTravelers.nth(2).innerText).contains('Agnes Kula');
-  await t.expect(startModule.ssrTravelers.nth(3).innerText).contains('Lovisa Kula');
+  await t
+    .expect(startModule.ssrTravelers.nth(0).innerText)
+    .contains(`${travelers[0].firstName} ${travelers[0].lastName}`);
+  await t
+    .expect(startModule.ssrTravelers.nth(1).innerText)
+    .contains(`${travelers[1].firstName} ${travelers[1].lastName}`);
+  await t
+    .expect(startModule.ssrTravelers.nth(2).innerText)
+    .contains(`${travelers[2].firstName} ${travelers[2].lastName}`);
+  await t
+    .expect(startModule.ssrTravelers.nth(3).innerText)
+    .contains(`${travelers[3].firstName} ${travelers[3].lastName}`);
 
   await t.click(startModule.travelerDropDown);
 
@@ -207,8 +215,10 @@ test.before(async () => {
   await t.click(paymentModule.cardLabel);
   await addPaymentData();
 
-  await t.expect(paymentModule.discountCodeText.innerText).contains('Your discount voucher');
-  await t.expect(paymentModule.discountCodeText.innerText).contains('£-10.00');
+  if (await isDesktop()) {
+    await t.expect(paymentModule.discountCodeText.innerText).contains('Your discount voucher');
+    await t.expect(paymentModule.discountCodeText.innerText).contains('£-10.00');
+  }
   await t.expect(paymentModule.cartDiscountCode.innerText).contains('Your discount voucher');
   await t.expect(paymentModule.cartDiscountCode.innerText).contains('£-10.00');
 
@@ -216,10 +226,7 @@ test.before(async () => {
   await t.click(paymentModule.payButton);
 
   await t.expect(orderModule.selfServiceRebookingImage.visible).ok('', { timeout: 20000 });
-  // This cannot be verified until bug WEB-4921 is solved
-  // await t
-  //   .expect(orderModule.selfServiceRebookingTitle.innerText)
-  //   .contains(travelers[0].firstName);
+  await t.expect(orderModule.selfServiceRebookingTitle.innerText).contains(travelers[0].firstName);
   const infoText =
     'Your rebooking request is being processed. Please note that this may take up to 24 hours.';
   await t.expect(orderModule.selfServiceRebookingInfoText.innerText).contains(infoText);
@@ -286,6 +293,7 @@ test.before(async () => {
   await t.expect(paymentModule.paymentContainer.visible).ok();
   await t.expect(paymentModule.voucherNotValidInfo.visible).ok();
 
+  await scrollToElement('[data-testid="discount-form-toggle"]');
   await t
     .click(paymentModule.discountCodeToggleInput)
     .typeText(paymentModule.discountCodeInput, getDiscountCode())
