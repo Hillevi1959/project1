@@ -1,11 +1,21 @@
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
 import config from '../../../frontE2E/testdata.json';
 import edvinModule from '../rf_modules/edvinModule';
+import { logInToEdvin } from '../rf_pages/edvin';
 import { fetchUrl } from './clientFunction';
 import { reloadWindow } from './common';
 
 async function setProp(key, value) {
   await fetchUrl(`/ibemgr/test-prop.action?key=${key}&value=${value}`);
+}
+
+export async function reloadCacheTriggers(site) {
+  await t.navigateTo(
+    `http://${site}${config.host}/edvin/cache/PendingCacheTriggers.list.action?_s=true`,
+  );
+  if (!(await edvinModule.cacheTriggerAlert.visible)) {
+    await t.click(edvinModule.selectAllCheckboxes).click(edvinModule.reloadImmediatelyButton);
+  }
 }
 
 export default async function setProps(data) {
@@ -17,19 +27,26 @@ export default async function setProps(data) {
   await reloadWindow();
 }
 
-export async function updatePropsInEdvin(site, propName, value, groupName) {
-  // Selectors for setting properties
-  const keyName = Selector('[name="keyName"]');
-  const searchButton = Selector('[name="__submit"]');
-  const groupNameInput = Selector('[name="groupName"]');
-  const propInList = Selector('td').withText(propName);
-  const keyValue = Selector('[name="keyvalue"]');
-  const selectAllCheckboxes = Selector(
-    '[title="Click to Select/Deselect all Checkboxes. Mouse over the Checkboxes with SHIFT to select, Mouse over and ALT to deselect."]',
+export async function addNewPropInEdvin(site, propName, value, groupName) {
+  await logInToEdvin(`http://${site}${config.host}/edvin`);
+  await t.navigateTo(
+    `http://${site}${config.host}/edvin/dbproperty/DBPropertyValue.list.action?_s=true&search=false`,
   );
-  const saveProp = Selector('[value="Save"]').nth(1);
-  const reloadImmediatelyButton = Selector('[name="formButton"]');
-  const cacheTriggerAlert = Selector('[role="alert"]');
+  // Search for prop
+  await t
+    .typeText(edvinModule.keyName, propName)
+    .typeText(edvinModule.groupNameInput, groupName)
+    .click(edvinModule.searchButton);
+  if (await edvinModule.noPropFoundAlert.visible) {
+    await t
+      .typeText(edvinModule.valueInput, value)
+      .click(edvinModule.addPropertyCheckbox(''))
+      .click(edvinModule.searchButton);
+  }
+  await reloadCacheTriggers(site);
+}
+
+export async function updatePropsInEdvin(site, propName, value, groupName) {
   await t
     .navigateTo(`http://${site}${config.host}/edvin`)
     .typeText(edvinModule.userNameInput, 'autotest')
@@ -41,26 +58,21 @@ export async function updatePropsInEdvin(site, propName, value, groupName) {
 
   // Search for prop
   await t
-    .typeText(keyName, propName)
-    .typeText(groupNameInput, groupName)
-    .click(searchButton);
+    .typeText(edvinModule.keyName, propName)
+    .typeText(edvinModule.groupNameInput, groupName)
+    .click(edvinModule.searchButton);
   // Change prop
-  await t.click(propInList);
-  if (await keyValue.checked) {
+  await t.click(edvinModule.propInList(propName));
+  if (await edvinModule.keyValue.checked) {
     if (value === 'false') {
-      await t.click(keyValue);
-      await t.click(saveProp);
+      await t.click(edvinModule.keyValue);
+      await t.click(edvinModule.saveProp);
     }
-  } else if (!(await keyValue.checked)) {
+  } else if (!(await edvinModule.keyValue.checked)) {
     if (value === 'true') {
-      await t.click(keyValue);
-      await t.click(saveProp);
-    }
-    await t.navigateTo(
-      `http://${site}${config.host}/edvin/cache/PendingCacheTriggers.list.action?_s=true`,
-    );
-    if (!(await cacheTriggerAlert.visible)) {
-      await t.click(selectAllCheckboxes).click(reloadImmediatelyButton);
+      await t.click(edvinModule.keyValue);
+      await t.click(edvinModule.saveProp);
     }
   }
+  await reloadCacheTriggers(site);
 }
