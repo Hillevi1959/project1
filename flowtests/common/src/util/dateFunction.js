@@ -33,7 +33,7 @@ export function getExpectedDate(addedMonths, day, tripType) {
   return `${String(y)}-${m <= 9 ? `0${m}` : m}-${d <= 9 ? `0${d}` : d}`;
 }
 
-export function getMonthInFuture(addedMonths) {
+export function getDateWithAddedMonths(addedMonths) {
   const now = new Date();
   const d = now.getDate();
   const m = now.getMonth() + 1 + addedMonths;

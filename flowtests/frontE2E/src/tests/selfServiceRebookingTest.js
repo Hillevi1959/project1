@@ -48,7 +48,7 @@ import {
   updateDiscountCampaignForCovid19,
 } from '../../../common/src/rf_pages/selfServiceReboking';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
-import { getMonthInFuture } from '../../../common/src/util/dateFunction';
+import { getDateWithAddedMonths } from '../../../common/src/util/dateFunction';
 import { scrollToElement } from '../../../common/src/util/clientFunction';
 
 const travelers = addNumberToTraveler([
@@ -61,7 +61,7 @@ const numberOfAdults = 2;
 const numberOfChildren = 1;
 const origin = 'Stockholm';
 const destination = 'London';
-const validDate = getMonthInFuture(6);
+const validDate = getDateWithAddedMonths(6);
 const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
 
 fixture('Verify self service rebooking flow');
@@ -75,7 +75,7 @@ test.before(async () => {
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
     'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   };
-  await addTextKey(urlEdvin, 'SelfServiceRebooking.InformationBox.ReadMore.Link.Text');
+  await addTextKey(urlEdvin, 'SelfServiceRebooking.InformationBox.ReadMore.Link.Text', 'Read more');
   await updateDiscountCampaignForCovid19('SK', validDate);
   await t.navigateTo(url);
   await enableDebug();

@@ -16,7 +16,7 @@ export async function logInToEdvin(url) {
     .click(edvinModule.logInButton);
 }
 
-export async function addTextKey(url, textKey) {
+export async function addTextKey(url, textKey, text) {
   // Selectors in Edvin for creating a text key
   const noFoundTextAlert = Selector('.alert.alert-info', { timeout: 3000 });
   const createTextLink = Selector('.edvin-menu-text').withText('Create text');
@@ -41,11 +41,11 @@ export async function addTextKey(url, textKey) {
       const newUrl = `${url}/text_editor/TextCode.edit.action?_s=true&code=${textKey}&id=${id}&languageId=1`;
       await t.navigateTo(newUrl);
       await t.click(translationInput);
-      await t.typeText(translationInput, 'Read more');
+      await t.typeText(translationInput, text);
       await t.click(saveTextButton);
     } else {
       await t.click(translationInput);
-      await t.typeText(translationInput, 'Read more');
+      await t.typeText(translationInput, text);
       await t.click(saveTextButton);
     }
   }
