@@ -6,7 +6,7 @@ export function getFirstAdult() {
     age: '52',
     baggage: true,
     ageType: 'vuxen',
-    email: 'devtest@etraveli.com',
+    email: 'devtest@etraveligroup.com',
     phone: '12345678',
     street: 'Teststreet 19',
     zipCode: '12345',

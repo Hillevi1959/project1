@@ -22,6 +22,9 @@ export default {
     Selector(`[data-testid="searchForm-multiBound[${tripNr}]-destination-input"]`),
   setMultiTripOrigin: tripNr =>
     Selector(`[data-testid="searchForm-multiBound[${tripNr}]-origin-input"]`),
+  ssrReadMoreButton: Selector('[data-testid="startPage-rebookingBanner-readMore-Button"]'),
+  ssrVoucherCriteria: Selector('[data-testid="startPage-extendedRebookingInfo-criterion"]'),
+  ssrTravelers: Selector('[data-testid="startPage-extendedRebookingInfo-traveler"]'),
   startPageSearchForm: Selector('[data-testid="searchPage-searchForm"]'),
   travelerAdultsCounterPlus: Selector('[data-testid="adults-option"] .etiCounter__button--plus'),
   travelerChildrenCounterMinus: Selector(

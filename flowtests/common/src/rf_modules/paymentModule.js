@@ -127,9 +127,10 @@ export default {
   ),
   owcInformation: Selector('[data-testid="tripDetails-oneWayCombination-wrapper"]'),
   payButton: Selector('[data-testid="payment-pay-button"]'),
+  payCityInput: Selector('[data-testid="city-input"]'),
   payFirstNameInput: Selector('[data-testid="firstName-input"]'),
   payLastNameInput: Selector('[data-testid="lastName-input"]'),
-
+  paymentContainer: Selector('[data-testid="paymentPage-paymentMethodsAndCart-container"]'),
   payPalLabel: Selector('[data-testid="paymentMethods-PayPal-label"]'),
   payPalEmailLogin: Selector('[name="login_email"]'),
   payPalNextButton: Selector('[name="btnNext"]'),
@@ -144,8 +145,6 @@ export default {
   payPalPaymentOptions: Selector('[data-testid="stacked-payment-options"]'),
   payStreetInput: Selector('[data-testid="street-input"]'),
   payZipCodeInput: Selector('[data-testid="zipCode-input"]'),
-  payCityInput: Selector('[data-testid="city-input"]'),
-  paymentContainer: Selector('[data-testid="paymentPage-paymentMethodsAndCart-container"]'),
   priceBoxAmountToPay: Selector(
     '[data-testid="payment-bottomContent-priceSummary-discount"] + div',
   ),
