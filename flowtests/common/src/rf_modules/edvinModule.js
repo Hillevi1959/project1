@@ -54,4 +54,11 @@ export default {
   selectAllCheckboxes: Selector(
     '[title="Click to Select/Deselect all Checkboxes. Mouse over the Checkboxes with SHIFT to select, Mouse over and ALT to deselect."]',
   ),
+  // Add text key
+  noFoundTextAlert: Selector('.alert.alert-info', { timeout: 3000 }),
+  createTextLink: Selector('.edvin-menu-text').withText('Create text'),
+  inputCode: Selector('[name="code"]'),
+  createCodeButton: Selector('#text_editor_TextCode_save_createCode', { timeout: 3000 }),
+  translationInput: Selector('[name="newText"]'),
+  saveTextButton: Selector('[value="Submit"]').nth(1),
 };
