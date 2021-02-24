@@ -11,7 +11,7 @@ import { getWindowWidth } from '../../../common/src/util/device';
 import {
   prepareSelfServiceRebookingFlow,
   createOrderAndDiscountCode,
-} from '../../../common/src/util/selfServiceReboking';
+} from '../../../common/src/rf_pages/selfServiceReboking';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const props = {
