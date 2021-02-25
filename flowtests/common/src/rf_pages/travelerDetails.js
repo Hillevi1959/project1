@@ -6,6 +6,7 @@ import travelerDetailsModule from '../rf_modules/travelerDetailsModule';
 import dateToYMD, { dateToDDMMYYYY } from '../util/dateFunction';
 import { isDesktop, isMobile, isTablet } from '../util/device';
 import { scrollToElement } from '../util/clientFunction';
+import { dropdownSelect } from '../util/dropdownSelect';
 
 export async function addContact(traveler) {
   await t.expect(travelerDetailsModule.contactPersonMail.exists).ok('', { timeout: 30000 });
@@ -144,4 +145,26 @@ export async function addPassportInformation(travelers, fillExpiryDate, dateForm
 export async function clickProceedToReviewButton() {
   await scrollToElement('[data-testid="proceed-button"]');
   await t.click(travelerDetailsModule.proceedToReviewButton);
+}
+
+export async function addTravelDocuments(travelers, dateFormat, nationality, option) {
+  for (const traveler of travelers) {
+    await scrollToElement(
+      `[data-testid="travelerDetails-TravelDocumentIssueCountry-${traveler.nr}-dropdown"]`,
+    );
+    if (nationality !== 'Russia') {
+      await dropdownSelect(
+        travelerDetailsModule.nationalityDropdown(traveler.travelerNr),
+        nationality,
+      );
+    }
+    await dropdownSelect(travelerDetailsModule.documentTypeDropdown(traveler.nr), option);
+
+    await t.typeText(travelerDetailsModule.passPortNumberInput(traveler.nr), traveler.passPortNr);
+
+    if (travelerDetailsModule.expiryDateInput.visible) {
+      const expiryDate = getExpiryDate(dateFormat);
+      await t.typeText(travelerDetailsModule.expiryDateInput(traveler.nr), expiryDate);
+    }
+  }
 }

@@ -152,6 +152,8 @@ export default {
   contactForm: Selector('[data-testid="travelerDetails-contactForm"]'),
   contactPersonMail: Selector('[for="traveler-mail"]'),
   contactPersonPhone: Selector('[for="traveler-phone"]'),
+  documentTypeDropdown: travelerNr =>
+    Selector(`[data-testid="document-types-dropdown-${travelerNr}"]`),
   errorMessage: Selector('[data-testid="components-textInput"] > .message > [type="error"]'),
   expiryDateError: travelerNr =>
     Selector(
@@ -159,6 +161,10 @@ export default {
     ),
   expiryDateInput: travelerNr =>
     Selector(`[data-testid="traveler-travel-document-expiry-date-${travelerNr}-input"]`),
+  expiryDateMessage: travelerNr =>
+    Selector(
+      `[data-testid="travelerDetails-traveler-${travelerNr}-section"] [data-testid="components-textInput"] .message`,
+    ),
   extraProductsContainer: Selector('[data-testid="travelerDetails-products"]'),
   firstBoundPlaneIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(1) [data-testid="tripDetails-bound-plane-icon"]',
@@ -194,6 +200,8 @@ export default {
   mobileTravelPlanContainer: Selector('[data-testid="mobileTravelPlan-container"]'),
   mobileTravelPlanNoButton: Selector('[data-testid="mobileTravelPlan--false"]'),
   mobileTravelPlanYesButton: Selector('[data-testid="mobileTravelPlan--true"]'),
+  nationalityDropdown: travelerNr =>
+    Selector(`[data-testid="travelerDetails-TravelDocumentIssueCountry-${travelerNr}-dropdown"]`),
   onlineCheckinBaggageContainer: Selector('[data-testid="onlineCheckIn-container"]'),
   onlineCheckinNoButton: Selector('[data-testid="onlineCheckIn--false"]'),
   onlineCheckinYesButton: Selector('[data-testid="onlineCheckIn--true"]'),
