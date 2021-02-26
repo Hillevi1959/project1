@@ -1,6 +1,9 @@
 import { t } from 'testcafe';
 import postbookingModule from '../rf_modules/postbookingModule';
 import getPaymentData from '../util/paymentData';
+import paymentModule from '../rf_modules/paymentModule';
+import { scrollToElement } from '../util/clientFunction';
+import { checkPaymentConditions } from './payment';
 
 export async function logInToPostBooking(email, orderNumber) {
   await t.typeText(postbookingModule.postBookingEmail, email);
@@ -28,4 +31,21 @@ export async function payPostbooking() {
   await t.typeText(postbookingModule.lastName, paymentData.lastName);
   await t.click(postbookingModule.conditions);
   await t.click(postbookingModule.payPostBookingButton);
+}
+
+export async function payWithDummyBankPostBooking() {
+  const paymentData = getPaymentData();
+  await t.expect(paymentModule.paymentContainer.exists).ok('', { timeout: 10000 });
+  await scrollToElement('[for="BANK"]');
+  await t.click(paymentModule.bankLabel);
+  await scrollToElement('[data-testid="bank-payment-form"] [data-testid="firstName-input"]');
+  await t.click(paymentModule.bankFirstNameInput);
+  await t.typeText(paymentModule.bankFirstNameInput, paymentData.firstName);
+  await t.typeText(paymentModule.bankLastNameInput, paymentData.lastName);
+  await scrollToElement('[data-testid="bank-payment-form"] [data-testid="street-input"]');
+  await t.typeText(paymentModule.bankStreetInput, paymentData.street);
+  await t.typeText(paymentModule.bankZipCodeInput, paymentData.zipCode);
+  await t.typeText(paymentModule.bankCityInput, paymentData.city);
+  await checkPaymentConditions();
+  await t.click(paymentModule.payButton);
 }

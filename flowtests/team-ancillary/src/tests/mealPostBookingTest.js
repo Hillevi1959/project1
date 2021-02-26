@@ -19,7 +19,10 @@ import {
   getOrderNumber,
   loadPostBookingLogIn,
 } from '../../../common/src/rf_pages/postBookingProduct';
-import { logInToPostBooking } from '../../../common/src/rf_pages/postBooking';
+import {
+  logInToPostBooking,
+  payWithDummyBankPostBooking,
+} from '../../../common/src/rf_pages/postBooking';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import { messageSupersaverSe, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import postbookingModule from '../../../common/src/rf_modules/postbookingModule';
@@ -67,7 +70,7 @@ test('Book and pay for a trip - add meal in post booking', async () => {
 
   await clickGoToPayment();
   await t.expect(postbookingModule.cartMealProductIcon.visible).ok();
-  await payWithDummyBank();
+  await payWithDummyBankPostBooking();
   await waitForOrderPageToLoad();
 
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
