@@ -52,7 +52,6 @@ test('Train icons and change to train information visible on all pages', async (
   await t.click(resultModule.tripDetailBound.nth(0));
 
   // Verify on result page
-  await t.expect(resultModule.planeTrainStandardIcon.visible).ok();
   await t.expect(resultModule.firstBoundPlaneIcon.visible).ok();
   await t.expect(resultModule.secondBoundTrainIcon.visible).ok();
   await t.expect(resultModule.trainSegmentIcon.visible).ok();
