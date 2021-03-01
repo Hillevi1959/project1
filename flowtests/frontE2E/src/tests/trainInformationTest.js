@@ -58,8 +58,6 @@ test('Train icons and change to train information visible on all pages', async (
 
   await selectTripButtonByIndex(0);
   // Verify on TD-page
-
-  await t.debug();
   await t.click(travelerDetailsModule.tripDetailsArrow);
 
   await t.expect(travelerDetailsModule.smallIcons.count).gt(2);
