@@ -83,9 +83,6 @@ export default {
   openFlightButton: Selector('[data-testid="searchResults-arrowDown-button"]'),
   originInput: Selector('[data-testid="searchForm-singleBound-origin-input"]'),
   owcInformation: Selector('[data-testid="tripDetails-oneWayCombination-wrapper"]'),
-  planeTrainStandardIcon: Selector(
-    '.resultPage-flightResults-0 [data-testid="result-bookButton-planeTrainStandardIcon"]',
-  ),
   productBundleOption3: Selector('[data-testid="productBundleItem-3"]'),
   productBundleOption3Button: Selector('[for="choice.flexibleTicketBundle.3"]'),
   productBundleConfirmationButton: Selector(

@@ -59,5 +59,5 @@ test('Search trip, book all products, pay with PayPal', async () => {
   // Text will be changed later and applicable to PayPal
   await t
     .expect(orderModule.paymentMethod.innerText)
-    .contains('Payment method: Wallet (Apple Pay)');
+    .contains('Payment method: Wallet (Apple Pay / Paypal)');
 });
