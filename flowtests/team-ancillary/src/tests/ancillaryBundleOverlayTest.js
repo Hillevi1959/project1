@@ -41,7 +41,8 @@ const propsOverlay = {
   'Payment.RemoveAdressForBank.Enable': false,
 };
 
-fixture('Ancillary Bundle Overlay Verification')
+fixture
+  .skip('Ancillary Bundle Overlay Verification')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
