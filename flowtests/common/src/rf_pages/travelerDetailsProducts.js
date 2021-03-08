@@ -11,13 +11,13 @@ import { saveSeatMapSelections, selectSeatsForAllSegmentTypes } from './seatMap'
 
 export async function addSupportPackageBasic() {
   if (await isMobile()) {
-    await scrollToElement(travelerDetailsModule.supportPackageBasicStringMobile);
+    await scrollToElement('[for="toggleChoice.supportPackage.0"]');
     await t.click(travelerDetailsModule.supportPackageBasicMobile);
     if (await travelerDetailsModule.supportPackageModalNoButton.exists) {
       await t.click(travelerDetailsModule.supportPackageModalNoButton);
     }
   } else if ((await isTablet()) || (await isDesktop())) {
-    await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
+    await scrollToElement('[for="choice.supportPackage.0"] .etiCustomRadio');
     await t.click(travelerDetailsModule.supportPackageBasic);
     if (await travelerDetailsModule.supportPackageModalNoButton.exists) {
       await t.click(travelerDetailsModule.supportPackageModalNoButton);
@@ -26,7 +26,7 @@ export async function addSupportPackageBasic() {
 }
 
 export async function addSupportPackageBasicNew() {
-  await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
+  await scrollToElement('[for="toggleChoice.supportPackage.0"]');
   await t.click(travelerDetailsModule.supportPackageBasicNew);
   if (await travelerDetailsModule.supportPackageModalNoButton.exists) {
     await t.click(travelerDetailsModule.supportPackageModalNoButton);

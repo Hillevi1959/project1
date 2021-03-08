@@ -50,6 +50,7 @@ test.before(async () => {
 
   await selectTripButtonByIndex(0);
   // Traveler details page
+  await t.expect(travelerDetailsModule.travelerDetailsPage.visible).ok();
   await t.expect(travelerDetailsModule.stepIndicatorVisited.count).eql(1);
   await t.expect(travelerDetailsModule.stepIndicatorNotVisited.count).eql(3);
   await t
