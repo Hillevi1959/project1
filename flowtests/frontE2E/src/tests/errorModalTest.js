@@ -16,6 +16,7 @@ import { goBack } from '../../../common/src/util/clientFunction';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import errorModalModule from '../../../common/src/rf_modules/errorModalModule';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
+import startModule from '../../../common/src/rf_modules/startModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -38,7 +39,7 @@ fixture('Error modal verification')
     await closeHeaderUrgencyBanner();
   });
 // Tests for session timeout cannot be don until WEB-3751 is completed
-test('Go back from payment page with browser back arrow', async () => {
+test('Click back with browser arrow om payment page and choose back to traveler details page', async () => {
   const errorText1 =
     "We're sorry! Unfortunately, you cannot return to this page. Click the button below to return to the payment page. If you would like to change a name or product, please start with a new booking.";
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
@@ -51,4 +52,19 @@ test('Go back from payment page with browser back arrow', async () => {
   await t.expect(errorModalModule.paymentErrorTextContent.innerText).contains(errorText1);
   await t.click(errorModalModule.buttonContinue);
   await t.expect(paymentModule.paymentContainer.visible).ok();
+});
+
+test('Click back with browser arrow on payment page and choose back to search page', async () => {
+  const errorText1 =
+    "We're sorry! Unfortunately, you cannot return to this page. Click the button below to return to the payment page. If you would like to change a name or product, please start with a new booking.";
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults);
+  await bookFlight();
+  await closeSeatMapModal();
+  await t.expect(paymentModule.paymentContainer.visible).ok();
+  await goBack();
+  await t.expect(errorModalModule.paymentErrorTextContent.innerText).contains(errorText1);
+  await t.click(errorModalModule.buttonContinue.nth(1));
+  await t.expect(startModule.startPageSearchForm.visible).ok();
 });
