@@ -54,7 +54,7 @@ test('Click back with browser arrow om payment page and choose back to traveler 
   await t.expect(paymentModule.paymentContainer.visible).ok();
 });
 
-test('Click back with browser arrow on payment oage and choose back to search page', async () => {
+test('Click back with browser arrow on payment page and choose back to search page', async () => {
   const errorText1 =
     "We're sorry! Unfortunately, you cannot return to this page. Click the button below to return to the payment page. If you would like to change a name or product, please start with a new booking.";
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', 'STO', 'LON', 'ECONOMY', [11, 24]);
