@@ -50,8 +50,14 @@ export default {
   cartCancellationOutsideEuProductPrice: Selector(
     '[data-testid="cart-product-cancellationOutsideEu-price"]',
   ),
+  cartCancellationOutsideEuProductPriceMobile: Selector(
+    '[data-testid="cart-product-cancellationOutsideEu-price-drawer"]',
+  ),
   cartCancellationWithinEuProductPrice: Selector(
     '[data-testid="cart-product-cancellationInsideEu-price"]',
+  ),
+  cartCancellationWithinEuProductPriceMobile: Selector(
+    '[data-testid="cart-product-cancellationInsideEu-price-drawer"]',
   ),
   cartCardFeeText: Selector('[data-testid="cart-payment-price"]'),
   cartCheckInProduct: Selector('[data-testid="cart-product-onlineCheckIn"]'),
