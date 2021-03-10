@@ -8,7 +8,11 @@ import {
   searchAndSelectTrip,
   chooseTripType,
 } from '../../../common/src/rf_pages/start';
-import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
+import {
+  addTravelerInformation,
+  bookFlight,
+  toggleCart,
+} from '../../../common/src/rf_pages/travelerDetails';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import {
   addNoExtraProducts,
@@ -33,6 +37,7 @@ import {
   getFirstInfant,
 } from '../../../common/src/util/travelerData';
 import { getPriceFromText } from '../../../common/src/util/price';
+import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import config from './testdata.json';
 
 const url = getSiteUrl('test-uk', config.host);
@@ -70,39 +75,57 @@ test('Book and pay for a one way trip with Trip Cancellation Protection for one 
     .notOk();
 
   await addNoExtraProducts(travelers.length);
-
   await addManulifeCancellation(travelers);
-
   const totalPrice = getPriceFromText(
     await travelerDetailsModule.manulifeCancellationTotalPrice.innerText,
   );
-
-  const cartPrice = getPriceFromText(
-    await travelerDetailsModule.cartTripCancellationPrice.innerText,
-  );
-
-  await t.expect(cartPrice).eql(totalPrice);
-
+  if (await isDesktop()) {
+    const cartPrice = getPriceFromText(
+      await travelerDetailsModule.cartTripCancellationPrice.innerText,
+    );
+    await t.expect(cartPrice).eql(totalPrice);
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    const cartPrice = getPriceFromText(
+      await travelerDetailsModule.cartTripCancellationPriceMobile.innerText,
+    );
+    await t.expect(cartPrice).eql(totalPrice);
+    await toggleCart();
+  }
   await bookFlight();
   await closeSeatMapModal();
-
   await t.click(paymentModule.cardLabel);
   await t.expect(paymentModule.cardPaymentForm.exists).ok('', { timeout: 90000 });
 
-  await openCartIfClosed();
+  if (await isDesktop()) {
+    await openCartIfClosed();
 
-  await t
-    .expect(paymentModule.cartTripCancellationProduct.visible)
-    .ok()
-    .expect(paymentModule.cartTripCancellationProduct.innerText)
-    .contains(`${travelers.length} Manulife Cancellation Protection`);
+    await t
+      .expect(paymentModule.cartTripCancellationProduct.visible)
+      .ok()
+      .expect(paymentModule.cartTripCancellationProduct.innerText)
+      .contains(`${travelers.length} Manulife Cancellation Protection`);
 
-  const paymentCartPrice = getPriceFromText(
-    await paymentModule.cartTripCancellationPrice.innerText,
-  );
+    const paymentCartPrice = getPriceFromText(
+      await paymentModule.cartTripCancellationPrice.innerText,
+    );
+    await t.expect(paymentCartPrice).eql(totalPrice);
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t
+      .expect(paymentModule.cartTripCancellationProductMobile.visible)
+      .ok()
+      .expect(paymentModule.cartTripCancellationProductMobile.innerText)
+      .contains(`${travelers.length} Manulife Cancellation Protection`);
 
-  await t.expect(paymentCartPrice).eql(totalPrice);
-
+    const paymentCartPrice = getPriceFromText(
+      await paymentModule.cartTripCancellationPriceMobile.innerText,
+    );
+    await t.expect(paymentCartPrice).eql(totalPrice);
+    await toggleCart();
+  }
   await addPaymentData();
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
@@ -115,9 +138,7 @@ test('Book and pay for a one way trip with Trip Cancellation Protection for one 
     .contains(messageUk);
 
   await t.expect(orderModule.cartTripCancellationProduct.visible).ok();
-
   const orderCartPrice = getPriceFromText(await orderModule.cartTripCancellationPrice.innerText);
-
   await t.expect(orderCartPrice).eql(totalPrice);
 });
 
@@ -137,7 +158,6 @@ test('Book and pay for a return trip with All Inclusive Protection for 2 adults,
     [11, 24],
   );
   await addTravelerInformation(travelers);
-
   await t
     .expect(travelerDetailsModule.manulifeCancellationContainer.exists)
     .ok()
@@ -145,39 +165,62 @@ test('Book and pay for a return trip with All Inclusive Protection for 2 adults,
     .ok();
 
   await addNoExtraProducts(adults.length + children.length);
-
   await addManulifeAllInclusive(travelers);
-
   const totalPrice = getPriceFromText(
     await travelerDetailsModule.manulifeAllinclusiveTotalPrice.innerText,
   );
 
-  const cartPrice = getPriceFromText(await travelerDetailsModule.cartAllInclusivePrice.innerText);
+  if (await isDesktop()) {
+    const cartPrice = getPriceFromText(await travelerDetailsModule.cartAllInclusivePrice.innerText);
+    await t.expect(cartPrice).eql(totalPrice);
+  }
 
-  await t.expect(cartPrice).eql(totalPrice);
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    const cartPrice = getPriceFromText(
+      await travelerDetailsModule.cartAllInclusivePriceMobile.innerText,
+    );
 
+    await t.expect(cartPrice).eql(totalPrice);
+    await toggleCart();
+  }
   await bookFlight();
   await closeSeatMapModal();
   await t.click(paymentModule.cardLabel);
   await t.expect(paymentModule.cardPaymentForm.exists).ok('', { timeout: 90000 });
 
-  await openCartIfClosed();
+  if (await isDesktop()) {
+    await openCartIfClosed();
+    await t
+      .expect(paymentModule.cartAllInclusiveProduct.visible)
+      .ok()
+      .expect(paymentModule.cartAllInclusiveProduct.innerText)
+      .contains(`${travelers.length} Manulife All Inclusive`);
 
-  await t
-    .expect(paymentModule.cartAllInclusiveProduct.visible)
-    .ok()
-    .expect(paymentModule.cartAllInclusiveProduct.innerText)
-    .contains(`${travelers.length} Manulife All Inclusive`);
+    const paymentCartPrice = getPriceFromText(await paymentModule.cartAllInclusivePrice.innerText);
+    await t.expect(paymentCartPrice).eql(totalPrice);
+  }
 
-  const paymentCartPrice = getPriceFromText(await paymentModule.cartAllInclusivePrice.innerText);
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t
+      .expect(paymentModule.cartAllInclusiveProductMobile.visible)
+      .ok()
+      .expect(paymentModule.cartAllInclusiveProductMobile.innerText)
+      .contains(`${travelers.length} Manulife All Inclusive`);
 
-  await t.expect(paymentCartPrice).eql(totalPrice);
+    const paymentCartPrice = getPriceFromText(
+      await paymentModule.cartAllInclusivePriceMobile.innerText,
+    );
+
+    await t.expect(paymentCartPrice).eql(totalPrice);
+    await toggleCart();
+  }
 
   await addPaymentData();
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
   await addCheckoutData();
-
   await t
     .expect(orderModule.infoTextOrderPage.visible)
     .ok('', { timeout: 90000 })
@@ -185,8 +228,6 @@ test('Book and pay for a return trip with All Inclusive Protection for 2 adults,
     .contains(messageUk);
 
   await t.expect(orderModule.cartAllInclusiveProduct.visible).ok();
-
   const orderCartPrice = getPriceFromText(await orderModule.cartAllInclusivePrice.innerText);
-
   await t.expect(orderCartPrice).eql(totalPrice);
 });

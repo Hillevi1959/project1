@@ -40,7 +40,13 @@ export default {
   cardVisaDebit: Selector('[data-testid="payment-credit-cards"]').nth(1),
   cardVisaElectron: Selector('[data-testid="payment-credit-cards"]').nth(2),
   cartAllInclusivePrice: Selector('[data-testid="cart-product-allInclusiveProtection-price"]'),
+  cartAllInclusivePriceMobile: Selector(
+    '[data-testid="cart-product-allInclusiveProtection-price-drawer"]',
+  ),
   cartAllInclusiveProduct: Selector('[data-testid="cart-product-allInclusiveProtection"]'),
+  cartAllInclusiveProductMobile: Selector(
+    '[data-testid="cart-product-allInclusiveProtection-drawer"]',
+  ),
   cartAncillaryBundle: Selector('[data-testid="cart-bundle-1"]'),
   cartAncillaryBundleMobile: Selector('[data-testid="cart-bundle-1-drawer"]'),
   cartCancellationInsideEuProduct: Selector('[data-testid="cart-product-cancellationInsideEu"]'),
@@ -94,8 +100,14 @@ export default {
   cartTravelerInfoButton: Selector('[data-testid="cart-travelerInfoToggleButton-button"]'),
   cartTravelerInfoMobile: Selector('[data-testid="cart-travelerInfo-CartTravelers-drawer"]'),
   cartTripCancellationProduct: Selector('[data-testid="cart-product-tripCancellationProtection"]'),
+  cartTripCancellationProductMobile: Selector(
+    '[data-testid="cart-product-tripCancellationProtection-drawer"]',
+  ),
   cartTripCancellationPrice: Selector(
     '[data-testid="cart-product-tripCancellationProtection-price"]',
+  ),
+  cartTripCancellationPriceMobile: Selector(
+    '[data-testid="cart-product-tripCancellationProtection-price-drawer"]',
   ),
   cartTrip: Selector('[data-testid="cart-content-Trip"] div'),
   cartTrips: Selector('[data-testid="cart-content-Trips"]'),

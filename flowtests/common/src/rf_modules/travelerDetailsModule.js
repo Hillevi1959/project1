@@ -68,6 +68,9 @@ export default {
   cartAllInclusivePrice: Selector(
     '[data-testid="cart-product-allInclusiveProtection-price-widget"]',
   ),
+  cartAllInclusivePriceMobile: Selector(
+    '[data-testid="cart-product-allInclusiveProtection-price-drawer"]',
+  ),
   cartAncillaryBundle: Selector('[data-testid="cart-bundle-1-widget"]'),
   cartAncillaryBundleMobile: Selector('[data-testid="cart-bundle-1-drawer"]'),
   cartBaggagePrice: Selector('[data-testid="cart-product-checkInBaggage-price-widget"]'),
@@ -137,6 +140,9 @@ export default {
   cartTripPriceMobile: Selector('[data-testid="cart-totalPrice-span-drawer"]'),
   cartTripCancellationPrice: Selector(
     '[data-testid="cart-product-tripCancellationProtection-price-widget"]',
+  ),
+  cartTripCancellationPriceMobile: Selector(
+    '[data-testid="cart-product-tripCancellationProtection-price-drawer"]',
   ),
   checkInBaggageButtons: Selector('[data-testid="travelers"] .etiToggleBar'),
   checkInBaggageCheckbox: Selector('[data-testid="travelers"] [type="checkbox"]'),
