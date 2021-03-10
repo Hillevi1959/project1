@@ -2,6 +2,7 @@
 import { Selector, t } from 'testcafe';
 import seatMapModule from '../rf_modules/seatMapModule';
 import { getSelectorAttribute } from '../util/common';
+import { scrollToElement } from '../util/clientFunction';
 
 export async function clickSeatMapYes() {
   await t.click(seatMapModule.productYesButton);
@@ -77,6 +78,7 @@ export async function selectSeatsAndSeatingPreference() {
 }
 
 export async function selectSeatsAndVerifyNotIncludeInfants(numberOfSegments) {
+  await scrollToElement('[data-testid="seatMap-container"]');
   await clickSeatMapYes();
   await selectSeatsForAllSegmentTypes();
   const numberOfSeats = await saveSeatMapSelections();
