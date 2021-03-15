@@ -43,8 +43,14 @@ export async function addSupportPackagePremium() {
 }
 
 export async function addSupportPackagePremiumNew() {
-  await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
-  await t.click(travelerDetailsModule.supportPackagePremiumNew);
+  if (await isDesktop()) {
+    await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
+    await t.click(travelerDetailsModule.supportPackagePremiumNew);
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await scrollToElement('[data-testid="servicePackage-component"]');
+    await t.doubleClick(travelerDetailsModule.supportPackagePremiumSelectMobile);
+  }
 }
 
 export async function addNoBaggage(numberOfTravelers) {
