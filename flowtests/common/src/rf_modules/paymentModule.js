@@ -22,7 +22,7 @@ export default {
   cardFee: Selector('[data-testid="payment-paymentMethodFee-label-CARD"]'),
   cardFirstNameInput: Selector('[data-testid="card-payment-form"] [data-testid="firstName-input"]'),
   cardInfoText: Selector('.etiNotification').nth(0),
-  cardLabel: Selector('[for="CARD"]'),
+  cardLabel: Selector('[data-testid="paymentMethods-CARD-label"]'),
   cardLogo: Selector('[data-testid="paymentMethodLogo-card"]'),
   cardLastNameInput: Selector('[data-testid="card-payment-form"] [data-testid="lastName-input"]'),
   cardMaestro: Selector('[data-testid="payment-credit-cards"]').nth(4),
