@@ -2,12 +2,10 @@ import { Selector } from 'testcafe';
 
 export default {
   debugBar: Selector('[data-testid="devBar"]'),
-  debugBarClosed: Selector('.devBarClosed'),
-  debugBarOpen: Selector('.devBarOpen'),
+  debugBarClosed: Selector('.closed'),
+  debugBarOpen: Selector('.open'),
   debugFilterButton: Selector('[data-testid="resultPage-debugTools-toggleButton-button"]'),
-  debugFilterContent: Selector('[data-testid="resultPage-debugFilters-content"]'),
+  debugToolsButton: Selector('[data-testid="devBar-toggleButton-button"]').nth(1),
+  debugOptionsButton: Selector('[data-testid="devBar-toggleButton-button"]').nth(0),
   enableDebug: Selector('#debug-link'),
-  resultPageDebugBarClosed: Selector('.closed'),
-  resultPageDebugBarOpen: Selector('.open'),
-  toggleDevBarButton: Selector('[data-testid="toggleDevBar"]'),
 };
