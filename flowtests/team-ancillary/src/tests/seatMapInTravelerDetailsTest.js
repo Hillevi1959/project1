@@ -7,7 +7,6 @@ import { closeHeaderUrgencyBanner, searchAndSelectTrip } from '../../../common/s
 import {
   addTravelerInformation,
   bookFlight,
-  closeCart,
   toggleCart,
 } from '../../../common/src/rf_pages/travelerDetails';
 import { openCartIfClosed, payWithDummyBank } from '../../../common/src/rf_pages/payment';
@@ -23,7 +22,7 @@ import {
   getFirstAdult,
   getFirstInfant,
 } from '../../../common/src/util/travelerData';
-import { isMobile, isTablet } from '../../../common/src/util/device';
+import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
@@ -63,26 +62,30 @@ test('SeatMap is visible after book is pressed, seats selected and verified in c
   await addNoExtraProducts(numberOfTravelers);
   if ((await isMobile()) || (await isTablet())) {
     await toggleCart();
+    await t.expect(travelerDetailsModule.cartExtraProductsContent.exists).notOk();
+    await toggleCart();
   }
-
-  await t.expect(travelerDetailsModule.cartExtraProductsContent.exists).notOk();
-
-  if ((await isMobile()) || (await isTablet())) {
-    await closeCart();
-  }
-
   await t.expect(travelerDetailsModule.bookButton.hasAttribute('disabled')).notOk();
   await t.click(travelerDetailsModule.bookButton);
   await selectSeatsForAllSegmentTypes();
   await saveSeatMapSelections();
-
   await t.expect(paymentModule.paymentContainer.visible).ok('', { timeout: 50000 });
-  await openCartIfClosed();
 
-  await t.expect(paymentModule.cartSeatMapProduct.visible).ok('', { timeout: 30000 });
-  await t
-    .expect(paymentModule.cartSeatMapProduct.innerText)
-    .contains(`${numberOfSeatsBooked} Platsreservation`);
+  if (await isDesktop()) {
+    await openCartIfClosed();
+    await t.expect(paymentModule.cartSeatMapProduct.visible).ok('', { timeout: 30000 });
+    await t
+      .expect(paymentModule.cartSeatMapProduct.innerText)
+      .contains(`${numberOfSeatsBooked} Platsreservation`);
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t.expect(paymentModule.cartSeatMapProductMobile.visible).ok('', { timeout: 30000 });
+    await t
+      .expect(paymentModule.cartSeatMapProductMobile.innerText)
+      .contains(`${numberOfSeatsBooked} Platsreservation`);
+    await toggleCart();
+  }
 });
 
 test('SeatMap is visible before book, not selectable for infant and verified in cart', async () => {
@@ -95,7 +98,6 @@ test('SeatMap is visible before book, not selectable for infant and verified in 
   const numberOfSegments = 4;
 
   await setProps(modalDisabled);
-
   await selectProvider('IbeGDSDummy');
   await searchAndSelectTrip(
     numberOfAdults,
@@ -111,16 +113,25 @@ test('SeatMap is visible before book, not selectable for infant and verified in 
   await addNoExtraProducts(numberOfAdults);
   await selectSeatsAndVerifyNotIncludeInfants(numberOfSegments);
   await bookFlight();
-
   await t.expect(paymentModule.bankLabel.visible).ok();
-  await openCartIfClosed();
-  await t.expect(paymentModule.cartSeatMapProduct.visible).ok();
-  await t
-    .expect(paymentModule.cartSeatMapProduct.innerText)
-    .contains(`${numberOfSegments} Platsreservation`);
+
+  if (await isDesktop()) {
+    await openCartIfClosed();
+    await t.expect(paymentModule.cartSeatMapProduct.visible).ok();
+    await t
+      .expect(paymentModule.cartSeatMapProduct.innerText)
+      .contains(`${numberOfSegments} Platsreservation`);
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t.expect(paymentModule.cartSeatMapProductMobile.visible).ok('', { timeout: 30000 });
+    await t
+      .expect(paymentModule.cartSeatMapProductMobile.innerText)
+      .contains(`${numberOfSegments} Platsreservation`);
+    await toggleCart();
+  }
 
   await payWithDummyBank();
-
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
@@ -146,16 +157,24 @@ test('SeatMap book seating light and beside', async () => {
 
   await selectSeatsForAllSegmentTypes();
   await saveSeatMapSelections();
-
   await t.expect(paymentModule.bankLabel.visible).ok();
-  await openCartIfClosed();
-  await t.expect(paymentModule.cartSeatMapProduct.visible).ok();
-  await t
-    .expect(paymentModule.cartSeatMapProduct.innerText)
-    .contains(`${numberOfSegments} Platsreservation`);
 
+  if (await isDesktop()) {
+    await openCartIfClosed();
+    await t.expect(paymentModule.cartSeatMapProduct.visible).ok();
+    await t
+      .expect(paymentModule.cartSeatMapProduct.innerText)
+      .contains(`${numberOfSegments} Platsreservation`);
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t.expect(paymentModule.cartSeatMapProductMobile.visible).ok('', { timeout: 30000 });
+    await t
+      .expect(paymentModule.cartSeatMapProductMobile.innerText)
+      .contains(`${numberOfSegments} Platsreservation`);
+    await toggleCart();
+  }
   await payWithDummyBank();
-
   await t.expect(orderModule.infoTextOrderPage.visible).ok('', { timeout: 50000 });
   await t.expect(orderModule.infoTextOrderPage.innerText).contains(messageSupersaverSe);
 });
