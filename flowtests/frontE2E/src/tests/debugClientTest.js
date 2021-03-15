@@ -26,12 +26,12 @@ test('Verify debug client can be used', async () => {
 
   await t.click(debugModule.debugToolsButton);
   await t.expect(debugModule.debugBarOpen.count).eql(1);
-  await t.click(debugModule.debugToolsButton);
+  await t.click(debugModule.debugToolsCloseButton);
   await t.expect(debugModule.debugBarClosed.count).eql(2);
 
   await t.click(debugModule.debugOptionsButton);
   await t.expect(debugModule.debugBarOpen.count).eql(1);
-  await t.click(debugModule.debugOptionsButton);
+  await t.click(debugModule.debugOptionsCloseButton);
   await t.expect(debugModule.debugBarClosed.count).eql(2);
 
   await selectProvider('IbeGDSDummy');
@@ -42,7 +42,7 @@ test('Verify debug client can be used', async () => {
 
   await t.click(debugModule.debugFilterButton);
   await t.expect(debugModule.debugBarOpen.count).eql(1);
-  await t.click(debugModule.debugFilterButton);
+  await t.click(debugModule.debugFilterCloseButton);
   await t.expect(debugModule.debugBarClosed.count).eql(3);
 
   await t.click(debugModule.enableDebug);
