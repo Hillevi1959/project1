@@ -15,6 +15,7 @@ export default {
   destinationInput: Selector('[data-testid="searchForm-singleBound-destination-input"]'),
   departureDate: Selector('[data-testid="singleBound.departureDate-input"]'),
   discountInformation: Selector('[data-testid="payment-method-discount-info"]'),
+  filterAirlineAirFranceCheckbox: Selector('[for="airlines-AF"]'),
   filterAirlineLufthansaCheckbox: Selector('[for="airlines-LH"]'),
   filterAirlineSasCheckbox: Selector('[for="airlines-SK"]'),
   filterAirlineTurkishCheckbox: Selector('[for="airlines-TK"]'),

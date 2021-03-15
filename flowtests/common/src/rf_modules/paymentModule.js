@@ -89,6 +89,7 @@ export default {
   cartMealProductMobile: Selector('[data-testid="cart-product-meal-drawer"]'),
   cartOnlineCheckinProduct: Selector('[data-testid="cart-product-onlineCheckIn"]'),
   cartPrice: Selector('[data-testid="cart-totalPrice-span"]'),
+  cartPriceInfo: Selector('[data-testid="traveler-price-info"]'),
   cartPriceMobile: Selector('[data-testid="cart-totalPrice-span-drawer"]'),
   cartSeatMapProduct: Selector('[data-testid="cart-product-seatMap"]'),
   cartSeatMapProductMobile: Selector('[data-testid="cart-product-seatMap-drawer"]'),
@@ -98,7 +99,7 @@ export default {
   cartToggleButtonMobile: Selector('[data-testid="cart-cartButton-button"]'),
   cartTravelerinfo: Selector('[data-testid="cart-travelerInfo-CartTravelers"]'),
   cartTravelerInfoButton: Selector('[data-testid="cart-travelerInfoToggleButton-button"]'),
-  cartTravelerInfoMobile: Selector('[data-testid="cart-travelerInfo-CartTravelers-drawer"]'),
+  cartTravelerInfoMobile: Selector('[data-testid="traveler-price-info-drawer"]'),
   cartTripCancellationProduct: Selector('[data-testid="cart-product-tripCancellationProtection"]'),
   cartTripCancellationProductMobile: Selector(
     '[data-testid="cart-product-tripCancellationProtection-drawer"]',
