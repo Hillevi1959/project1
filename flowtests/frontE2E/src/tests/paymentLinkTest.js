@@ -107,6 +107,7 @@ test('Create add on cart in Edvin and verify payment link', async () => {
   await t.expect(paymentLinkModule.travelDocumentsByPostProduct.visible).ok();
 
   const paymentData = getPaymentData();
+  await t.click(paymentLinkModule.cardLabel);
   await t.typeText(paymentLinkModule.cardNumberInput, paymentData.cardNumber);
   await t.typeText(paymentLinkModule.cardExpInput, paymentData.exp);
   await t.typeText(paymentLinkModule.cardCvcInput, paymentData.cvc);
