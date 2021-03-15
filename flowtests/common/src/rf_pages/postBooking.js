@@ -45,3 +45,10 @@ export async function payWithDummyBankPostBooking() {
   await checkPaymentConditions();
   await t.click(paymentModule.payButton);
 }
+
+export async function toggleCartPostBooking() {
+  await t.click(postbookingModule.cartToggleButtonMobilePostBooking);
+}
+export async function closeCartPostBooking() {
+  await t.click(postbookingModule.cartToggleCloseButtonMobilePostBooking);
+}
