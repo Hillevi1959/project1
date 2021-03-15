@@ -4,6 +4,7 @@ export default {
   cardCvcInput: Selector('[data-testid="cvc-input"]'),
   cardExpInput: Selector('[data-testid="cc-exp-input"]'),
   cardFirstNameInput: Selector('[data-testid="firstName-input"]'),
+  cardLabel: Selector('[data-testid="paymentMethods-CARD-label"]'),
   cardLastNameInput: Selector('[data-testid="lastName-input"]'),
   cardNumberInput: Selector('[data-testid="cardnumber-input"]'),
   checkInProduct: Selector('[data-testid="cart-product-onlineCheckIn-price"]'),
