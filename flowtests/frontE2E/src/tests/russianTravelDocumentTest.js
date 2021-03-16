@@ -20,7 +20,7 @@ import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetails
 import { payWithCreditCard } from '../../../common/src/rf_pages/payment';
 import { messageUk, waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
-import setProps, { addNewPropInEdvin } from '../../../common/src/util/props';
+import setProps from '../../../common/src/util/props';
 
 const url = getSiteUrl('supersaver-ru', config.host);
 const props = {
@@ -40,7 +40,6 @@ const numberOfInfants = 1;
 const numberOfTravelers = numberOfAdults + numberOfChildren;
 
 fixture('Travel document for domestic Russian trips').beforeEach(async () => {
-  await addNewPropInEdvin('gotogate-ru', 'TD.Passport.DocumentType.Enabled', 'true', 'ibe');
   await t.navigateTo(url);
   await enableDebug();
   await acceptCookies();

@@ -31,11 +31,7 @@ import {
   payWithDummyBank,
 } from '../../../common/src/rf_pages/payment';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
-import {
-  addTextKey,
-  getDiscountCode,
-  getDiscountCodeUrl,
-} from '../../../common/src/rf_pages/edvin';
+import { getDiscountCode, getDiscountCodeUrl } from '../../../common/src/rf_pages/edvin';
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import resultModule from '../../../common/src/rf_modules/resultModule';
 import {
@@ -62,7 +58,6 @@ const numberOfChildren = 1;
 const origin = 'Stockholm';
 const destination = 'London';
 const validDate = getDateWithAddedMonths(6);
-const urlEdvin = getSiteUrl('gotogate-uk-edvin', config.host);
 
 fixture('Verify self service rebooking flow');
 
@@ -75,7 +70,6 @@ test.before(async () => {
     'Result.SelfServiceRebooking.ValidWithVoucherSwitch.Enable': true,
     'IbeClient.SearchResult.Flex.Behaviour': 'BUTTON',
   };
-  await addTextKey(urlEdvin, 'SelfServiceRebooking.InformationBox.ReadMore.Link.Text', 'Read more');
   await updateDiscountCampaignForCovid19('SK', validDate);
   await t.navigateTo(url);
   await enableDebug();
