@@ -34,6 +34,7 @@ export default {
   cartSeatMapIcon: Selector('[data-testid="seatMap-ProductIcon"]'),
   cartSmsProductPrice: Selector('[data-testid="cart-product-sms-price"]'),
   cartToggleButtonMobilePostBooking: Selector('[data-testid="cart-button"]'),
+  cartToggleCloseButtonMobilePostBooking: Selector('[class*="etiIcon tripWidget__closeIcon"]'),
   cartTotalPrice: Selector('[data-testid="cart-totalPrice-span"]'),
   checkinBaggageYesAllPassengers: Selector('[data-testid="checkInBaggage-toggleTravelers-true"]'),
   checkInBaggageYesOnePassenger: Selector('[data-testid="checkInBaggage-travelerModule-0-true"]'),
