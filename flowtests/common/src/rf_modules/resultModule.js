@@ -5,8 +5,6 @@ export default {
   bookFlightWithFlexibleTicketButton: Selector('[data-testid="resultPage-book-button"]').nth(1),
   cabinClassDropdown: Selector('[data-testid="searchForm-cabinClasses-dropdown"]'),
   cheapestFilterButton: Selector('[data-testid="result-quick-sort-button"]').nth(2),
-  childAgeCounterPlus: childNr =>
-    Selector(`[data-testid="child-${childNr}-age-option"] .etiCounter__button--plus`),
   clearAirlines: Selector(
     '[data-testid="resultPage-AIRLINESFilter-content"] > div > span:nth-child(1)',
   ),
@@ -15,7 +13,9 @@ export default {
   destinationInput: Selector('[data-testid="searchForm-singleBound-destination-input"]'),
   departureDate: Selector('[data-testid="singleBound.departureDate-input"]'),
   discountInformation: Selector('[data-testid="payment-method-discount-info"]'),
+  filterAirlineAirFranceCheckbox: Selector('[for="airlines-AF"]'),
   filterAirlineLufthansaCheckbox: Selector('[for="airlines-LH"]'),
+  filterAirlineSpiritAirlinesCheckbox: Selector('[for="airlines-NK"]'),
   filterAirlineSasCheckbox: Selector('[for="airlines-SK"]'),
   filterAirlineTurkishCheckbox: Selector('[for="airlines-TK"]'),
   filterAirlineToggleButton: Selector(
@@ -77,8 +77,6 @@ export default {
     '[data-testid="freeCancellationInformationDaysAhead-search-result"]',
   ),
   headerNavigationMenu: Selector('[data-testid="siteheader-button"]'),
-  infantAgeCounterPlus: infantNr =>
-    Selector(`[data-testid="infant-${infantNr}-age-option"] .etiCounter__button--plus`),
   nextMonth: Selector('[data-testid="searchForm-nextMonth-input"]'),
   openFlightButton: Selector('[data-testid="searchResults-arrowDown-button"]'),
   originInput: Selector('[data-testid="searchForm-singleBound-origin-input"]'),

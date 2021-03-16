@@ -11,4 +11,5 @@ export default {
   debugOptionsButton: Selector('[data-testid="devBar-toggleButton-button"]').nth(0),
   debugOptionsCloseButton: Selector('#dev-bar-search button'),
   enableDebug: Selector('#debug-link'),
+  searchCarrierDropdown: Selector('[data-testid="resultPage-debugTools-carrier-search-dropdown"]'),
 };

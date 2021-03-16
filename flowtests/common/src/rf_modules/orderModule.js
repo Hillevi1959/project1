@@ -39,6 +39,7 @@ export default {
   flightInfoButton: Selector('[data-testid="order-show-flight-info-button"]'),
   infoTextOrderPage: Selector('[data-testid="order-page"] .etiContentWrapper span').nth(0),
   mailConfirmationButton: Selector('[data-testid="mailConfirmation-button"]'),
+  markupPrice: Selector('[data-testid="cart-travelers-ADT-markup"]'),
   moreInfoButton: Selector('[data-testid="order-lccinfo-toggle-button"]'),
   myBookingsButton: Selector('[data-testid="my-bookings-large"]'),
   myBookingsButtonMobile: Selector('[data-testid="myBookings-dropdown-small"]'),
