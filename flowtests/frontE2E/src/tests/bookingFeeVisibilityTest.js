@@ -24,6 +24,13 @@ import { addNoExtraProducts } from '../../../common/src/rf_pages/travelerDetails
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
+import {
+  addCheckoutData,
+  openCartIfClosed,
+  payWithCreditCard,
+} from '../../../common/src/rf_pages/payment';
+import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
+import orderModule from '../../../common/src/rf_modules/orderModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
@@ -59,6 +66,8 @@ test('Booking fee visible for Air France', async () => {
   await t.click(resultModule.clearAirlines);
   await t.click(resultModule.filterAirlineAirFranceCheckbox);
   await selectTripButtonByIndex(0);
+
+  // Verify on traveler details page
   if ((await isMobile()) || (await isTablet())) {
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
@@ -77,7 +86,8 @@ test('Booking fee visible for Air France', async () => {
   await addNoExtraProducts(numberOfAdults);
   await bookFlight();
   await closeSeatMapModal();
-
+  // Verify on payment page
+  await openCartIfClosed();
   if ((await isMobile()) || (await isTablet())) {
     await t.click(paymentModule.cartToggleButtonMobile);
     await t.click(paymentModule.cartTravelerInfoButton);
@@ -91,4 +101,9 @@ test('Booking fee visible for Air France', async () => {
 
     await t.expect(paymentModule.cartPriceInfo.innerText).contains('Booking fee');
   }
+  await payWithCreditCard();
+  await addCheckoutData();
+  // Verify on order page
+  await waitForOrderPageToLoad();
+  await t.expect(orderModule.travelerPriceInfo.innerText).contains('Booking fee');
 });
