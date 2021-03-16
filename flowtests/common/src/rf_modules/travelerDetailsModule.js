@@ -102,6 +102,7 @@ export default {
     '[data-testid="cart-product-cancellationInsideEu-price-drawer"]',
   ),
   cartCheckInProduct: Selector('[data-testid="cart-product-onlineCheckIn-widget"]'),
+  cartCheckInProductMobile: Selector('[data-testid="cart-product-onlineCheckIn-price-drawer"]'),
   cartCheckInBaggageProduct: Selector('[data-testid="cart-product-checkInBaggage-widget"]'),
   cartExtraProductsContent: Selector('[data-testid="cart-content-products-widget"]'),
   cartCheckInBaggageProductMobile: Selector('[data-testid="cart-product-checkInBaggage-drawer"]'),
@@ -120,6 +121,9 @@ export default {
   cartFlightContent: Selector('[data-testid="cart-content-Content"] div.etiCartItem'),
   cartFlightMobile: Selector('[data-testid="cart-content-Trip-drawer"] div'),
   cartMobileTravelPlanProduct: Selector('[data-testid="cart-product-mobileTravelPlan-widget"]'),
+  cartMobileTravelPlanProductMobile: Selector(
+    '[data-testid="cart-product-mobileTravelPlan-drawer"]',
+  ),
   cartSeatMapProductMobile: Selector('[data-testid="cart-product-seatMap-drawer"]'),
   cartToggleButtonMobile: Selector('[data-testid="cart-cartButton-button"]'),
   cartPassengers: Selector('[data-testid="traveler-price-info-widget"]'),
@@ -127,7 +131,11 @@ export default {
   cartPrice: Selector('[data-testid="cart-content-Content"] div div'),
   cartSeatMapProduct: Selector('[data-testid="cart-product-seatMap-widget"]'),
   cartSmsProduct: Selector('[data-testid="cart-product-sms-widget"]'),
+  cartSmsProductMobile: Selector('[data-testid="cart-product-sms-drawer"]'),
   cartSupportPackageProduct: Selector('[data-testid="cart-product-servicePackage-widget"]'),
+  cartSupportPackageProductMobile: Selector(
+    '[data-testid="cart-product-servicePackage-price-drawer"]',
+  ),
   cartTagIcon: Selector('[data-testId="cart-tag-icon"]'),
   cartTravelerInfo: Selector('[data-testid="traveler-price-info"]'),
   cartTravelerToggleButton: Selector('[data-testid="cart-travelerInfoToggleButton-button"]'),
@@ -276,6 +284,7 @@ export default {
   supportPackageBasicStringSelector: '[for="choice.supportPackage.0"] .etiCustomRadio',
   supportPackageBasicStringMobile: '[for="toggleChoice.supportPackage.0"] .etiCustomRadio',
   supportPackageComponent: Selector('[data-testid="servicePackage-component"]'),
+  supportPackageContainerMobile: Selector('[data-testid="servicePackage-component"]'),
   supportPackageMobileTravelPlan: Selector(
     '[data-testid="servicePackage-mobileTravelPlan-trigger"]',
   ),
@@ -285,6 +294,7 @@ export default {
   supportPackagePremiumIcon: Selector('[data-testid="servicePackage-ProductIcon"]'),
   supportPackagePremiumNew: Selector('[for="toggleChoice.supportPackage.62"]'),
   supportPackagePremiumMobile: Selector('[for="toggleChoice.supportPackage.62"]'),
+  supportPackagePremiumSelectMobile: Selector('[for="toggleChoice.supportPackage.62"]').nth(1),
   trainSegmentIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-segment-train"] svg',
   ),

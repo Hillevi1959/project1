@@ -4,7 +4,11 @@ import { selectProvider } from '../../../common/src/util/debugOptions';
 import { acceptCookies, getSiteUrl } from '../../../common/src/util/common';
 import setProps from '../../../common/src/util/props';
 import { closeHeaderUrgencyBanner, searchAndSelectTrip } from '../../../common/src/rf_pages/start';
-import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
+import {
+  addTravelerInformation,
+  bookFlight,
+  toggleCart,
+} from '../../../common/src/rf_pages/travelerDetails';
 import { closeSeatMapModal } from '../../../common/src/rf_pages/seatMap';
 import {
   addNoExtraProducts,
@@ -21,6 +25,7 @@ import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetail
 import orderModule from '../../../common/src/rf_modules/orderModule';
 import paymentModule from '../../../common/src/rf_modules/paymentModule';
 import { addNumberToTraveler, getFirstAdult } from '../../../common/src/util/travelerData';
+import { isDesktop, isMobile, isTablet } from '../../../common/src/util/device';
 import config from './testdata.json';
 
 const url = getSiteUrl('test-uk', config.host);
@@ -67,32 +72,61 @@ test('Book and pay for a trip with bundled support package', async () => {
   await addNoExtraProducts(travelers.length, travelers);
   await addSupportPackagePremiumNew();
 
-  await t
-    .expect(travelerDetailsModule.cartSupportPackageProduct.exists)
-    .ok()
-    .expect(travelerDetailsModule.cartCheckInProduct.exists)
-    .ok()
-    .expect(travelerDetailsModule.cartMobileTravelPlanProduct.exists)
-    .ok()
-    .expect(travelerDetailsModule.cartSmsProduct.exists)
-    .ok();
+  if (await isDesktop()) {
+    await t
+      .expect(travelerDetailsModule.cartSupportPackageProduct.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartCheckInProduct.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartMobileTravelPlanProduct.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartSmsProduct.exists)
+      .ok();
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t
+      .expect(travelerDetailsModule.cartSupportPackageProductMobile.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartCheckInProductMobile.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartMobileTravelPlanProductMobile.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartSmsProductMobile.exists)
+      .ok();
+    await toggleCart();
+  }
 
   await bookFlight();
   await closeSeatMapModal();
   await t.click(paymentModule.cardLabel);
   await t.expect(paymentModule.cardPaymentForm.exists).ok('', { timeout: 90000 });
 
-  await openCartIfClosed();
-
-  await t
-    .expect(paymentModule.cartSupportPackageProduct.visible)
-    .ok()
-    .expect(paymentModule.cartMobileTravelPlanProduct.visible)
-    .ok()
-    .expect(paymentModule.cartSmsProduct.visible)
-    .ok()
-    .expect(paymentModule.cartCheckInProduct.visible)
-    .ok();
+  if (await isDesktop()) {
+    await openCartIfClosed();
+    await t
+      .expect(paymentModule.cartSupportPackageProduct.visible)
+      .ok()
+      .expect(paymentModule.cartMobileTravelPlanProduct.visible)
+      .ok()
+      .expect(paymentModule.cartSmsProduct.visible)
+      .ok()
+      .expect(paymentModule.cartCheckInProduct.visible)
+      .ok();
+  }
+  if ((await isMobile()) || (await isTablet())) {
+    await toggleCart();
+    await t
+      .expect(travelerDetailsModule.cartSupportPackageProductMobile.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartCheckInProductMobile.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartMobileTravelPlanProductMobile.exists)
+      .ok()
+      .expect(travelerDetailsModule.cartSmsProductMobile.exists)
+      .ok();
+    await toggleCart();
+  }
 
   await addPaymentData();
   await checkPaymentConditions();
@@ -103,7 +137,9 @@ test('Book and pay for a trip with bundled support package', async () => {
     .expect(orderModule.infoTextOrderPage.visible)
     .ok('', { timeout: 90000 })
     .expect(orderModule.infoTextOrderPage.innerText)
-    .contains(messageUk)
+    .contains(messageUk);
+
+  await t
     .expect(paymentModule.cartSupportPackageProduct.visible)
     .ok()
     .expect(paymentModule.cartMobileTravelPlanProduct.visible)
