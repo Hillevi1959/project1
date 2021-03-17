@@ -44,6 +44,7 @@ const props = {
 
 async function filterTrip(carrier, selector) {
   await t.click(debugModule.debugFilterButton);
+  await t.expect(debugModule.searchCarrierDropdown.visible).ok();
   await dropdownSelect(debugModule.searchCarrierDropdown, carrier);
   await t.click(debugModule.debugFilterCloseButton);
   await t.click(resultModule.toggleFilterButton);
@@ -54,7 +55,9 @@ async function filterTrip(carrier, selector) {
   await t.click(selector);
 }
 
-fixture('Booking fee visibility for different carriers')
+// This test will be activated when WEB-5145 is solved and released
+fixture
+  .skip('Booking fee visibility for different carriers')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
