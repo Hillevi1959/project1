@@ -16,7 +16,6 @@ import {
   getTripDate,
   searchAndSelectTrip,
 } from '../../../common/src/rf_pages/start';
-// import getTrip from '../../../common/src/util/metaTrips';
 import { getTripWithCountryAndBrand } from '../../../common/src/util/metaTrips';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import resultModule from '../../../common/src/rf_modules/resultModule';
@@ -61,17 +60,110 @@ const props = {
 
 fixture('Edit search from traveler details page');
 
-test('Edit search when coming from result page', async () => {
-  await searchAndSelectTrip(
+// This test cannot be finished until the bug WEB-5110 is solved
+test.skip.before(async () => {
+  const url = await getSiteUrl('gotogate-uk', config.host);
+  await t.navigateTo(url);
+  await enableDebug();
+  await selectProvider('IbeGDSDummy');
+  await setProps(props);
+  await acceptCookies();
+  await closeHeaderUrgencyBanner();
+})('Edit search when coming from result page', async () => {
+  const airport1 = 'New York';
+  const airport2 = 'Barcelona';
+  const airport3 = 'Madrid';
+  await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', airport1, airport2, 'ECONOMY', [
+    11,
+    24,
+  ]);
+
+  await t.click(travelerDetailsModule.editSearchButton);
+  // Verify trip from TD page on result page
+  await t.expect(resultModule.resultPage.visible).ok();
+
+  await t.expect(resultModule.tripInfoAirport.nth(0).innerText).contains(airport1);
+  await t.expect(resultModule.tripInfoAirport.nth(1).innerText).contains(airport2);
+  await t.expect(resultModule.tripInfoAirport.nth(2).innerText).contains(airport2);
+  await t.expect(resultModule.tripInfoAirport.nth(3).innerText).contains(airport1);
+
+  // Change trip on result page
+  await addSearchDataResultPage(
     numberOfAdults,
+    airport1,
+    airport3,
     numberOfChildren,
     numberOfInfants,
-    'return trip',
-    'STO',
-    'LON',
-    'ECONOMY',
-    [11, 24],
   );
+  await t.click(resultModule.searchFlight);
+  await t.click(resultModule.searchFormButton);
+  await selectTripButtonByIndex(0);
+
+  // Verify changed trip on TD page
+  if ((await isMobile()) || (await isTablet())) {
+    await t.click(travelerDetailsModule.cartToggleButtonMobile);
+    await t.click(travelerDetailsModule.cartTravelerToggleButton);
+
+    await t.expect(travelerDetailsModule.cartTripsMobile.innerText).contains(airport1);
+    await t.expect(travelerDetailsModule.cartTripsMobile.innerText).contains(airport3);
+    await t
+      .expect(travelerDetailsModule.cartPassengersMobile.nth(0).innerText)
+      .contains('2 adults');
+    await t.expect(travelerDetailsModule.cartPassengersMobile.nth(1).innerText).contains('1 child');
+    await t
+      .expect(travelerDetailsModule.cartPassengersMobile.nth(2).innerText)
+      .contains('1 infant');
+    await t.click(travelerDetailsModule.cartToggleButtonMobile);
+  }
+  if (await isDesktop()) {
+    await t.click(travelerDetailsModule.cartTravelerToggleButton);
+    await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport1);
+    await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport3);
+    await t.expect(travelerDetailsModule.cartPassengers.nth(0).innerText).contains('2 adults');
+    await t.expect(travelerDetailsModule.cartPassengers.nth(1).innerText).contains('1 child');
+    await t.expect(travelerDetailsModule.cartPassengers.nth(2).innerText).contains('1 infant');
+  }
+
+  await addTravelerInformation(travelers);
+  await addNoExtraProducts(numberOfAdults + numberOfChildren);
+  await bookFlight();
+  await closeSeatMapModal();
+
+  // Verify payment page
+  if ((await isMobile()) || (await isTablet())) {
+    await t.click(paymentModule.cartToggleButtonMobile);
+    await t.click(paymentModule.cartTravelerInfoButton);
+
+    await t.expect(paymentModule.cartTripsMobile.innerText).contains(airport1);
+    await t.expect(paymentModule.cartTripsMobile.innerText).contains(airport3);
+    await t.expect(paymentModule.cartTravelerInfoMobile.nth(0).innerText).contains('2 adults');
+    await t.expect(paymentModule.cartTravelerInfoMobile.nth(1).innerText).contains('1 child');
+    await t.expect(paymentModule.cartTravelerInfoMobile.nth(2).innerText).contains('1 infant');
+
+    await t.click(paymentModule.cartToggleButtonMobile);
+  }
+  if (await isDesktop()) {
+    await openCartIfClosed();
+    await t.click(paymentModule.cartTravelerInfoButton);
+
+    await t.expect(paymentModule.cartTrips.innerText).contains(airport1);
+    await t.expect(paymentModule.cartTrips.innerText).contains(airport3);
+    await t.expect(paymentModule.cartPriceInfo.nth(0).innerText).contains('2 adults');
+    await t.expect(paymentModule.cartPriceInfo.nth(1).innerText).contains('1 child');
+    await t.expect(paymentModule.cartPriceInfo.nth(2).innerText).contains('1 infant');
+  }
+
+  await payWithCreditCard();
+  await addCheckoutData();
+
+  // Verify order page
+  await waitForOrderPageToLoad();
+
+  await t.expect(orderModule.orderInfoTrip.innerText).contains(airport1);
+  await t.expect(orderModule.orderInfoTrip.innerText).contains(airport3);
+  await t.expect(orderModule.travelerPriceInfo.nth(0).innerText).contains('2 adults');
+  await t.expect(orderModule.travelerPriceInfo.nth(1).innerText).contains('1 child');
+  await t.expect(orderModule.travelerPriceInfo.nth(2).innerText).contains('1 infant');
 });
 
 test.before(async () => {
@@ -122,8 +214,8 @@ test.before(async () => {
   // Change trip on result page
   await addSearchDataResultPage(
     numberOfAdults,
-    'Stockholm',
-    'Madrid',
+    airport1,
+    airport3,
     numberOfChildren,
     numberOfInfants,
   );
