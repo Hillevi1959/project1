@@ -179,6 +179,7 @@ export default {
   contactPersonPhone: Selector('[for="traveler-phone"]'),
   documentTypeDropdown: travelerNr =>
     Selector(`[data-testid="document-types-dropdown-${travelerNr}"]`),
+  editSearchButton: Selector('[data-testid="edit-search-button"]'),
   errorMessage: Selector('[data-testid="components-textInput"] > .message > [type="error"]'),
   expiryDateError: travelerNr =>
     Selector(

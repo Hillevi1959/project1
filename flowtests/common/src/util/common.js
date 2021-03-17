@@ -37,6 +37,8 @@ export function getSiteUrl(site, host) {
       return `https://gotogate-uk${host}/rf/order-login`;
     case 'SE-meta':
       return `https://supersaver-se${host}`;
+    case 'gotogate-uk-meta':
+      return `https://gotogate-uk${host}`;
     case 'SE':
       return `https://supersaver-se${host}/flyg`;
     case 'UK':
