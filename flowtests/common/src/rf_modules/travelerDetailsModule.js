@@ -286,7 +286,7 @@ export default {
   supportPackageBasicNew: Selector('[for="toggleChoice.supportPackage.0"]').nth(1),
   supportPackageBasicStringSelector: '[for="choice.supportPackage.0"] .etiCustomRadio',
   supportPackageBasicStringMobile: '[for="toggleChoice.supportPackage.0"] .etiCustomRadio',
-  supportPackageComponent: Selector('[data-testid="servicePackage-component"]'),
+  supportPackageComponentNew: Selector('[data-testid="supportPackage-pack-Premium"]'),
   supportPackageContainerMobile: Selector('[data-testid="servicePackage-component"]'),
   supportPackageMobileTravelPlan: Selector(
     '[data-testid="servicePackage-mobileTravelPlan-trigger"]',
@@ -296,7 +296,6 @@ export default {
   supportPackagePremium: Selector('[for="choice.supportPackage.62"]'),
   supportPackagePremiumIcon: Selector('[data-testid="servicePackage-ProductIcon"]'),
   supportPackagePremiumNew: Selector('[for="toggleChoice.supportPackage.62"]'),
-  supportPackagePremiumMobile: Selector('[for="toggleChoice.supportPackage.62"]'),
   supportPackagePremiumSelectMobile: Selector('[for="toggleChoice.supportPackage.62"]').nth(1),
   trainSegmentIcon: Selector(
     '[data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-segment-train"] svg',

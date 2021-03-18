@@ -36,7 +36,7 @@ export async function addSupportPackageBasicNew() {
 export async function addSupportPackagePremium() {
   await scrollToElement(travelerDetailsModule.supportPackageBasicStringSelector);
   if (await isMobile()) {
-    await t.click(travelerDetailsModule.supportPackagePremiumMobile);
+    await t.click(travelerDetailsModule.supportPackagePremiumNew);
   } else if ((await isTablet()) || (await isDesktop())) {
     await t.click(travelerDetailsModule.supportPackagePremium);
   }
@@ -544,8 +544,8 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
   }
   if (await isMobile()) {
     if (
-      (await travelerDetailsModule.supportPackagePremiumMobile.exists) &&
-      (await travelerDetailsModule.supportPackagePremiumMobile.visible)
+      (await travelerDetailsModule.supportPackagePremiumNew.exists) &&
+      (await travelerDetailsModule.supportPackagePremiumNew.visible)
     ) {
       await addSupportPackagePremium();
     }
@@ -557,11 +557,13 @@ export async function addAllExtraProducts(nrOfTravelers, travelers) {
       await addSupportPackagePremium();
     }
   }
-  if (
-    (await travelerDetailsModule.supportPackagePremiumNew.exists) &&
-    (await travelerDetailsModule.supportPackagePremiumNew.visible)
-  ) {
-    await addSupportPackagePremiumNew();
+  if (await isMobile()) {
+    if (
+      (await travelerDetailsModule.supportPackageComponentNew.exists) &&
+      (await travelerDetailsModule.supportPackageComponentNew.visible)
+    ) {
+      await addSupportPackagePremiumNew();
+    }
   }
   if (
     (await travelerDetailsModule.onlineCheckinBaggageContainer.exists) &&
