@@ -130,6 +130,9 @@ export default {
     ),
   tripChange: Selector('[data-testid="searchResults-segment-stops"]'),
   tripDetailBound: Selector('[data-testid="tripDetails-bound"]'),
+  tripInfoAirport: Selector(
+    '[data-testid="resultPage-selectedTrip-wrapper"] [data-testid="tripDetails-segment"] p:nth-child(2)',
+  ),
   tripInformationHeader: Selector('.header'),
   tripInfoText: Selector('.resultPage-flightResults-4 [data-testid="tripDetails-segment-event"]'),
   tripPriceFlex: Selector('[data-testid="result-trip-price-flex"]'),
