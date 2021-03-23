@@ -45,24 +45,22 @@ export async function makeSearchResultPage(origin, destination) {
 }
 
 export async function addSearchDataResultPage(
-  numberOfAdults,
+  numberOfAdultsToAdd,
   origin,
   destination,
-  numberOfChildren,
-  numberOfInfants,
+  numberOfChildrenToAdd,
+  numberOfInfantsToAdd,
 ) {
   await t.click(resultModule.searchFormButton);
   await dropdownSelect(resultModule.cabinClassDropdown, 1);
   await dropdownSelect(resultModule.travelerDropDown, 0);
-  if (numberOfAdults > 1) {
-    for (let i = 1; i < numberOfAdults; i += 1) {
-      await t.click(resultModule.travelerAdultsCounterPlus);
-    }
+  for (let i = 0; i < numberOfAdultsToAdd; i += 1) {
+    await t.click(resultModule.travelerAdultsCounterPlus);
   }
-  if (numberOfChildren === 1) {
+  for (let i = 0; i < numberOfChildrenToAdd; i += 1) {
     await t.click(resultModule.travelerChildrenCounterPlus);
   }
-  if (numberOfInfants === 1) {
+  for (let i = 0; i < numberOfInfantsToAdd; i += 1) {
     await t.click(resultModule.travelerInfantsCounterPlus);
   }
   await makeSearchResultPage(origin, destination);
