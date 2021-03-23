@@ -48,9 +48,10 @@ const travelers = addNumberToTraveler([
 
 const numberOfAdults = 2;
 const numberOfChildren = 1;
-const numberOfInfants = 1;
 const adultTextOneAdult = '1 adult';
+const adultTextOneAdultMobile = '1';
 const adultTextTwoAdults = '2 adults';
+const adultTextTwoAdultsMobile = '2';
 const childText = '1 child';
 const infantText = '1 infant';
 
@@ -76,28 +77,28 @@ test.before(async () => {
   const airport1 = 'New York';
   const airport2 = 'Barcelona';
   const airport3 = 'Madrid';
+
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', airport1, airport2, 'ECONOMY', [
     11,
     24,
   ]);
-
   await t.click(travelerDetailsModule.editSearchButton);
   // Verify trip from TD page on result page
   await t.expect(resultModule.resultPage.visible).ok();
 
-  await t.expect(resultModule.tripInfoAirport.nth(0).innerText).contains(airport1);
-  await t.expect(resultModule.tripInfoAirport.nth(1).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(2).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(3).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(0).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(2).innerText).contains(airport2);
+  if ((await isMobile()) || (await isTablet())) {
+    await t
+      .expect(resultModule.tripTitleTravelerInfoMobile().innerText)
+      .contains(adultTextTwoAdultsMobile);
+  }
+  if (await isDesktop()) {
+    await t.expect(resultModule.tripTitleTravelerInfo.innerText).contains(adultTextTwoAdults);
+  }
 
   // Change trip on result page
-  await addSearchDataResultPage(
-    numberOfAdults,
-    airport1,
-    airport3,
-    numberOfChildren,
-    numberOfInfants,
-  );
+  await addSearchDataResultPage(0, airport1, airport3, 1, 1);
   await t.click(resultModule.searchFlight);
   await t.click(resultModule.searchFormButton);
   await selectTripButtonByIndex(0);
@@ -191,6 +192,7 @@ test.before(async () => {
   const expectedDateReturn = getExpectedDate(4, 24);
 
   // Verify trip from meta on TD page
+
   if ((await isMobile()) || (await isTablet())) {
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
@@ -212,24 +214,23 @@ test.before(async () => {
       .expect(travelerDetailsModule.cartPassengers.nth(0).innerText)
       .contains(adultTextOneAdult);
   }
-
   await t.click(travelerDetailsModule.editSearchButton);
   // Verify trip from meta on result page
   await t.expect(resultModule.resultPage.visible).ok();
 
-  await t.expect(resultModule.tripInfoAirport.nth(0).innerText).contains(airport1);
-  await t.expect(resultModule.tripInfoAirport.nth(1).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(2).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(3).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(0).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(2).innerText).contains(airport2);
+  if ((await isMobile()) || (await isTablet())) {
+    await t
+      .expect(resultModule.tripTitleTravelerInfoMobile().innerText)
+      .contains(adultTextOneAdultMobile);
+  }
+  if (await isDesktop()) {
+    await t.expect(resultModule.tripTitleTravelerInfo.innerText).contains(adultTextOneAdult);
+  }
 
   // Change trip on result page
-  await addSearchDataResultPage(
-    numberOfAdults,
-    airport1,
-    airport3,
-    numberOfChildren,
-    numberOfInfants,
-  );
+  await addSearchDataResultPage(1, airport1, airport3, 1, 1);
   const inputDateDeparture = await getTripDate(resultModule.departureDate);
   const inputDateReturn = await getTripDate(resultModule.returnDate);
 
