@@ -71,6 +71,10 @@ export default {
   ),
   nextMonth: Selector('[data-testid="searchForm-nextMonth-input"]'),
   originInput: Selector('[data-testid="searchForm-singleBound-origin-input"]'),
+  owcInformation: Selector('[data-testid="tripDetails-oneWayCombination-wrapper"]'),
+  priceInfoButton: Selector('[data-testid="result-trip-price-info-button"]'),
+  priceInfoCloseButton: Selector('[data-testid="etiModal-close"]'),
+  priceInformationModal: Selector('[data-testid="traveler-price-info"]'),
   productBundleOption3: Selector('[data-testid="productBundleItem-3"]'),
   productBundleOption3Button: Selector('[for="choice.flexibleTicketBundle.3"]'),
   productBundleConfirmationButton: Selector(
