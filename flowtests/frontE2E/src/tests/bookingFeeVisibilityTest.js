@@ -15,8 +15,6 @@ import {
   getSecondAdult,
 } from '../../../common/src/util/travelerData';
 import debugModule from '../../../common/src/rf_modules/debugModule';
-import { dropdownSelect } from '../../../common/src/util/dropdownSelect';
-import resultModule from '../../../common/src/rf_modules/resultModule';
 import { selectTripButtonByIndex } from '../../../common/src/rf_pages/result';
 import travelerDetailsModule from '../../../common/src/rf_modules/travelerDetailsModule';
 import { addTravelerInformation, bookFlight } from '../../../common/src/rf_pages/travelerDetails';
@@ -31,47 +29,49 @@ import {
 } from '../../../common/src/rf_pages/payment';
 import { waitForOrderPageToLoad } from '../../../common/src/rf_pages/order';
 import orderModule from '../../../common/src/rf_modules/orderModule';
+import startModule from '../../../common/src/rf_modules/startModule';
+import resultModule from '../../../common/src/rf_modules/resultModule';
 
 const url = getSiteUrl('gotogate-uk', config.host);
 const travelers = addNumberToTraveler([getFirstAdult(), getSecondAdult()]);
 
 const numberOfAdults = 2;
+const bookingFeeText = 'Booking fee';
 const props = {
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
   'IbeClient.SeatMap.Segment.Navigation.Manual.Enabled': true,
   'IbeClient.SeatMap.Footer.CancelButton.Disabled': true,
 };
 
-async function filterTrip(carrier, selector) {
-  await t.click(debugModule.debugFilterButton);
-  await t.expect(debugModule.searchCarrierDropdown.visible).ok();
-  await dropdownSelect(debugModule.searchCarrierDropdown, carrier);
-  await t.click(debugModule.debugFilterCloseButton);
-  await t.click(resultModule.toggleFilterButton);
-  if ((await isMobile()) || (await isTablet())) {
-    await t.click(resultModule.filterAirlineToggleButton);
-  }
-  await t.click(resultModule.clearAirlines);
-  await t.click(selector);
+async function addCarrierToTrip(carrier) {
+  await t.expect(startModule.startPageSearchForm.visible).ok();
+  await t.click(debugModule.debugOptionsButton);
+  await t.click(debugModule.searchCarrierDropdown);
+  await t.click(debugModule.carrierOption(carrier));
+  await t.click(debugModule.debugOptionsCloseButton);
 }
 
-// This test will be activated when WEB-5145 is solved and released
-fixture
-  .skip('Booking fee visibility for different carriers')
+fixture('Markup visibility for different carriers')
   .page(url)
   .beforeEach(async () => {
     await enableDebug();
     await acceptCookies();
-    // await setIBEDummyPaymentBankOn();
     await selectProvider('IbeGDSDummy');
     await setProps(props);
     await closeHeaderUrgencyBanner();
   });
 
-test('Booking fee visible for Air France', async () => {
+test('Markup visible for Air France (AF)', async () => {
+  await addCarrierToTrip('AF');
   await selectTravelers(numberOfAdults);
-  await makeSearch('return trip', 'Stockholm', 'Paris', [11, 24]);
-  await filterTrip('Air France', resultModule.filterAirlineAirFranceCheckbox);
+  await makeSearch('one way trip', 'Stockholm', 'Paris', [11, 24]);
+  // Verify on result page
+  await t.expect(resultModule.resultPage.visible).ok();
+  await t.click(resultModule.priceInfoButton.nth(0));
+
+  await t.expect(resultModule.priceInformationModal.innerText).contains(bookingFeeText);
+
+  await t.click(resultModule.priceInfoCloseButton);
   await selectTripButtonByIndex(0);
 
   // Verify on traveler details page
@@ -79,14 +79,14 @@ test('Booking fee visible for Air France', async () => {
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
 
-    await t.expect(travelerDetailsModule.cartPassengersMobile.innerText).contains('Booking fee');
+    await t.expect(travelerDetailsModule.cartPassengersMobile.innerText).contains(bookingFeeText);
 
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
   }
   if (await isDesktop()) {
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
 
-    await t.expect(travelerDetailsModule.cartPassengers.innerText).contains('Booking fee');
+    await t.expect(travelerDetailsModule.cartPassengers.innerText).contains(bookingFeeText);
   }
 
   await addTravelerInformation(travelers);
@@ -99,26 +99,33 @@ test('Booking fee visible for Air France', async () => {
     await t.click(paymentModule.cartToggleButtonMobile);
     await t.click(paymentModule.cartTravelerInfoButton);
 
-    await t.expect(paymentModule.cartTravelerInfoMobile.innerText).contains('Booking fee');
+    await t.expect(paymentModule.cartTravelerInfoMobile.innerText).contains(bookingFeeText);
 
     await t.click(paymentModule.cartToggleButtonMobile);
   }
   if (await isDesktop()) {
     await t.click(paymentModule.cartTravelerInfoButton);
 
-    await t.expect(paymentModule.cartPriceInfo.innerText).contains('Booking fee');
+    await t.expect(paymentModule.cartPriceInfo.innerText).contains(bookingFeeText);
   }
   await payWithCreditCard();
   await addCheckoutData();
   // Verify on order page
   await waitForOrderPageToLoad();
-  await t.expect(orderModule.travelerPriceInfo.innerText).contains('Booking fee');
+  await t.expect(orderModule.travelerPriceInfo.innerText).contains(bookingFeeText);
 });
 
-test('Booking fee not visible for Spirit airlines', async () => {
+test('Markup not visible for Spirit airlines (NK)', async () => {
+  await addCarrierToTrip('NK');
   await selectTravelers(numberOfAdults);
-  await makeSearch('one way trip', 'New York', 'Michigan city', [11, 24]);
-  await filterTrip('Spirit Airlines', resultModule.filterAirlineSpiritAirlinesCheckbox);
+  await makeSearch('one way trip', 'New York', 'Detroit', [11, 24]);
+  // Verify on result page
+  await t.expect(resultModule.resultPage.visible).ok();
+  await t.click(resultModule.priceInfoButton.nth(0));
+
+  await t.expect(resultModule.priceInformationModal.innerText).notContains(bookingFeeText);
+
+  await t.click(resultModule.priceInfoCloseButton);
   await selectTripButtonByIndex(0);
 
   // Verify on traveler details page
@@ -126,14 +133,14 @@ test('Booking fee not visible for Spirit airlines', async () => {
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
 
-    await t.expect(travelerDetailsModule.cartMarkupPriceMobile.visible).notOk({ timeout: 600 });
+    await t.expect(travelerDetailsModule.cartMarkupPriceMobile.visible).notOk({ timeout: 400 });
 
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
   }
   if (await isDesktop()) {
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
 
-    await t.expect(travelerDetailsModule.cartMarkupPrice.visible).notOk({ timeout: 600 });
+    await t.expect(travelerDetailsModule.cartMarkupPrice.visible).notOk({ timeout: 400 });
   }
 
   await addTravelerInformation(travelers);
@@ -147,19 +154,19 @@ test('Booking fee not visible for Spirit airlines', async () => {
     await t.click(paymentModule.cartToggleButtonMobile);
     await t.click(paymentModule.cartTravelerInfoButton);
 
-    await t.expect(paymentModule.cartMarkupPriceMobile.visible).notOk({ timeout: 600 });
+    await t.expect(paymentModule.cartMarkupPriceMobile.visible).notOk({ timeout: 400 });
 
     await t.click(paymentModule.cartToggleButtonMobile);
   }
   if (await isDesktop()) {
     await t.click(paymentModule.cartTravelerInfoButton);
 
-    await t.expect(paymentModule.cartMarkupPrice.visible).notOk({ timeout: 600 });
+    await t.expect(paymentModule.cartMarkupPrice.visible).notOk({ timeout: 400 });
   }
   await payWithCreditCard();
   await addCheckoutData();
 
   // Verify on order page
   await waitForOrderPageToLoad();
-  await t.expect(orderModule.markupPrice.visible).notOk({ timeout: 600 });
+  await t.expect(orderModule.markupPrice.visible).notOk({ timeout: 400 });
 });

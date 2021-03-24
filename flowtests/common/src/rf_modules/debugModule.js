@@ -1,6 +1,7 @@
 import { Selector } from 'testcafe';
 
 export default {
+  carrierOption: carrier => Selector('#carrier-select option').withAttribute('value', carrier),
   debugBar: Selector('[data-testid="devBar"]'),
   debugBarClosed: Selector('.closed'),
   debugBarOpen: Selector('.open'),
@@ -11,5 +12,5 @@ export default {
   debugOptionsButton: Selector('[data-testid="devBar-toggleButton-button"]').nth(0),
   debugOptionsCloseButton: Selector('#dev-bar-search button'),
   enableDebug: Selector('#debug-link'),
-  searchCarrierDropdown: Selector('[data-testid="resultPage-debugTools-carrier-search-dropdown"]'),
+  searchCarrierDropdown: Selector('#carrier-select'),
 };
