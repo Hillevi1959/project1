@@ -9,10 +9,8 @@ export default {
     '[data-testid="resultPage-AIRLINESFilter-content"] > div > span:nth-child(1)',
   ),
   date: Selector('[aria-disabled="false"]'),
-  day: Selector('.DayPicker-Day'),
   destinationInput: Selector('[data-testid="searchForm-singleBound-destination-input"]'),
   departureDate: Selector('[data-testid="singleBound.departureDate-input"]'),
-  discountInformation: Selector('[data-testid="payment-method-discount-info"]'),
   filterAirlineAirFranceCheckbox: Selector('[for="airlines-AF"]'),
   filterAirlineLufthansaCheckbox: Selector('[for="airlines-LH"]'),
   filterAirlineSpiritAirlinesCheckbox: Selector('[for="airlines-NK"]'),
@@ -22,7 +20,6 @@ export default {
     '[data-testid="resultPage-filterHeader-AIRLINESToggleButton-button"]',
   ),
   filterAllButton: Selector('[data-testid="MAX_STOPS-all"]'),
-  filterAllButtonId: Selector('#MAX_STOPS_all'),
   filterArrivalSecondBoundRadioButton: Selector(
     '[data-testid="resultPage-departureArrivalFilter-arrival1-radio"]',
   ),
@@ -32,7 +29,6 @@ export default {
   filterArrivalTimeSecondBound: Selector(
     '[data-testid="resultPage-departureArrivalFilter-arrival1-slider"] .slider-tracks',
   ),
-  filterContent: Selector('[data-testid="resultPage-searchFilters-content"]'),
   filterDepArrFirstBoundToggleButton: Selector(
     '[data-testid="resultPage-filterHeader-departureArrival0ToggleButton-button"]',
   ),
@@ -47,9 +43,6 @@ export default {
   ),
   filterDirectButton: Selector('[data-testid="MAX_STOPS-direct"]'),
   filterMaxOneStopButton: Selector('[data-testid="MAX_STOPS-max1"]'),
-  filterMaxStopResetButton: Selector(
-    '[data-testid="resultPage-filterHeader-MAX_STOPSFilterResetButton-button"]',
-  ),
   filterMaxStopToggleButton: Selector(
     '[data-testid="resultPage-filterHeader-MAX_STOPSToggleButton-button"]',
   ),
@@ -76,9 +69,7 @@ export default {
   freeCancellationDaysAheadText: Selector(
     '[data-testid="freeCancellationInformationDaysAhead-search-result"]',
   ),
-  headerNavigationMenu: Selector('[data-testid="siteheader-button"]'),
   nextMonth: Selector('[data-testid="searchForm-nextMonth-input"]'),
-  openFlightButton: Selector('[data-testid="searchResults-arrowDown-button"]'),
   originInput: Selector('[data-testid="searchForm-singleBound-origin-input"]'),
   owcInformation: Selector('[data-testid="tripDetails-oneWayCombination-wrapper"]'),
   priceInfoButton: Selector('[data-testid="result-trip-price-info-button"]'),
@@ -89,8 +80,6 @@ export default {
   productBundleConfirmationButton: Selector(
     '[data-testid="productBundle-flexibleTicketBundle-confirmation-button"]',
   ),
-  recommendedFilterButton: Selector('[data-testid="result-quick-sort-button"]').nth(0),
-  resultBookButtons: Selector('[data-testid="result-bookButtons-wrapper"]'),
   resultPage: Selector('[data-testid="resultPage-searchResults"]'),
   returnDate: Selector('[data-testid="singleBound.returnDate-input"]'),
   searchFlight: Selector('[data-testid="searchForm-searchFlights-button"]'),
@@ -99,7 +88,6 @@ export default {
   secondBoundTrainIcon: Selector(
     '.resultPage-flightResults-0 [data-testid="tripDetails-bound"]:nth-child(2) [data-testid="tripDetails-bound-train-icon"]',
   ),
-  segmentTrainIcon: Selector('[data-testid="tripDetails-segment-train"]'),
   selfTransferText: Selector(
     '[data-testid*="resultPage-resultTrip-"] [data-testid="self-transfer-content"]',
   ),
@@ -107,8 +95,6 @@ export default {
     '[data-testid*="resultPage-resultTrip-"] [data-testid="self-transfer-header"]',
   ),
   shortestFilterButton: Selector('[data-testid="result-quick-sort-button"]').nth(3),
-  smallPlaneIcon: Selector('[data-testid="tripDetails-bound-plane-icon"]'),
-  smallTrainIcon: Selector('[data-testid="tripDetails-bound-train-icon"]'),
   stepIndicatorCurrent: Selector('[data-testid="current-step"]'),
   stepIndicatorNotVisited: Selector('[data-testid="not-visited-step"]'),
   stepIndicatorVisited: Selector('[data-testid="visited-step"]'),
@@ -133,11 +119,6 @@ export default {
     ),
   tripChange: Selector('[data-testid="searchResults-segment-stops"]'),
   tripDetailBound: Selector('[data-testid="tripDetails-bound"]'),
-  tripInfoAirport: Selector(
-    '[data-testid="resultPage-selectedTrip-wrapper"] [data-testid="tripDetails-segment"] p:nth-child(2)',
-  ),
-  tripInformationHeader: Selector('.header'),
-  tripInfoText: Selector('.resultPage-flightResults-4 [data-testid="tripDetails-segment-event"]'),
   tripPriceFlex: Selector('[data-testid="result-trip-price-flex"]'),
   tripPriceStandard: Selector('[data-testid="result-trip-price-standard"]'),
   tripSegment: Selector('[data-testid="tripDetails-segment"]'),
@@ -148,8 +129,10 @@ export default {
   tripTitleDate: Selector('[data-testid="tripDetails-title-date-desktop"]'),
   tripTitleDateMobile: Selector('[data-testid="tripDetails-title-date-mobile"]'),
   tripTitleFlight: Selector('[data-testid="tripDetails-title-TitleText"]'),
-  tripWithVoucherTag: tripNumber =>
-    `[data-testid*="resultPage-resultTrip-${tripNumber}"] [data-testid="valid-with-voucher-tag"]`,
+  tripTitleFlightCity: number =>
+    Selector('[data-testid="tripDetails-title-TitleText"] span').nth(number),
+  tripTitleTravelerInfo: Selector('[data-testid="tripDetails-title-travelers-desktop"]'),
+  tripTitleTravelerInfoMobile: Selector('[data-testid="tripDetails-title-travelers-mobile"]'),
   voucherFlexPrice: Selector('[data-testid="result-trip-discounted-price-flex"]'),
   voucherStandardPrice: Selector('[data-testid="result-trip-discounted-price-standard"]'),
   voucherSwitch: Selector('[data-testid="slider-valid-with-voucher-switch"]'),

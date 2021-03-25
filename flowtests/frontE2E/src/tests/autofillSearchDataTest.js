@@ -46,9 +46,8 @@ test('Autofill search data on start page', async () => {
     .expect(startModule.cabinClassDropdown.innerText)
     .contains('Economy');
 
-  const numberOfAdults = 2;
   await t.click(startModule.searchFlight);
-  await addSearchDataResultPage(numberOfAdults, 'GOT', 'PAR', 1, 1);
+  await addSearchDataResultPage(1, 'GOT', 'PAR', 1, 1);
   await t.click(resultModule.searchFlight);
   await t.click(headerModule.logoHeader);
 

@@ -33,7 +33,7 @@ fixture(`Verify possibility to search for trip on result page`)
   });
 
 test('Possible to search for a new trip on result page', async () => {
-  let numberOfAdults = 1;
+  const numberOfAdults = 1;
 
   await selectTravelers(numberOfAdults, 0, 0);
   await makeSearch('return trip', 'UME', 'TYO', [11, 24]);
@@ -45,8 +45,7 @@ test('Possible to search for a new trip on result page', async () => {
     .contains('Tokyo');
   const expectedDateDeparture = getExpectedDate(4, 11);
   const expectedDateReturn = getExpectedDate(4, 24);
-  numberOfAdults = 2;
-  await addSearchDataResultPage(numberOfAdults, 'STO', 'SYD', 1, 1);
+  await addSearchDataResultPage(1, 'STO', 'SYD', 1, 1);
   const inputDateDeparture = await getTripDate(resultModule.departureDate);
   const inputDateReturn = await getTripDate(resultModule.returnDate);
   await t.click(resultModule.searchFlight);

@@ -48,7 +48,12 @@ const travelers = addNumberToTraveler([
 
 const numberOfAdults = 2;
 const numberOfChildren = 1;
-const numberOfInfants = 1;
+const adultTextOneAdult = '1 adult';
+const adultTextOneAdultMobile = '1';
+const adultTextTwoAdults = '2 adults';
+const adultTextTwoAdultsMobile = '2';
+const childText = '1 child';
+const infantText = '1 infant';
 
 const props = {
   'IbeClient.TravelerDetails.Modal': 'SEATMAP',
@@ -60,8 +65,7 @@ const props = {
 
 fixture('Edit search from traveler details page');
 
-// This test cannot be finished until the bug WEB-5110 is solved
-test.skip.before(async () => {
+test.before(async () => {
   const url = await getSiteUrl('gotogate-uk', config.host);
   await t.navigateTo(url);
   await enableDebug();
@@ -73,28 +77,28 @@ test.skip.before(async () => {
   const airport1 = 'New York';
   const airport2 = 'Barcelona';
   const airport3 = 'Madrid';
+
   await searchAndSelectTrip(numberOfAdults, 0, 0, 'return trip', airport1, airport2, 'ECONOMY', [
     11,
     24,
   ]);
-
   await t.click(travelerDetailsModule.editSearchButton);
   // Verify trip from TD page on result page
   await t.expect(resultModule.resultPage.visible).ok();
 
-  await t.expect(resultModule.tripInfoAirport.nth(0).innerText).contains(airport1);
-  await t.expect(resultModule.tripInfoAirport.nth(1).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(2).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(3).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(0).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(2).innerText).contains(airport2);
+  if ((await isMobile()) || (await isTablet())) {
+    await t
+      .expect(resultModule.tripTitleTravelerInfoMobile().innerText)
+      .contains(adultTextTwoAdultsMobile);
+  }
+  if (await isDesktop()) {
+    await t.expect(resultModule.tripTitleTravelerInfo.innerText).contains(adultTextTwoAdults);
+  }
 
   // Change trip on result page
-  await addSearchDataResultPage(
-    numberOfAdults,
-    airport1,
-    airport3,
-    numberOfChildren,
-    numberOfInfants,
-  );
+  await addSearchDataResultPage(0, airport1, airport3, 1, 1);
   await t.click(resultModule.searchFlight);
   await t.click(resultModule.searchFormButton);
   await selectTripButtonByIndex(0);
@@ -108,20 +112,22 @@ test.skip.before(async () => {
     await t.expect(travelerDetailsModule.cartTripsMobile.innerText).contains(airport3);
     await t
       .expect(travelerDetailsModule.cartPassengersMobile.nth(0).innerText)
-      .contains('2 adults');
-    await t.expect(travelerDetailsModule.cartPassengersMobile.nth(1).innerText).contains('1 child');
+      .contains(adultTextTwoAdults);
+    await t.expect(travelerDetailsModule.cartPassengersMobile.nth(1).innerText).contains(childText);
     await t
       .expect(travelerDetailsModule.cartPassengersMobile.nth(2).innerText)
-      .contains('1 infant');
+      .contains(infantText);
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
   }
   if (await isDesktop()) {
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
     await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport1);
     await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport3);
-    await t.expect(travelerDetailsModule.cartPassengers.nth(0).innerText).contains('2 adults');
-    await t.expect(travelerDetailsModule.cartPassengers.nth(1).innerText).contains('1 child');
-    await t.expect(travelerDetailsModule.cartPassengers.nth(2).innerText).contains('1 infant');
+    await t
+      .expect(travelerDetailsModule.cartPassengers.nth(0).innerText)
+      .contains(adultTextTwoAdults);
+    await t.expect(travelerDetailsModule.cartPassengers.nth(1).innerText).contains(childText);
+    await t.expect(travelerDetailsModule.cartPassengers.nth(2).innerText).contains(infantText);
   }
 
   await addTravelerInformation(travelers);
@@ -136,9 +142,11 @@ test.skip.before(async () => {
 
     await t.expect(paymentModule.cartTripsMobile.innerText).contains(airport1);
     await t.expect(paymentModule.cartTripsMobile.innerText).contains(airport3);
-    await t.expect(paymentModule.cartTravelerInfoMobile.nth(0).innerText).contains('2 adults');
-    await t.expect(paymentModule.cartTravelerInfoMobile.nth(1).innerText).contains('1 child');
-    await t.expect(paymentModule.cartTravelerInfoMobile.nth(2).innerText).contains('1 infant');
+    await t
+      .expect(paymentModule.cartTravelerInfoMobile.nth(0).innerText)
+      .contains(adultTextTwoAdults);
+    await t.expect(paymentModule.cartTravelerInfoMobile.nth(1).innerText).contains(childText);
+    await t.expect(paymentModule.cartTravelerInfoMobile.nth(2).innerText).contains(infantText);
 
     await t.click(paymentModule.cartToggleButtonMobile);
   }
@@ -148,9 +156,9 @@ test.skip.before(async () => {
 
     await t.expect(paymentModule.cartTrips.innerText).contains(airport1);
     await t.expect(paymentModule.cartTrips.innerText).contains(airport3);
-    await t.expect(paymentModule.cartPriceInfo.nth(0).innerText).contains('2 adults');
-    await t.expect(paymentModule.cartPriceInfo.nth(1).innerText).contains('1 child');
-    await t.expect(paymentModule.cartPriceInfo.nth(2).innerText).contains('1 infant');
+    await t.expect(paymentModule.cartPriceInfo.nth(0).innerText).contains(adultTextTwoAdults);
+    await t.expect(paymentModule.cartPriceInfo.nth(1).innerText).contains(childText);
+    await t.expect(paymentModule.cartPriceInfo.nth(2).innerText).contains(infantText);
   }
 
   await payWithCreditCard();
@@ -161,9 +169,9 @@ test.skip.before(async () => {
 
   await t.expect(orderModule.orderInfoTrip.innerText).contains(airport1);
   await t.expect(orderModule.orderInfoTrip.innerText).contains(airport3);
-  await t.expect(orderModule.travelerPriceInfo.nth(0).innerText).contains('2 adults');
-  await t.expect(orderModule.travelerPriceInfo.nth(1).innerText).contains('1 child');
-  await t.expect(orderModule.travelerPriceInfo.nth(2).innerText).contains('1 infant');
+  await t.expect(orderModule.travelerPriceInfo.nth(0).innerText).contains(adultTextTwoAdults);
+  await t.expect(orderModule.travelerPriceInfo.nth(1).innerText).contains(childText);
+  await t.expect(orderModule.travelerPriceInfo.nth(2).innerText).contains(infantText);
 });
 
 test.before(async () => {
@@ -184,13 +192,16 @@ test.before(async () => {
   const expectedDateReturn = getExpectedDate(4, 24);
 
   // Verify trip from meta on TD page
+
   if ((await isMobile()) || (await isTablet())) {
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
 
     await t.expect(travelerDetailsModule.cartTripsMobile.innerText).contains(airport1);
     await t.expect(travelerDetailsModule.cartTripsMobile.innerText).contains(airport2);
-    await t.expect(travelerDetailsModule.cartPassengersMobile.nth(0).innerText).contains('1 adult');
+    await t
+      .expect(travelerDetailsModule.cartPassengersMobile.nth(0).innerText)
+      .contains(adultTextOneAdult);
 
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
   }
@@ -199,26 +210,27 @@ test.before(async () => {
 
     await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport1);
     await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport2);
-    await t.expect(travelerDetailsModule.cartPassengers.nth(0).innerText).contains('1 adult');
+    await t
+      .expect(travelerDetailsModule.cartPassengers.nth(0).innerText)
+      .contains(adultTextOneAdult);
   }
-
   await t.click(travelerDetailsModule.editSearchButton);
   // Verify trip from meta on result page
   await t.expect(resultModule.resultPage.visible).ok();
 
-  await t.expect(resultModule.tripInfoAirport.nth(0).innerText).contains(airport1);
-  await t.expect(resultModule.tripInfoAirport.nth(1).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(2).innerText).contains(airport2);
-  await t.expect(resultModule.tripInfoAirport.nth(3).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(0).innerText).contains(airport1);
+  await t.expect(resultModule.tripTitleFlightCity(2).innerText).contains(airport2);
+  if ((await isMobile()) || (await isTablet())) {
+    await t
+      .expect(resultModule.tripTitleTravelerInfoMobile().innerText)
+      .contains(adultTextOneAdultMobile);
+  }
+  if (await isDesktop()) {
+    await t.expect(resultModule.tripTitleTravelerInfo.innerText).contains(adultTextOneAdult);
+  }
 
   // Change trip on result page
-  await addSearchDataResultPage(
-    numberOfAdults,
-    airport1,
-    airport3,
-    numberOfChildren,
-    numberOfInfants,
-  );
+  await addSearchDataResultPage(1, airport1, airport3, 1, 1);
   const inputDateDeparture = await getTripDate(resultModule.departureDate);
   const inputDateReturn = await getTripDate(resultModule.returnDate);
 
@@ -239,20 +251,22 @@ test.before(async () => {
     await t.expect(travelerDetailsModule.cartTripsMobile.innerText).contains(airport3);
     await t
       .expect(travelerDetailsModule.cartPassengersMobile.nth(0).innerText)
-      .contains('2 adults');
-    await t.expect(travelerDetailsModule.cartPassengersMobile.nth(1).innerText).contains('1 child');
+      .contains(adultTextTwoAdults);
+    await t.expect(travelerDetailsModule.cartPassengersMobile.nth(1).innerText).contains(childText);
     await t
       .expect(travelerDetailsModule.cartPassengersMobile.nth(2).innerText)
-      .contains('1 infant');
+      .contains(infantText);
     await t.click(travelerDetailsModule.cartToggleButtonMobile);
   }
   if (await isDesktop()) {
     await t.click(travelerDetailsModule.cartTravelerToggleButton);
     await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport1);
     await t.expect(travelerDetailsModule.cartTrips.innerText).contains(airport3);
-    await t.expect(travelerDetailsModule.cartPassengers.nth(0).innerText).contains('2 adults');
-    await t.expect(travelerDetailsModule.cartPassengers.nth(1).innerText).contains('1 child');
-    await t.expect(travelerDetailsModule.cartPassengers.nth(2).innerText).contains('1 infant');
+    await t
+      .expect(travelerDetailsModule.cartPassengers.nth(0).innerText)
+      .contains(adultTextTwoAdults);
+    await t.expect(travelerDetailsModule.cartPassengers.nth(1).innerText).contains(childText);
+    await t.expect(travelerDetailsModule.cartPassengers.nth(2).innerText).contains(infantText);
   }
 
   await addTravelerInformation(travelers);
@@ -267,9 +281,11 @@ test.before(async () => {
 
     await t.expect(paymentModule.cartTripsMobile.innerText).contains(airport1);
     await t.expect(paymentModule.cartTripsMobile.innerText).contains(airport3);
-    await t.expect(paymentModule.cartTravelerInfoMobile.nth(0).innerText).contains('2 adults');
-    await t.expect(paymentModule.cartTravelerInfoMobile.nth(1).innerText).contains('1 child');
-    await t.expect(paymentModule.cartTravelerInfoMobile.nth(2).innerText).contains('1 infant');
+    await t
+      .expect(paymentModule.cartTravelerInfoMobile.nth(0).innerText)
+      .contains(adultTextTwoAdults);
+    await t.expect(paymentModule.cartTravelerInfoMobile.nth(1).innerText).contains(childText);
+    await t.expect(paymentModule.cartTravelerInfoMobile.nth(2).innerText).contains(infantText);
 
     await t.click(paymentModule.cartToggleButtonMobile);
   }
@@ -279,9 +295,9 @@ test.before(async () => {
 
     await t.expect(paymentModule.cartTrips.innerText).contains(airport1);
     await t.expect(paymentModule.cartTrips.innerText).contains(airport3);
-    await t.expect(paymentModule.cartPriceInfo.nth(0).innerText).contains('2 adults');
-    await t.expect(paymentModule.cartPriceInfo.nth(1).innerText).contains('1 child');
-    await t.expect(paymentModule.cartPriceInfo.nth(2).innerText).contains('1 infant');
+    await t.expect(paymentModule.cartPriceInfo.nth(0).innerText).contains(adultTextTwoAdults);
+    await t.expect(paymentModule.cartPriceInfo.nth(1).innerText).contains(childText);
+    await t.expect(paymentModule.cartPriceInfo.nth(2).innerText).contains(infantText);
   }
 
   await payWithCreditCard();
@@ -292,7 +308,7 @@ test.before(async () => {
 
   await t.expect(orderModule.orderInfoTrip.innerText).contains(airport1);
   await t.expect(orderModule.orderInfoTrip.innerText).contains(airport3);
-  await t.expect(orderModule.travelerPriceInfo.nth(0).innerText).contains('2 adults');
-  await t.expect(orderModule.travelerPriceInfo.nth(1).innerText).contains('1 child');
-  await t.expect(orderModule.travelerPriceInfo.nth(2).innerText).contains('1 infant');
+  await t.expect(orderModule.travelerPriceInfo.nth(0).innerText).contains(adultTextTwoAdults);
+  await t.expect(orderModule.travelerPriceInfo.nth(1).innerText).contains(childText);
+  await t.expect(orderModule.travelerPriceInfo.nth(2).innerText).contains(infantText);
 });
